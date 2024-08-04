@@ -13,7 +13,12 @@ const port = 5000;
 const helcimToken = process.env.HELCIM_API_TOKEN;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:5173', 'https://yourdomain.com'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
+
 app.use(express.json());
 
 // MongoDB connection
