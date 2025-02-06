@@ -3,9 +3,8 @@
     <div class="logo">Star Detailing</div>
     <nav>
       <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Fleet Services</a></li>
         <li><a href="#">Car Services</a></li>
+        <li><a href="#">Fleet Services</a></li>
         <li><a href="#">RV services</a></li>
         <li><a href="#">Boats Services</a></li>
         <li><a href="#">FAQs</a></li>

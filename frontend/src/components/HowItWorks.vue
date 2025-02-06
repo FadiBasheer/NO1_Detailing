@@ -45,13 +45,16 @@ export default {
 }
 
 .steps {
-  display: flex;
-  justify-content: center;
-  gap: 30px;
+  max-width: 1200px; /* Prevents stretching */
+  margin: 0 auto; /* Centers content */
+  display: flex; /* Aligns items */
+  justify-content: center; /* Centers inside */
+  flex-wrap: wrap; /* Prevents overflow */
+  gap: 20px; /* Space between steps */
 }
 
 .step {
-  width: 250px;
+  width: 350px;
   text-align: center;
 }
 
