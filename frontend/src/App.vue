@@ -21,11 +21,12 @@ export default {
 </script>
 
 <style>
-/* Global styles */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  background: #f4f4f4;
+  text-align: center;
 }
 </style>

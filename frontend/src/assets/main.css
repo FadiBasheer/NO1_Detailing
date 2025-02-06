@@ -5,8 +5,12 @@
   margin: 0 auto;
   padding: 2rem;
   font-weight: normal;
+  display: flex;
+  flex-direction: column; /* Ensures sections stack properly */
+  align-items: center; /* Centers content */
 }
 
+/* Link styling */
 a,
 .green {
   text-decoration: none;
@@ -23,13 +27,10 @@ a,
 
 @media (min-width: 1024px) {
   body {
-    display: flex;
-    place-items: center;
+    display: block; /* Change from flex to block */
   }
 
   #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
     padding: 0 2rem;
   }
 }

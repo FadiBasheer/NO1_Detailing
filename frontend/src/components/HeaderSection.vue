@@ -1,12 +1,13 @@
 <template>
   <header class="header">
-    <div class="logo">shiny</div>
+    <div class="logo">Star Detailing</div>
     <nav>
       <ul>
-        <li><a href="#">Car Detailing</a></li>
-        <li><a href="#">Mold Removal</a></li>
-        <li><a href="#">Pricing</a></li>
-        <li><a href="#">Reviews</a></li>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Fleet Services</a></li>
+        <li><a href="#">Car Services</a></li>
+        <li><a href="#">RV services</a></li>
+        <li><a href="#">Boats Services</a></li>
         <li><a href="#">FAQs</a></li>
         <li><a href="#">Contact</a></li>
       </ul>
