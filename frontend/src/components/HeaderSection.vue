@@ -7,10 +7,11 @@
         <li><a href="#">Mold Removal</a></li>
         <li><a href="#">Pricing</a></li>
         <li><a href="#">Reviews</a></li>
+        <li><a href="#">FAQs</a></li>
         <li><a href="#">Contact</a></li>
-        <li><button class="pricing-btn">VIEW OUR PRICING</button></li>
       </ul>
     </nav>
+    <a href="#" class="pricing-btn">VIEW OUR PRICING</a>
   </header>
 </template>
 
@@ -19,29 +20,34 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 40px;
-  background-color: #fff;
+  padding: 15px 30px;
+  background-color: white;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+
 .logo {
   font-size: 24px;
   font-weight: bold;
-  color: #007bff;
+  color: #007BFF;
 }
+
 nav ul {
   list-style: none;
   display: flex;
   gap: 20px;
 }
+
 nav a {
   text-decoration: none;
-  color: black;
+  color: #333;
+  font-weight: bold;
 }
+
 .pricing-btn {
-  background-color: #007bff;
+  background-color: #007BFF;
   color: white;
-  padding: 8px 15px;
-  border: none;
-  cursor: pointer;
+  padding: 10px 15px;
+  text-decoration: none;
+  border-radius: 5px;
 }
 </style>
