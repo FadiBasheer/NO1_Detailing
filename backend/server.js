@@ -22,6 +22,17 @@ app.get('/', (req, res) => {
   res.send('Mobile Detailing Backend is running');
 });
 
+app.get('/api/bookings', async (req, res) => {
+  try {
+    const bookings = await Booking.find();
+    res.json(bookings);
+  } catch (error) {
+    console.error('Error fetching bookings:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
 app.post('/api/bookings', async (req, res) => {
   try {
     const { vehicleType, date, time, address } = req.body;
@@ -39,16 +50,6 @@ app.post('/api/bookings', async (req, res) => {
     res.status(201).json({ message: 'Booking confirmed!', booking: newBooking });
   } catch (error) {
     console.error('Error creating booking:', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-});
-
-app.get('/api/bookings', async (req, res) => {
-  try {
-    const bookings = await Booking.find();
-    res.json(bookings);
-  } catch (error) {
-    console.error('Error fetching bookings:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
