@@ -5,7 +5,9 @@
       <p>We come to your home, office, or job site</p>
       <p>We bring electricity and water</p>
       <div class="buttons">
-        <button class="book-btn">BOOK NOW</button>
+        <router-link to="/vehicles">
+          <button>BOOK NOW</button>
+        </router-link>
         <button class="pricing-btn">VIEW OUR PRICING</button>
       </div>
     </div>

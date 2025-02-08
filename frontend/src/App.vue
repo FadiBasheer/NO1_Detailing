@@ -1,21 +1,16 @@
 <template>
   <div>
     <HeaderSection />
-    <HeroSection />
-    <HowItWorks />
+    <router-view />
   </div>
 </template>
 
 <script>
 import HeaderSection from './components/HeaderSection.vue';
-import HeroSection from './components/HeroSection.vue';
-import HowItWorks from './components/HowItWorks.vue';
 
 export default {
   components: {
     HeaderSection,
-    HeroSection,
-    HowItWorks,
   }
 };
 </script>
