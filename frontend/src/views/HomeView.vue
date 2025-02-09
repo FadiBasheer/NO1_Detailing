@@ -1,3 +1,5 @@
+// Home page
+
 <template>
   <div>
     <HeroSection />
