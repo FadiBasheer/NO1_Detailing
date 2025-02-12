@@ -1,6 +1,6 @@
 <template>
   <header class="header">
-    <a href="#" class="logo">Star Detailing</a>
+    <router-link to="/HomeView" class="logo">Star Detailing</router-link>
     <nav>
       <ul>
         <li><a href="#">Car Services</a></li>
