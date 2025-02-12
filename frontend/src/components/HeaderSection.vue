@@ -1,6 +1,6 @@
 <template>
   <header class="header">
-    <div class="logo">Star Detailing</div>
+    <a href="#" class="logo">Star Detailing</a>
     <nav>
       <ul>
         <li><a href="#">Car Services</a></li>
