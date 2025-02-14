@@ -5,15 +5,15 @@
       <ul>
         <li><a href="#">Car Services</a></li>
         
-        <div class="dropdown" @click="toggle">
+        <li class="dropdown" style="position: relative">
           <button class="dropdown-btn">Business Programs</button>
-          <ul v-if="isOpen" class="dropdown-menu">
+          <ul class="dropdown-menu">
             <li><a href="#">An item</a></li>
             <li><a href="#">Another item</a></li>
             <li><a href="#">Another item</a></li>
             <li><a href="#">Another item</a></li>
           </ul>
-        </div>
+        </li>
 
         <li><a href="#">RV services</a></li>
         <li><a href="#">Boats Services</a></li>
@@ -27,14 +27,8 @@
   </header>
 </template>
 
-<script setup>
-import { ref } from 'vue'
-const isOpen = ref(false)
-const toggle = () => isOpen.value = !isOpen.value
-</script>
 
-
-<style scoped>
+<style>
 .header {
   display: flex;
   justify-content: space-between;
@@ -54,6 +48,7 @@ nav ul {
   list-style: none;
   display: flex;
   gap: 20px;
+  position: relative;
 }
 
 nav a {
@@ -71,21 +66,32 @@ nav a {
 }
 
 .dropdown {
-  position: relative;
-  display: inline-block;
+  position: relative; /* 🔑 Needed so the submenu positions correctly */
 }
+
 .dropdown-menu {
+  display: none;
   position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 160px;
   background: white;
   border: 1px solid #ccc;
   list-style: none;
-  padding: 8px 0;
+  padding: 0;
   margin: 0;
+  z-index: 1001;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  flex-direction: column; /* ✅ Optional if needed for layout fix */
 }
+
+/* ✅ This ensures vertical list display inside dropdown */
 .dropdown-menu li {
-  padding: 8px 16px;
+  display: block;
 }
-.dropdown-menu li:hover {
-  background-color: #eee;
+
+.dropdown:hover .dropdown-menu {
+  display: block;
 }
+
 </style>
