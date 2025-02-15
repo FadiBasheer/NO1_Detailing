@@ -6,7 +6,7 @@
         <li><a href="#">Car Services</a></li>
         
         <li class="dropdown" style="position: relative">
-          <button class="dropdown-btn">Business Programs</button>
+          <p class="dropdown-btn">Business Programs &#x2BC6;</p>
           <ul class="dropdown-menu">
             <li><a href="#">An item</a></li>
             <li><a href="#">Another item</a></li>
@@ -51,7 +51,7 @@ nav ul {
   position: relative;
 }
 
-nav a {
+nav a, p {
   text-decoration: none;
   color: #333;
   font-weight: bold;
