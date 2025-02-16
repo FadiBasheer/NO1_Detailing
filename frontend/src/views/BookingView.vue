@@ -3,14 +3,6 @@
     <h2>Book Your Appointment</h2>
 
     <form @submit.prevent="submitBooking">
-      <label for="vehicle">Select Vehicle Type:</label>
-      <select id="vehicle" v-model="vehicleType" required>
-        <option disabled value="">Choose your vehicle</option>
-        <option v-for="type in vehicleTypes" :key="type" :value="type">
-          {{ type }}
-        </option>
-      </select>
-
       <label for="date">Select Date:</label>
       <input type="date" id="date" v-model="date" @change="fetchBookedTimes" required />
 
@@ -44,10 +36,6 @@ export default {
       address: '',
       message: '',
       bookedTimes: [],
-      vehicleTypes: [
-        'Sedan', 'Small SUV', 'Mid-size SUV', 'SUV 7 seats',
-        'Small Truck', 'Big Truck', 'Mini Van', 'Commercial Van'
-      ],
       timeSlots: ['08:00 AM', '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', 
                   '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM']
     };
