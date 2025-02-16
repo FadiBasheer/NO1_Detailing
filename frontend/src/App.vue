@@ -18,7 +18,7 @@ export default {
 <style>
 body {
   font-family: Arial, sans-serif;
-  overflow-x: hidden;
+  overflow-x: hidden; 
   margin: 0;
   padding: 0;
   box-sizing: border-box;

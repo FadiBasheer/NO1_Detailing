@@ -6,6 +6,11 @@
         {{ vehicle }}
       </button>
     </div>
+
+    <button id="next">
+    Next
+    </button>
+
   </div>
 </template>
 
@@ -35,5 +40,14 @@ export default {
   padding: 10px 20px;
   font-size: 18px;
   cursor: pointer;
+}
+
+#next{
+  background-color: #007BFF;
+  color: white;
+  padding: 10px 15px;
+  text-decoration: none;
+  border-radius: 5px;
+  
 }
 </style>
