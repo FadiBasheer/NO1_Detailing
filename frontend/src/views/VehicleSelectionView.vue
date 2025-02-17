@@ -3,12 +3,8 @@
     <h1>Select Your Vehicle Type</h1>
 
     <div class="vehicle-list">
-      <button
-        v-for="vehicle in vehicles"
-        :key="vehicle"
-        @click="selectedVehicle = vehicle"
-        :class="{ selected: selectedVehicle === vehicle }"
-      >
+      <button v-for="vehicle in vehicles" :key="vehicle" @click="selectedVehicle = vehicle" 
+      :class="{ selected: selectedVehicle === vehicle }">
         {{ vehicle }}
       </button>
     </div>
@@ -41,8 +37,8 @@ export default {
   data() {
     return {
       vehicles: [
-        "Sedan", "Small SUV", "Mid-size SUV", "SUV 7 seats",
-        "Small Truck", "Big Truck", "Mini Van", "Commercial Van"
+        "Sedan/Coupe", "Small SUV", "Mid-size SUV", "SUV 7 seats",
+        "Small Truck", "Big Truck", "Mini Van", "Commercial Van", "Small size Truck", "Full size Truck", "Motorcycles", "RVs", "Trailer", "Boats"
       ],
       selectedVehicle: null,
       brand: '',
