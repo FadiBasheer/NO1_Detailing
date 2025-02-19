@@ -36,17 +36,17 @@ export default {
   data() {
     return {
       vehicles: [
-        { name: "Sedan/Coupe", image: "/images/sedan.png" },
-        { name: "Small SUV", image: "/images/small-suv.png" },
-        { name: "Mid-size SUV", image: "/images/mid-suv.png" },
-        { name: "SUV 7 seats", image: "/images/suv-7.png" },
-        { name: "Mini Van", image: "/images/minivan.png" },
-        { name: "Small Truck", image: "/images/small-truck.png" },
-        { name: "Big Truck", image: "/images/big-truck.png" },
-        { name: "Commercial Van", image: "/images/van.png" },
-        { name: "Motorcycle", image: "/images/minivan.png" },
-        { name: "RV/Trailer", image: "/images/minivan.png" },
-        { name: "Boats", image: "/images/minivan.png" }
+        { name: "Sedan/Coupe", image: "/src/assets/sedan.jpg" },
+        { name: "Small SUV", image: "/src/assets/small-suv.jpg" },
+        { name: "Mid-size SUV", image: "/src/assets/mid-suv.jpg" },
+        { name: "SUV 7 seats", image: "/src/assets/suv-7.jpg" },
+        { name: "Mini Van", image: "/src/assets/minivan.jpg" },
+        { name: "Small Truck", image: "/src/assets/small-truck.jpg" },
+        { name: "Big Truck", image: "/src/assets/big-truck.jpg" },
+        { name: "Commercial Van", image: "/src/assets/commercial-van.jpg" },
+        { name: "Motorcycle", image: "/src/assets/motorcycle.jpg" },
+        { name: "RV/Trailer", image: "/src/assets/rv-trailer.jpg" },
+        { name: "Boats", image: "/src/assets/boats.jpg" }
       ],
       selectedVehicle: null,
       brand: '',
