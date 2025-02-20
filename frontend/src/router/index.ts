@@ -21,6 +21,12 @@ const router = createRouter({
       props: true
     },
     {
+      path: '/booking/:vehicleType',
+      name: 'address',
+      component: () => import('../views/AddressSelectionView.vue'),
+      props: true
+    },
+    {
       path: '/FAQs',
       name: 'FAQs',
       // route level code-splitting
