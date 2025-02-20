@@ -15,16 +15,14 @@ const router = createRouter({
       component: () => import('../views/VehicleSelectionView.vue'),
     },
     {
-      path: '/booking/:vehicleType',
-      name: 'booking',
-      component: () => import('../views/BookingView.vue'),
-      props: true
+      path: '/vehicle-selection',
+      name: 'VehicleSelectionView',
+      component: () => import('@/views/VehicleSelectionView.vue')
     },
     {
-      path: '/booking/:vehicleType',
-      name: 'address',
-      component: () => import('../views/AddressSelectionView.vue'),
-      props: true
+      path: '/booking',
+      name: 'BookingView',
+      component: () => import('@/views/BookingView.vue')
     },
     {
       path: '/FAQs',
