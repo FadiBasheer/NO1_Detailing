@@ -15,9 +15,9 @@ const router = createRouter({
       component: () => import('../views/VehicleSelectionView.vue'),
     },
     {
-      path: '/vehicle-selection',
-      name: 'VehicleSelectionView',
-      component: () => import('@/views/VehicleSelectionView.vue')
+      path: '/address-selection',
+      name: 'AddressSelectionView',
+      component: () => import('@/views/AddressSelectionView.vue')
     },
     {
       path: '/booking',
