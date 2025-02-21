@@ -26,7 +26,7 @@
         v-model="model"
         placeholder="Car Model (e.g. Camry)"
       />
-      <button @click="goToNextPage" :disabled="!canProceed">Next</button>
+      <button @click="goToAddressSelection" :disabled="!canProceed">Next</button>
     </div>
   </div>
 </template>
@@ -64,12 +64,12 @@ export default {
     },
     goToNextPage() {
       if (this.canProceed) {
-        // Pass data via query params or route params
         this.$router.push({
-          path: `/booking/${this.selectedVehicle}`,
+          name: 'AddressSelectionView', // Use route name, not path string
           query: {
-            brand: this.brand,
-            model: this.model
+        vehicle: this.selectedVehicle,
+        brand: this.brand,
+        model: this.model
           }
         });
       }
