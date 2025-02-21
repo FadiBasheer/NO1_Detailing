@@ -67,9 +67,9 @@ export default {
         this.$router.push({
           name: 'AddressSelectionView', // Use route name, not path string
           query: {
-        vehicle: this.selectedVehicle,
-        brand: this.brand,
-        model: this.model
+            vehicle: this.selectedVehicle,
+            brand: this.brand,
+            model: this.model
           }
         });
       }

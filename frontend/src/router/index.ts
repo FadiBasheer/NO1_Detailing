@@ -17,12 +17,12 @@ const router = createRouter({
     {
       path: '/address-selection',
       name: 'AddressSelectionView',
-      component: () => import('@/views/AddressSelectionView.vue')
+      component: () => import('../views/AddressSelectionView.vue')
     },
     {
       path: '/booking',
       name: 'BookingView',
-      component: () => import('@/views/BookingView.vue')
+      component: () => import('../views/BookingView.vue')
     },
     {
       path: '/FAQs',
