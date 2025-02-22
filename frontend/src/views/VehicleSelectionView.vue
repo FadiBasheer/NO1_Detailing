@@ -62,7 +62,7 @@ export default {
     selectVehicle(name) {
       this.selectedVehicle = name;
     },
-    goToNextPage() {
+    goToAddressSelection() {
       if (this.canProceed) {
         this.$router.push({
           name: 'AddressSelectionView', // Use route name, not path string
