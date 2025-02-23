@@ -1,4 +1,4 @@
-<template>
+<template> 
   <div class="address-selection">
     <h1>Enter Your Address</h1>
     <input
@@ -21,12 +21,18 @@ export default {
     };
   },
   mounted() {
-    const input = this.$refs.autocompleteInput;
-    this.autocomplete = new google.maps.places.Autocomplete(input);
-    this.autocomplete.addListener("place_changed", () => {
-      const place = this.autocomplete.getPlace();
-      this.address = place.formatted_address;
-    });
+    // Wait for Google Maps to be fully loaded
+    const interval = setInterval(() => {
+      if (window.google && window.google.maps && window.google.maps.places) {
+        clearInterval(interval);
+        const input = this.$refs.autocompleteInput;
+        this.autocomplete = new google.maps.places.Autocomplete(input);
+        this.autocomplete.addListener("place_changed", () => {
+          const place = this.autocomplete.getPlace();
+          this.address = place?.formatted_address || "";
+        });
+      }
+    }, 100);
   },
   methods: {
     goToBooking() {
