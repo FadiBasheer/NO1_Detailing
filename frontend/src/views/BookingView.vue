@@ -14,9 +14,6 @@
         </option>
       </select>
 
-      <label for="address">Enter Address:</label>
-      <input type="text" id="address" v-model="address" required />
-
       <button type="submit">Confirm Booking</button>
 
       <p v-if="message" class="message">{{ message }}</p>
