@@ -42,7 +42,7 @@ export default {
       }
 
       this.$router.push({
-        name: "BookingView",
+        name: "ChoosingServiceView",
         query: { address: this.address },
       });
     },
