@@ -7,7 +7,7 @@
       placeholder="Enter your address"
       class="address-input"
     />
-    <button @click="goToBooking">Continue</button>
+    <button @click="goToService">Continue</button>
   </div>
 </template>
 
@@ -35,7 +35,7 @@ export default {
     }, 100);
   },
   methods: {
-    goToBooking() {
+    goToService() {
       if (!this.address) {
         alert("Please enter a valid address.");
         return;
