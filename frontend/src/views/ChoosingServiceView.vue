@@ -14,16 +14,21 @@ export default {
   name: "ChoosingServiceView",
   data() {
     return {
-      address: this.$route.query.address || "",
+      vehicleType: this.$route.query.vehicle || "",
     };
   },
+
+  created() {
+    //console.log("Vehicle type:", this.vehicleType);
+  },
+
   methods: {
     selectService(serviceType) {
       this.$router.push({
         name: "BookingView",
         query: {
-          address: this.address,
           service: serviceType,
+          vehicle: this.vehicleType
         },
       });
     },

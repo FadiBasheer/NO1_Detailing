@@ -27,7 +27,10 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      vehicleType: '',
+      vehicleType: this.$route.query.vehicle || "",
+      service: this.$route.query.service || "",
+      brand: this.$route.query.brand || "",
+      model: this.$route.query.model || "",
       date: '',
       time: '',
       address: '',
@@ -36,6 +39,11 @@ export default {
       timeSlots: ['08:00 AM', '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', 
                   '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM']
     };
+  },
+
+  created() {
+    console.log("Vehicle type:", this.vehicleType);
+    console.log("service type:", this.service);
   },
   computed: {
     availableTimeSlots() {

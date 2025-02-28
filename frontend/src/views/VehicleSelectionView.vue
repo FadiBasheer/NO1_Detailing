@@ -26,7 +26,7 @@
         v-model="model"
         placeholder="Car Model (e.g. Camry)"
       />
-      <button @click="goToAddressSelection" :disabled="!canProceed">Next</button>
+      <button @click="goToServiceSelection" :disabled="!canProceed">Next</button>
     </div>
   </div>
 </template>
@@ -62,10 +62,10 @@ export default {
     selectVehicle(name) {
       this.selectedVehicle = name;
     },
-    goToAddressSelection() {
+    goToServiceSelection() {
       if (this.canProceed) {
         this.$router.push({
-          name: 'ChoosingServiceView', // Use route name, not path string // I need to change it later to (AddressSelectionView)
+          name: 'ChoosingServiceView', // Use route name, not path string
           query: {
             vehicle: this.selectedVehicle,
             brand: this.brand,
