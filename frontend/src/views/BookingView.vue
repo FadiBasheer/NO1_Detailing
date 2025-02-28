@@ -44,6 +44,7 @@ export default {
   created() {
     console.log("Vehicle type:", this.vehicleType);
     console.log("service type:", this.service);
+    console.log("service type:", this.service);
   },
   computed: {
     availableTimeSlots() {
