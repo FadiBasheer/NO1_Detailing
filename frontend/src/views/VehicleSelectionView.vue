@@ -65,7 +65,7 @@ export default {
     goToAddressSelection() {
       if (this.canProceed) {
         this.$router.push({
-          name: 'AddressSelectionView', // Use route name, not path string
+          name: 'ChoosingServiceView', // Use route name, not path string // I need to change it later to (AddressSelectionView)
           query: {
             vehicle: this.selectedVehicle,
             brand: this.brand,
