@@ -8,7 +8,8 @@
         v-for="(service, key) in services"
         :key="key"
         @click="selectService(key)">
-        {{ service.name }}
+        {{ service.name,
+        service.duration }}
       </button>
     </div>
 
