@@ -1,38 +1,66 @@
 <template>
   <div class="choose-service">
     <h1>Select Service Type</h1>
+
+    <!-- Service Selection -->
     <div class="service-options">
-      <button @click="selectService('Interior')">Interior</button>
-      <button @click="selectService('Exterior')">Exterior</button>
-      <button @click="selectService('Both')">Both</button>
+      <button
+        v-for="(service, key) in services"
+        :key="key"
+        @click="selectService(key)">
+        {{ service.name }}
+      </button>
+    </div>
+
+    <!-- Add-on Options -->
+    <div v-if="selectedService" class="addons-section">
+      <h2>Add-on Services</h2>
+      <div class="addon-option" v-for="(addon, name) in addons" :key="name">
+        <label>
+          <input
+            type="checkbox"
+            :value="name"
+            v-model="selectedAddons"
+          />
+          {{ name }} ({{ addon.duration }} mins - ${{ addon.price }})
+        </label>
+      </div>
+
+      <button @click="goToBooking">Continue to Booking</button>
     </div>
   </div>
 </template>
 
 <script>
+import { services, addons } from "@/data/services.js";
+
 export default {
   name: "ChoosingServiceView",
   data() {
     return {
       vehicleType: this.$route.query.vehicle || "",
+      selectedService: null,
+      selectedAddons: [],
+      services,
+      addons
     };
   },
-
-  created() {
-    //console.log("Vehicle type:", this.vehicleType);
-  },
-
   methods: {
-    selectService(serviceType) {
+    selectService(serviceKey) {
+      this.selectedService = serviceKey;
+      this.selectedAddons = []; // reset addons
+    },
+    goToBooking() {
       this.$router.push({
         name: "BookingView",
         query: {
-          service: serviceType,
-          vehicle: this.vehicleType
-        },
+          vehicle: this.vehicleType,
+          service: this.selectedService,
+          addons: this.selectedAddons.join(",") // send as comma-separated
+        }
       });
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -50,4 +78,26 @@ export default {
   font-size: 18px;
   cursor: pointer;
 }
+
+.addons-section {
+  margin-top: 30px;
+  text-align: left;
+  width: 300px;
+}
+
+.addon-option {
+  margin-bottom: 10px;
+}
+
+button {
+  margin-top: 20px;
+  padding: 10px 20px;
+}
 </style>
+
+
+
+
+ // created() {
+ //   //console.log("Vehicle type:", this.vehicleType);
+ // },
