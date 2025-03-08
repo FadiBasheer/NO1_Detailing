@@ -4,13 +4,18 @@
 
     <!-- Service Selection -->
     <div class="service-options">
-      <button
+      <div
+        class="service-card"
         v-for="(service, key) in services"
         :key="key"
-        @click="selectService(key)">
-        {{ service.name,
-        service.duration }}
-      </button>
+        @click="selectService(key)"
+      >
+        <img :src="service.image" :alt="service.name" class="service-image" />
+        <h3>{{ service.name }}</h3>
+        <p>{{ service.description }}</p>
+        <p><strong>Duration:</strong> {{ service.duration }} mins</p>
+        <p><strong>Price:</strong> ${{ service.price }}</p>
+      </div>
     </div>
 
     <!-- Add-on Options -->
