@@ -27,6 +27,12 @@ import services from '@/data/services';
 import axios from 'axios';
 
 export default {
+  computed: {
+    selectedService() {
+      return services[this.service]; // This gives you the full object
+    }
+  }
+  
   data() {
     return {
       vehicleType: this.$route.query.vehicle || "",
