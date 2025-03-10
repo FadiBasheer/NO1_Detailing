@@ -1,3 +1,5 @@
+import services from '@/data/services';
+
 <template>
   <div class="booking-container">
     <h2>Book Your Appointment</h2>
@@ -29,6 +31,7 @@ export default {
     return {
       vehicleType: this.$route.query.vehicle || "",
       service: this.$route.query.service || "",
+      addons: this.$route.query.addons || "",
       brand: this.$route.query.brand || "",
       model: this.$route.query.model || "",
       date: '',
@@ -43,7 +46,8 @@ export default {
 
   created() {
     console.log("Vehicle type:", this.vehicleType);
-    console.log("service type:", this.service);
+    console.log("service type:", this.service.name);
+    console.log("service duration:", this.service.duration);
     console.log("service type:", this.service);
   },
   computed: {
