@@ -52,10 +52,12 @@ export default {
 
   created() {
     console.log("Vehicle type:", this.vehicleType);
-    console.log("service type:", this.service.name);
-    console.log("service duration:", this.service.duration);
-    console.log("service type:", this.service);
+    console.log("Service key:", this.service);
+    console.log("Full service object:", this.selectedService);
+    console.log("Service name:", this.selectedService.name);
+    console.log("Service duration:", this.selectedService.duration);
   },
+
   computed: {
     availableTimeSlots() {
       return this.timeSlots;

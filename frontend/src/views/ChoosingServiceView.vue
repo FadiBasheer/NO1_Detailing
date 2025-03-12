@@ -63,7 +63,7 @@ export default {
         query: {
           vehicle: this.vehicleType,
           service: this.selectedService,
-          addons: this.selectedAddons.join(",") // send as comma-separated
+          addons: this.selectedAddons
         }
       });
     }
@@ -133,12 +133,4 @@ button {
   background: #f0fff0;
 }
 
-
 </style>
-
-
-
-
- // created() {
- //   //console.log("Vehicle type:", this.vehicleType);
- // },
