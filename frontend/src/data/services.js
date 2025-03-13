@@ -42,3 +42,5 @@ export const addons = {
     image: '/src/assets/addons/mold-cleaning.jpg'
   }
 };
+
+export default services;

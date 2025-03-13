@@ -27,11 +27,6 @@ import services from '@/data/services';
 import axios from 'axios';
 
 export default {
-  computed: {
-    selectedService() {
-      return services[this.service]; // This gives you the full object
-    }
-  },
 
   data() {
     return {
@@ -51,18 +46,23 @@ export default {
   },
 
   created() {
+    console.log("Imported services object:", services);
     console.log("Vehicle type:", this.vehicleType);
     console.log("Service key:", this.service);
     console.log("Full service object:", this.selectedService);
-    console.log("Service name:", this.selectedService.name);
-    console.log("Service duration:", this.selectedService.duration);
+    //console.log("Service name:", this.selectedService.name);
+    //console.log("Service duration:", this.selectedService.duration);
   },
 
   computed: {
     availableTimeSlots() {
       return this.timeSlots;
+    },
+    selectedService() {
+      return services[this.service]; // This gives you the full object
     }
   },
+
   methods: {
     async fetchBookedTimes() {
       if (!this.date) return;
