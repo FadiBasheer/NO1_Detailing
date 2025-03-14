@@ -1,4 +1,4 @@
-import services from '@/data/services';
+
 
 <template>
   <div class="booking-container">
@@ -25,6 +25,7 @@ import services from '@/data/services';
 
 <script>
 import axios from 'axios';
+import services from '@/data/services';
 
 export default {
 
@@ -50,8 +51,8 @@ export default {
     console.log("Vehicle type:", this.vehicleType);
     console.log("Service key:", this.service);
     console.log("Full service object:", this.selectedService);
-    //console.log("Service name:", this.selectedService.name);
-    //console.log("Service duration:", this.selectedService.duration);
+    console.log("Service name:", this.selectedService.name);
+    console.log("Service duration:", this.selectedService.duration);
   },
 
   computed: {
