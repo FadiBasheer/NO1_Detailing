@@ -1,5 +1,4 @@
 
-
 <template>
   <div class="booking-container">
     <h2>Book Your Appointment</h2>
@@ -48,17 +47,20 @@ export default {
 
   created() {
     console.log("Vehicle type:", this.vehicleType);
-    console.log("Service key:", this.service);
+    console.log("Addons:", this.addons);
+    console.log("Addons duration:", this.selectedAddons.duration);
     console.log("Service name:", this.selectedService.name);
     console.log("Service duration:", this.selectedService.duration);
   },
-
   computed: {
     availableTimeSlots() {
       return this.timeSlots;
     },
     selectedService() {
       return services[this.service]; // This gives you the full object
+    },
+    selectedAddons() {
+      return services[this.addons]; // This gives you the full object
     }
   },
 
