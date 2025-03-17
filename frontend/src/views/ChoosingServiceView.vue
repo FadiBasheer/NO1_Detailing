@@ -63,7 +63,7 @@ export default {
         query: {
           vehicle: this.vehicleType,
           service: this.selectedService,
-          addons: this.selectedAddons
+          addons: this.selectedAddons.join(",") // send as comma-separated string (if we have more than one addons)
         }
       });
     }
