@@ -60,7 +60,10 @@ export default {
       return services[this.service]; // This gives you the full object
     },
     selectedAddons() {
-      return services[this.addons]; // This gives you the full object
+      if (!this.addons) return [];
+  
+      const addonKeys = this.addons.split(",");
+      return addonKeys.map(key => addons[key]).filter(Boolean);
     }
   },
 
