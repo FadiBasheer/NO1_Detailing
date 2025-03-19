@@ -24,7 +24,7 @@
 
 <script>
 import axios from 'axios';
-import services from '@/data/services';
+import { services, addons } from '@/data/services';
 
 export default {
 
@@ -61,7 +61,7 @@ export default {
     },
     selectedAddons() {
       if (!this.addons) return [];
-  
+
       const addonKeys = this.addons.split(",");
       return addonKeys.map(key => addons[key]).filter(Boolean);
     }
