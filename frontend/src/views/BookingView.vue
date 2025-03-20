@@ -48,7 +48,15 @@ export default {
   created() {
     console.log("Vehicle type:", this.vehicleType);
     console.log("Addons:", this.addons);
-    console.log("Addons duration:", this.selectedAddons.duration);
+
+    console.log("Selected Add-ons:");
+    this.selectedAddons.forEach((addon, index) => {
+      console.log(
+        `#${index + 1} - Name: ${addon.name}, Duration: ${addon.duration} mins, Price: $${addon.price}`
+      );
+    });
+
+
     console.log("Service name:", this.selectedService.name);
     console.log("Service duration:", this.selectedService.duration);
   },
