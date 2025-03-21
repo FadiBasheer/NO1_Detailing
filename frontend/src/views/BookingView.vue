@@ -56,7 +56,7 @@ export default {
       );
     });
 
-
+//czcx
     console.log("Service name:", this.selectedService.name);
     console.log("Service duration:", this.selectedService.duration);
   },
