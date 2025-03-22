@@ -24,18 +24,21 @@ export const services = {
 
 export const addons = {
   "Engine Cleaning": {
+    name: "Engine Cleaning",
     duration: 30,
     price: 40,
     description: "Degreasing and detailed cleaning of the engine bay.",
     image: '/src/assets/addons/engine-cleaning.jpg'
   },
   "Polishing": {
+    name: "Polishing",
     duration: 45,
     price: 60,
     description: "Paint correction and polishing for a showroom finish.",
     image: '/src/assets/addons/polishing.jpg'
   },
   "Mold Cleaning": {
+    name: "Mold Cleaning",
     duration: 60,
     price: 75,
     description: "Removes mold and disinfects affected areas.",
