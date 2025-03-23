@@ -52,7 +52,7 @@ export default {
     console.log("Selected Add-ons:");
     this.selectedAddons.forEach((addon, index) => {
       console.log(
-        `#${index + 1} - Name: ${addon.key}, Duration: ${addon.duration} mins, Price: $${addon.price}`
+        `#${index + 1} - Name: ${addon.name}, Duration: ${addon.duration} mins, Price: $${addon.price}`
       );
     });
 
