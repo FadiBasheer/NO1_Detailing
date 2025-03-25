@@ -74,6 +74,29 @@ export default {
   },
 
   methods: {
+
+    generateTimeSlots(startTime, endTime, intervalMinutes) {
+      const slots = [];
+      const pad = n => (n < 10 ? "0" + n : n);
+
+      let [startHour, startMin] = startTime.split(":").map(Number);
+      let [endHour, endMin] = endTime.split(":").map(Number);
+
+      let current = new Date();
+      current.setHours(startHour, startMin, 0, 0);
+      const end = new Date();
+      end.setHours(endHour, endMin, 0, 0);
+
+      while (current <= end) {
+        const hour = current.getHours();
+        const minute = current.getMinutes();
+        const formatted = `${pad(hour % 12 || 12)}:${pad(minute)} ${hour < 12 ? "AM" : "PM"}`;
+        slots.push(formatted);
+        current.setMinutes(current.getMinutes() + intervalMinutes);
+      }
+      return slots;
+    },
+
     async fetchBookedTimes() {
       if (!this.date) return;
 
@@ -84,9 +107,11 @@ export default {
         console.error('Error fetching booked times:', error);
       }
     },
+
     isTimeBooked(slot) {
       return this.bookedTimes.includes(slot);
     },
+
     async submitBooking() {
       try {
         const bookingData = {
