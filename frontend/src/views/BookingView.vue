@@ -58,6 +58,7 @@ export default {
     console.log("Service name:", this.selectedService.name);
     console.log("Service duration:", this.selectedService.duration);
   },
+  
   computed: {
     availableTimeSlots() {
       return this.timeSlots;
@@ -74,7 +75,6 @@ export default {
   },
 
   methods: {
-
     generateTimeSlots(startTime, endTime, intervalMinutes) {
       const slots = [];
       const pad = n => (n < 10 ? "0" + n : n);
