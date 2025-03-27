@@ -58,14 +58,27 @@ export default {
     console.log("Service name:", this.selectedService.name);
     console.log("Service duration:", this.selectedService.duration);
   },
-  
+
   computed: {
+    totalDuration() {
+      let total = 0;
+      if (this.selectedService) {
+        total += this.selectedService.duration;
+      }
+      this.selectedAddons.forEach(addon => {
+        total += addon.duration;
+      });
+      return total;
+    },
+
     availableTimeSlots() {
       return this.timeSlots;
     },
+
     selectedService() {
       return services[this.service]; // This gives you the full object
     },
+
     selectedAddons() {
       if (!this.addons) return [];
 
