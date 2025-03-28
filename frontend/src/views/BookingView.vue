@@ -110,6 +110,13 @@ export default {
       return slots;
     },
 
+    timeStringToMinutes(timeStr) {
+      const [time, period] = timeStr.split(" ");
+      let [hour, minute] = time.split(":").map(Number);
+      if (period === "PM" && hour !== 12) hour += 12;
+      if (period === "AM" && hour === 12) hour = 0;
+      return hour * 60 + minute;
+    },
     async fetchBookedTimes() {
       if (!this.date) return;
 
