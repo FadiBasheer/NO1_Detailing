@@ -130,7 +130,7 @@ export default {
         );
       });
     },
-    
+
     async fetchBookedTimes() {
       if (!this.date) return;
 
@@ -140,10 +140,6 @@ export default {
       } catch (error) {
         console.error('Error fetching booked times:', error);
       }
-    },
-
-    isTimeBooked(slot) {
-      return this.bookedTimes.includes(slot);
     },
 
     async submitBooking() {
