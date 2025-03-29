@@ -40,7 +40,7 @@ export default {
       address: '',
       message: '',
       bookedTimes: [],
-      timeSlots: this.generateTimeSlots("08:00", "17:00", 30)
+      timeSlots: this.generateTimeSlots("08:00", "20:00", 30)
     };
   },
 
@@ -60,6 +60,15 @@ export default {
   },
 
   computed: {
+
+    todayDate() {
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const dd = String(today.getDate()).padStart(2, '0');
+      return `${yyyy}-${mm}-${dd}`;
+    },
+
     totalDuration() {
       let total = 0;
       if (this.selectedService) {
