@@ -117,6 +117,20 @@ export default {
       if (period === "AM" && hour === 12) hour = 0;
       return hour * 60 + minute;
     },
+
+    isTimeBooked(slot) {
+      const slotStart = this.timeStringToMinutes(slot);
+      const slotEnd = slotStart + this.totalDuration;
+
+      return this.bookedTimes.some(booked => {
+        const bookedStart = this.timeStringToMinutes(booked);
+        const bookedEnd = bookedStart + 60; // Assuming each existing booking lasts 1 hour (you can store actual duration later)
+        return (
+          (slotStart < bookedEnd && slotEnd > bookedStart) // overlap check
+        );
+      });
+    },
+    
     async fetchBookedTimes() {
       if (!this.date) return;
 
