@@ -5,7 +5,7 @@
 
     <form @submit.prevent="submitBooking">
       <label for="date">Select Date:</label>
-      <input type="date" id="date" v-model="date" @change="fetchBookedTimes" required />
+      
 
       <label for="time">Select Time:</label>
       <select id="time" v-model="time" required>
