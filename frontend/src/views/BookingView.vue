@@ -68,6 +68,10 @@ export default {
 
   computed: {
 
+    availableTimeSlots() {
+      return this.generateTimeSlots("08:00", "20:00", 30, this.totalDuration);
+    },
+    
     todayDate() {
       const today = new Date();
       const yyyy = today.getFullYear();
