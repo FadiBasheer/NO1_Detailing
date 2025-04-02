@@ -111,33 +111,33 @@ export default {
     generateTimeSlots(startTime, endTime, intervalMinutes, jobDuration = 0) {
       const slots = [];
       const pad = n => (n < 10 ? "0" + n : n);
-    
+
       let [startHour, startMin] = startTime.split(":").map(Number);
       let [endHour, endMin] = endTime.split(":").map(Number);
-    
+
       let current = new Date();
       current.setHours(startHour, startMin, 0, 0);
       const end = new Date();
       end.setHours(endHour, endMin, 0, 0);
-    
+
       const endMinutes = endHour * 60 + endMin;
-    
+
       while (true) {
         const slotMinutes = current.getHours() * 60 + current.getMinutes();
         const jobEnd = slotMinutes + jobDuration;
-    
+
         if (jobEnd > endMinutes) break;
-    
+
         const hour = current.getHours();
         const minute = current.getMinutes();
         const formatted = `${pad(hour % 12 || 12)}:${pad(minute)} ${hour < 12 ? "AM" : "PM"}`;
         slots.push(formatted);
-    
+
         current.setMinutes(current.getMinutes() + intervalMinutes);
       }
-    
+
       return slots;
-    }
+    },
 
 
     timeStringToMinutes(timeStr) {
