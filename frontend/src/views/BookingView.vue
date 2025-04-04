@@ -130,12 +130,11 @@ export default {
 
         const hour = current.getHours();
         const minute = current.getMinutes();
-        const formatted = `${pad(hour % 12 || 12)}:${pad(minute)} ${hour < 12 ? "AM" : "PM"}`;
+        const formatted = '${pad(hour % 12 || 12)}:${pad(minute)} ${hour < 12 ? "AM" : "PM"}';
         slots.push(formatted);
 
         current.setMinutes(current.getMinutes() + intervalMinutes);
       }
-
       return slots;
     },
 
