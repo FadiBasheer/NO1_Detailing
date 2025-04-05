@@ -47,7 +47,6 @@ export default {
       address: '',
       message: '',
       bookedTimes: [],
-      //timeSlots: this.generateTimeSlots("08:00", "20:00", 30)
     };
   },
 
