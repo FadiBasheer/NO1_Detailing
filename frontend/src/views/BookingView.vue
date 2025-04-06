@@ -90,10 +90,6 @@ export default {
       return total;
     },
 
-    availableTimeSlots() {
-      return this.timeSlots;
-    },
-
     selectedService() {
       return services[this.service]; // This gives you the full object
     },
