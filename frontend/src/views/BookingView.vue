@@ -37,18 +37,23 @@ export default {
 
   data() {
     return {
-      vehicleType: this.$route.query.vehicle || "",
-      service: this.$route.query.service || "",
-      addons: this.$route.query.addons || "",
-      brand: this.$route.query.brand || "",
-      model: this.$route.query.model || "",
       date: '',
       time: '',
       address: '',
+      vehicles: [
+        {
+          vehicleType: this.$route.query.vehicle || "",
+          service: this.$route.query.service || "",
+          addons: this.$route.query.addons || "",
+          brand: this.$route.query.brand || "",
+          model: this.$route.query.model || ""
+        }
+      ],
       message: '',
       bookedTimes: [],
     };
   },
+
 
   created() {
     console.log("Vehicle type:", this.vehicleType);
