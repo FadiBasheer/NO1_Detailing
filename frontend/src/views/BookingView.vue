@@ -24,6 +24,11 @@
 
       <button type="submit">Confirm Booking</button>
 
+      <button type="button" @click="addAnotherVehicle" style="margin-top: 10px;">
+        Add Another Vehicle Before Your Appointment
+      </button>
+
+
       <p v-if="message" class="message">{{ message }}</p>
     </form>
   </div>
