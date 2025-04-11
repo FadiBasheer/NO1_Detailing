@@ -113,6 +113,25 @@ export default {
   },
 
   methods: {
+
+    addAnotherVehicle() {
+      // Save current vehicle info to localStorage or a global store if using Vuex/Pinia
+      const existingVehicles = JSON.parse(localStorage.getItem('vehicles')) || [];
+      existingVehicles.push({
+        vehicleType: this.vehicleType,
+        service: this.service,
+        addons: this.addons,
+        brand: this.brand,
+        model: this.model
+      });
+      localStorage.setItem('vehicles', JSON.stringify(existingVehicles));
+
+      // Redirect to vehicle selection view
+      this.$router.push({ name: 'VehicleSelection' }); // adjust route name if needed
+    }
+
+
+
     generateTimeSlots(startTime, endTime, intervalMinutes, jobDuration = 0) {
       const slots = [];
       const pad = n => (n < 10 ? "0" + n : n);
