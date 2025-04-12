@@ -128,7 +128,7 @@ export default {
 
       // Redirect to vehicle selection view
       this.$router.push({ name: 'VehicleSelection' }); // adjust route name if needed
-    }
+    },
 
 
 
