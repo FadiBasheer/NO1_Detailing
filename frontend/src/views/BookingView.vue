@@ -130,8 +130,6 @@ export default {
       this.$router.push({ name: 'VehicleSelection' }); // adjust route name if needed
     },
 
-
-
     generateTimeSlots(startTime, endTime, intervalMinutes, jobDuration = 0) {
       const slots = [];
       const pad = n => (n < 10 ? "0" + n : n);
