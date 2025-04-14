@@ -73,6 +73,20 @@ export default {
 
     console.log("Service name:", this.selectedService.name);
     console.log("Service duration:", this.selectedService.duration);
+
+    const savedVehicles = JSON.parse(localStorage.getItem('vehicles')) || [];
+
+    if (this.vehicleType) {
+      savedVehicles.push({
+        vehicleType: this.vehicleType,
+        service: this.service,
+        addons: this.addons,
+        brand: this.brand,
+        model: this.model
+      });
+    }
+  
+    this.vehicles = savedVehicles;
   },
 
   computed: {
