@@ -85,7 +85,6 @@ export default {
         model: this.model
       });
     }
-  
     this.vehicles = savedVehicles;
   },
 
