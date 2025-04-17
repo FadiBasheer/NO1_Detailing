@@ -71,8 +71,8 @@ export default {
       );
     });
 
-    console.log("Service name:", this.service.name);
-    console.log("Service duration:", this.service.duration);
+    console.log("Service name:", this.selectedService.name);
+    console.log("Service duration:", this.selectedService.duration);
 
     const savedVehicles = JSON.parse(localStorage.getItem('vehicles')) || [];
 
