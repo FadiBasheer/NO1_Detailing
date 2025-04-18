@@ -61,6 +61,20 @@ export default {
 
 
   created() {
+    const savedVehicles = JSON.parse(localStorage.getItem('vehicles')) || [];
+
+    if (this.vehicleType) {
+      savedVehicles.push({
+        vehicleType: this.vehicleType,
+        service: this.service,
+        addons: this.addons,
+        brand: this.brand,
+        model: this.model
+      });
+    }
+    this.vehicles = savedVehicles;
+
+
     console.log("Vehicle type:", this.vehicleType);
     console.log("Addons:", this.addons);
 
@@ -76,18 +90,6 @@ export default {
       console.log("Service duration:", selectedService.duration);
     }
 
-    const savedVehicles = JSON.parse(localStorage.getItem('vehicles')) || [];
-
-    if (this.vehicleType) {
-      savedVehicles.push({
-        vehicleType: this.vehicleType,
-        service: this.service,
-        addons: this.addons,
-        brand: this.brand,
-        model: this.model
-      });
-    }
-    this.vehicles = savedVehicles;
   },
 
   computed: {
