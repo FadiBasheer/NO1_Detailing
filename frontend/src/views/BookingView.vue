@@ -88,7 +88,7 @@ export default {
     if (this.vehicles.length > 0) {
       const firstVehicle = this.vehicles[0];
       const selectedService = services[firstVehicle.service];
-    
+
       if (selectedService) {
         console.log("Service name:", selectedService.name);
         console.log("Service duration:", selectedService.duration);
@@ -149,7 +149,7 @@ export default {
       localStorage.setItem('vehicles', JSON.stringify(existingVehicles));
 
       // Redirect to vehicle selection view
-      this.$router.push({ name: 'VehicleSelection' }); // adjust route name if needed
+      this.$router.push({ name: 'VehicleSelection' });
     },
 
     generateTimeSlots(startTime, endTime, intervalMinutes, jobDuration = 0) {
