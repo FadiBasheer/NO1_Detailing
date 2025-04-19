@@ -85,9 +85,14 @@ export default {
       );
     });
 
-    if (selectedService) {
-      console.log("Service name:", selectedService.name);
-      console.log("Service duration:", selectedService.duration);
+    if (this.vehicles.length > 0) {
+      const firstVehicle = this.vehicles[0];
+      const selectedService = services[firstVehicle.service];
+    
+      if (selectedService) {
+        console.log("Service name:", selectedService.name);
+        console.log("Service duration:", selectedService.duration);
+      }
     }
 
   },
