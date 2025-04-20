@@ -149,7 +149,7 @@ export default {
       localStorage.setItem('vehicles', JSON.stringify(existingVehicles));
 
       // Redirect to vehicle selection view
-      this.$router.push({ name: 'VehicleSelection' });
+      this.$router.push({ name: 'vehicles' });
     },
 
     generateTimeSlots(startTime, endTime, intervalMinutes, jobDuration = 0) {
