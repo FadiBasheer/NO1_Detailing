@@ -63,27 +63,14 @@ export default {
   created() {
     const savedVehicles = JSON.parse(localStorage.getItem('vehicles')) || [];
 
-    if (this.vehicleType) {
-      savedVehicles.push({
-        vehicleType: this.vehicleType,
-        service: this.service,
-        addons: this.addons,
-        brand: this.brand,
-        model: this.model
-      });
+    if (this.vehicles && this.vehicles[0]?.vehicleType) {
+      savedVehicles.push({ ...this.vehicles[0] });
     }
+
     this.vehicles = savedVehicles;
 
 
-    console.log("Vehicle type:", this.vehicleType);
-    console.log("Addons:", this.addons);
-
-    console.log("Selected Add-ons:");
-    this.selectedAddons.forEach((addon, index) => {
-      console.log(
-        `#${index + 1} - Name: ${addon.name}, Duration: ${addon.duration} mins, Price: $${addon.price}`
-      );
-    });
+    console.log("this.vehicles.length: ",this.vehicles.length);
 
     if (this.vehicles.length > 0) {
       const firstVehicle = this.vehicles[0];
