@@ -74,7 +74,11 @@ export default {
 
     if (this.vehicles.length > 0) {
       const firstVehicle = this.vehicles[0];
+
+      console.log("firstVehicle: ",firstVehicle.vehicleType);
+
       const selectedService = services[firstVehicle.service];
+      console.log("selectedService: ",selectedService);
 
       if (selectedService) {
         console.log("Service name:", selectedService.name);
@@ -123,21 +127,19 @@ export default {
 
   methods: {
 
-    addAnotherVehicle() {
-      // Save current vehicle info to localStorage or a global store if using Vuex/Pinia
-      const existingVehicles = JSON.parse(localStorage.getItem('vehicles')) || [];
-      existingVehicles.push({
-        vehicleType: this.vehicleType,
-        service: this.service,
-        addons: this.addons,
-        brand: this.brand,
-        model: this.model
-      });
-      localStorage.setItem('vehicles', JSON.stringify(existingVehicles));
+  addAnotherVehicle() {
+    const existingVehicles = JSON.parse(localStorage.getItem('vehicles')) || [];
 
-      // Redirect to vehicle selection view
-      this.$router.push({ name: 'vehicles' });
-    },
+    // Only add if valid vehicle data is present
+    if (this.vehicles && this.vehicles[0]?.vehicleType) {
+      existingVehicles.push({ ...this.vehicles[0] });
+      localStorage.setItem('vehicles', JSON.stringify(existingVehicles));
+    }
+
+    // Redirect to vehicle selection view
+    this.$router.push({ name: 'vehicles' });
+  },
+
 
     generateTimeSlots(startTime, endTime, intervalMinutes, jobDuration = 0) {
       const slots = [];
