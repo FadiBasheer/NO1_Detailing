@@ -129,7 +129,7 @@ export default {
 
     addAnotherVehicle() {
       const existingVehicles = JSON.parse(localStorage.getItem('vehicles')) || [];
-      
+
       // Only add if valid vehicle data is present
       if (this.vehicles && this.vehicles[0]?.vehicleType) {
         existingVehicles.push({ ...this.vehicles[0] });
@@ -139,7 +139,6 @@ export default {
       // Redirect to vehicle selection view
       this.$router.push({ name: 'vehicles' });
     },
-
 
     generateTimeSlots(startTime, endTime, intervalMinutes, jobDuration = 0) {
       const slots = [];
