@@ -49,7 +49,7 @@ export default {
         {
           vehicleType: this.$route.query.vehicle || "",
           service: this.$route.query.service || "",
-          addons: this.$route.query.addons || "",
+          addons: this.$route.query.addons ? this.$route.query.addons.split(",") : [],
           brand: this.$route.query.brand || "",
           model: this.$route.query.model || ""
         }
@@ -206,24 +206,24 @@ export default {
     async submitBooking() {
       try {
         const savedVehicles = JSON.parse(localStorage.getItem('vehicles')) || [];
-    
+
         const bookingData = {
           vehicles: savedVehicles,
           date: this.date,
           time: this.time,
           address: this.address
         };
-    
+
         const response = await axios.post('http://localhost:5000/api/bookings', bookingData);
         this.message = response.data.message;
-    
+
         // Clear everything
         localStorage.removeItem('vehicles');
         this.date = '';
         this.time = '';
         this.address = '';
         this.vehicles = [];
-    
+
         this.fetchBookedTimes();
       } catch (error) {
         this.message = error.response?.data?.message || 'Error submitting booking.';
