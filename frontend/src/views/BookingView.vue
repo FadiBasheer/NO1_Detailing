@@ -205,28 +205,31 @@ export default {
 
     async submitBooking() {
       try {
+        const savedVehicles = JSON.parse(localStorage.getItem('vehicles')) || [];
+    
         const bookingData = {
-          vehicleType: this.vehicleType,
+          vehicles: savedVehicles,
           date: this.date,
           time: this.time,
           address: this.address
         };
-
+    
         const response = await axios.post('http://localhost:5000/api/bookings', bookingData);
         this.message = response.data.message;
-        
-        // Clear form after successful booking
-        this.vehicleType = '';
+    
+        // Clear everything
+        localStorage.removeItem('vehicles');
         this.date = '';
         this.time = '';
         this.address = '';
-
-        // Refresh booked times to disable selected slot
+        this.vehicles = [];
+    
         this.fetchBookedTimes();
       } catch (error) {
         this.message = error.response?.data?.message || 'Error submitting booking.';
       }
     }
+
   }
 };
 </script>
