@@ -65,7 +65,6 @@ export default {
     if (this.vehicles && this.vehicles[0]?.vehicleType) {
       savedVehicles.push({ ...this.vehicles[0] });
     }
-
     this.vehicles = savedVehicles;
 
 
