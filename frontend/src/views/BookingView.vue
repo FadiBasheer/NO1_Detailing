@@ -59,7 +59,6 @@ export default {
     };
   },
 
-
   created() {
     const savedVehicles = JSON.parse(localStorage.getItem('vehicles')) || [];
 
