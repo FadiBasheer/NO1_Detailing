@@ -67,7 +67,6 @@ export default {
     }
     this.vehicles = savedVehicles;
 
-
     console.log("this.vehicles.length: ",this.vehicles.length);
 
     if (this.vehicles.length > 0) {
