@@ -61,29 +61,28 @@ export default {
 
   created() {
     const savedVehicles = JSON.parse(localStorage.getItem('vehicles')) || [];
-
-    if (this.vehicles && this.vehicles[0]?.vehicleType) {
-      savedVehicles.push({ ...this.vehicles[0] });
+  
+    // Only push if this.vehicles[0] has valid data
+    const first = this.vehicles[0];
+    if (first?.vehicleType) {
+      savedVehicles.push({ ...first });
+      localStorage.setItem('vehicles', JSON.stringify(savedVehicles));
     }
+  
     this.vehicles = savedVehicles;
-
-    console.log("this.vehicles.length: ",this.vehicles.length);
-
+  
     if (this.vehicles.length > 0) {
       const firstVehicle = this.vehicles[0];
-
-      console.log("firstVehicle: ",firstVehicle.vehicleType);
-
+      console.log("firstVehicle: ", firstVehicle.vehicleType);
+  
       const selectedService = services[firstVehicle.service];
-      console.log("selectedService: ",selectedService);
-
       if (selectedService) {
         console.log("Service name:", selectedService.name);
         console.log("Service duration:", selectedService.duration);
       }
     }
+  }
 
-  },
 
   computed: {
 
