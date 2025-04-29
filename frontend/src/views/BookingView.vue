@@ -61,20 +61,20 @@ export default {
 
   created() {
     const savedVehicles = JSON.parse(localStorage.getItem('vehicles')) || [];
-  
+
     // Only push if this.vehicles[0] has valid data
     const first = this.vehicles[0];
     if (first?.vehicleType) {
       savedVehicles.push({ ...first });
       localStorage.setItem('vehicles', JSON.stringify(savedVehicles));
     }
-  
+
     this.vehicles = savedVehicles;
-  
+
     if (this.vehicles.length > 0) {
       const firstVehicle = this.vehicles[0];
       console.log("firstVehicle: ", firstVehicle.vehicleType);
-  
+
       const selectedService = services[firstVehicle.service];
       if (selectedService) {
         console.log("Service name:", selectedService.name);
@@ -110,8 +110,9 @@ export default {
     },
 
     selectedService() {
-      return services[this.service]; // This gives you the full object
-    },
+      const first = this.vehicles[0];
+      return first ? services[first.service] : null;
+    },,
 
     selectedAddons() {
       if (!this.addons) return [];
