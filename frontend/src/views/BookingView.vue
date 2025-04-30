@@ -73,7 +73,10 @@ export default {
 
     if (this.vehicles.length > 0) {
       const firstVehicle = this.vehicles[0];
-      console.log("firstVehicle: ", firstVehicle.vehicleType);
+      if (firstVehicle?.vehicleType) {
+        console.log("firstVehicle: ", firstVehicle.vehicleType);
+      }
+    }
 
       const selectedService = services[firstVehicle.service];
       if (selectedService) {
