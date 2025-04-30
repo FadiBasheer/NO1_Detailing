@@ -115,10 +115,9 @@ export default {
     },,
 
     selectedAddons() {
-      if (!this.addons) return [];
-
-      const addonKeys = this.addons.split(",");
-      return addonKeys.map(key => addons[key]).filter(Boolean);
+      const first = this.vehicles[0];
+      if (!first?.addons) return [];
+      return first.addons.map(key => addons[key]).filter(Boolean);
     }
   },
 
