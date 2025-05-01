@@ -78,7 +78,7 @@ export default {
       }
     }
 
-      const selectedService = services[firstVehicle.service];
+    const selectedService = services[firstVehicle.service];
       if (selectedService) {
         console.log("Service name:", selectedService.name);
         console.log("Service duration:", selectedService.duration);
@@ -115,7 +115,7 @@ export default {
     selectedService() {
       const first = this.vehicles[0];
       return first ? services[first.service] : null;
-    },,
+    },
 
     selectedAddons() {
       const first = this.vehicles[0];
