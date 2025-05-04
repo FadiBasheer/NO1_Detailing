@@ -83,7 +83,7 @@ export default {
       console.log("Service name:", selectedService.name);
       console.log("Service duration:", selectedService.duration);
     }
-    },
+  },
 
 
   computed: {
