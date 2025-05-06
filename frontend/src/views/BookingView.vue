@@ -73,20 +73,18 @@ export default {
 
     console.log("this.vehicles.length: ", this.vehicles.length);
 
+    const firstVehicle = this.vehicles[0];
 
-
-    if (this.vehicles.length > 0) {
-      const firstVehicle = this.vehicles[0];
-      if (firstVehicle?.vehicleType) {
-        console.log("firstVehicle: ", firstVehicle.vehicleType);
+    if (firstVehicle?.vehicleType) {
+      console.log("firstVehicle: ", firstVehicle.vehicleType);
+    
+      const selectedService = services[firstVehicle.service];
+      if (selectedService) {
+        console.log("Service name:", selectedService.name);
+        console.log("Service duration:", selectedService.duration);
       }
     }
 
-    const selectedService = services[firstVehicle.service];
-    if (selectedService) {
-      console.log("Service name:", selectedService.name);
-      console.log("Service duration:", selectedService.duration);
-    }
   },
 
   computed: {
