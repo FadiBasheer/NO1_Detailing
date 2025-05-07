@@ -71,13 +71,11 @@ export default {
 
     this.vehicles = savedVehicles;
 
-    console.log("this.vehicles.length: ", this.vehicles.length);
-
     const firstVehicle = this.vehicles[0];
 
     if (firstVehicle?.vehicleType) {
       console.log("firstVehicle: ", firstVehicle.vehicleType);
-    
+
       const selectedService = services[firstVehicle.service];
       if (selectedService) {
         console.log("Service name:", selectedService.name);
