@@ -45,15 +45,7 @@ export default {
       date: '',
       time: '',
       address: '',
-      vehicles: [
-        {
-          vehicleType: this.$route.query.vehicle || "",
-          service: this.$route.query.service || "",
-          addons: this.$route.query.addons ? this.$route.query.addons.split(",") : [],
-          brand: this.$route.query.brand || "",
-          model: this.$route.query.model || ""
-        }
-      ],
+      vehicles: [],
       message: '',
       bookedTimes: [],
     };
@@ -62,27 +54,31 @@ export default {
   created() {
     const savedVehicles = JSON.parse(localStorage.getItem('vehicles')) || [];
 
-    // Only push if this.vehicles[0] has valid data
-    const first = this.vehicles[0];
-    if (first?.vehicleType) {
-      savedVehicles.push({ ...first });
+    const vehicleFromRoute = {
+      vehicleType: this.$route.query.vehicle || "",
+      service: this.$route.query.service || "",
+      addons: this.$route.query.addons ? this.$route.query.addons.split(",") : [],
+      brand: this.$route.query.brand || "",
+      model: this.$route.query.model || ""
+    };
+
+    if (vehicleFromRoute.vehicleType) {
+      savedVehicles.push(vehicleFromRoute);
       localStorage.setItem('vehicles', JSON.stringify(savedVehicles));
     }
 
     this.vehicles = savedVehicles;
 
     const firstVehicle = this.vehicles[0];
+    console.log("firstVehicle: ", firstVehicle.vehicleType);
 
-    if (firstVehicle?.vehicleType) {
-      console.log("firstVehicle: ", firstVehicle.vehicleType);
-
-      const selectedService = services[firstVehicle.service];
-      if (selectedService) {
-        console.log("Service name:", selectedService.name);
-        console.log("Service duration:", selectedService.duration);
-      }
-    }
-
+   if (firstVehicle?.vehicleType) {
+     const selectedService = services[firstVehicle.service];
+     if (selectedService) {
+       console.log("Service name:", selectedService.name);
+       console.log("Service duration:", selectedService.duration);
+     }
+   }
   },
 
   computed: {
