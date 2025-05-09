@@ -74,9 +74,6 @@ export default {
       localStorage.setItem('vehicles', JSON.stringify(savedVehicles));
     }
 
-    
-
-
     this.vehicles = savedVehicles;
 
     console.log("this.vehicles after push:", this.vehicles);
