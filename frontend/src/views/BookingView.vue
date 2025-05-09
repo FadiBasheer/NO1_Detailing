@@ -54,6 +54,10 @@ export default {
   created() {
     const savedVehicles = JSON.parse(localStorage.getItem('vehicles')) || [];
 
+    console.log("Raw $route.query:", this.$route.query);
+
+
+
     const vehicleFromRoute = {
       vehicleType: this.$route.query.vehicle || "",
       service: this.$route.query.service || "",
@@ -62,12 +66,20 @@ export default {
       model: this.$route.query.model || ""
     };
 
+    console.log("vehicleFromRoute:", vehicleFromRoute);
+
     if (vehicleFromRoute.vehicleType) {
       savedVehicles.push(vehicleFromRoute);
+      console.log("Saved vehicles before update:", savedVehicles);
       localStorage.setItem('vehicles', JSON.stringify(savedVehicles));
     }
 
+    
+
+
     this.vehicles = savedVehicles;
+
+    console.log("this.vehicles after push:", this.vehicles);
 
     const firstVehicle = this.vehicles[0];
     console.log("firstVehicle: ", firstVehicle.vehicleType);
