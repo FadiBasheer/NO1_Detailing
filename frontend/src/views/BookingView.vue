@@ -24,6 +24,9 @@
 
       <button type="submit">Confirm Booking</button>
 
+      <button @click="clearLocalStorage" style="margin-top: 10px;">Clear All Vehicles (Debug)</button>
+
+
       <button type="button" @click="addAnotherVehicle" style="margin-top: 10px;">
         Add Another Vehicle Before Your Appointment
       </button>
@@ -56,8 +59,6 @@ export default {
 
     console.log("Raw $route.query:", this.$route.query);
 
-
-
     const vehicleFromRoute = {
       vehicleType: this.$route.query.vehicle || "",
       service: this.$route.query.service || "",
@@ -70,6 +71,7 @@ export default {
 
     if (vehicleFromRoute.vehicleType) {
       savedVehicles.push(vehicleFromRoute);
+
       console.log("Saved vehicles before update:", savedVehicles);
       localStorage.setItem('vehicles', JSON.stringify(savedVehicles));
     }
