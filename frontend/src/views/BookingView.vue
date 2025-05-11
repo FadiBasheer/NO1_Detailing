@@ -131,6 +131,12 @@ export default {
 
   methods: {
 
+    clearLocalStorage() {
+      localStorage.removeItem('vehicles');
+      this.vehicles = [];
+      console.log("LocalStorage cleared.");
+    },
+
     addAnotherVehicle() {
       const existingVehicles = JSON.parse(localStorage.getItem('vehicles')) || [];
 
