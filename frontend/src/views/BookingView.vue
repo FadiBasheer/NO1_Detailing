@@ -117,10 +117,11 @@ console.log("lastVehicle: ", lastVehicle.vehicleType);
       return total;
     },
 
-    selectedService() {
-      const first = this.vehicles[0];
-      return first ? services[first.service] : null;
-    },
+selectedService() {
+  const last = this.vehicles[this.vehicles.length - 1];
+  return last ? services[last.service] : null;
+}
+
 
     selectedAddons() {
       const first = this.vehicles[0];
