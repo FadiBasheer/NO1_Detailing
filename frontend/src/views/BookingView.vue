@@ -120,14 +120,13 @@ console.log("lastVehicle: ", lastVehicle.vehicleType);
     selectedService() {
       const last = this.vehicles[this.vehicles.length - 1];
       return last ? services[last.service] : null;
+    },
+
+    selectedAddons() {
+      const last = this.vehicles[this.vehicles.length - 1];
+      if (!last?.addons) return [];
+      return last.addons.map(key => addons[key]).filter(Boolean);
     }
-
-
-selectedAddons() {
-  const last = this.vehicles[this.vehicles.length - 1];
-  if (!last?.addons) return [];
-  return last.addons.map(key => addons[key]).filter(Boolean);
-}
 
   },
 
