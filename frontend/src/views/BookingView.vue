@@ -117,17 +117,18 @@ console.log("lastVehicle: ", lastVehicle.vehicleType);
       return total;
     },
 
-selectedService() {
+    selectedService() {
+      const last = this.vehicles[this.vehicles.length - 1];
+      return last ? services[last.service] : null;
+    }
+
+
+selectedAddons() {
   const last = this.vehicles[this.vehicles.length - 1];
-  return last ? services[last.service] : null;
+  if (!last?.addons) return [];
+  return last.addons.map(key => addons[key]).filter(Boolean);
 }
 
-
-    selectedAddons() {
-      const first = this.vehicles[0];
-      if (!first?.addons) return [];
-      return first.addons.map(key => addons[key]).filter(Boolean);
-    }
   },
 
   methods: {
