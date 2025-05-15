@@ -80,8 +80,8 @@ export default {
 
     console.log("this.vehicles after push:", this.vehicles);
 
-const lastVehicle = this.vehicles[this.vehicles.length - 1];
-console.log("lastVehicle: ", lastVehicle.vehicleType);
+    const lastVehicle = this.vehicles[this.vehicles.length - 1];
+    console.log("lastVehicle: ", lastVehicle.vehicleType);
 
    if (firstVehicle?.vehicleType) {
      const selectedService = services[firstVehicle.service];
