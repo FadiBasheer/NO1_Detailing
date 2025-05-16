@@ -83,13 +83,13 @@ export default {
     const lastVehicle = this.vehicles[this.vehicles.length - 1];
     console.log("lastVehicle: ", lastVehicle.vehicleType);
 
-   if (firstVehicle?.vehicleType) {
-     const selectedService = services[firstVehicle.service];
-     if (selectedService) {
-       console.log("Service name:", selectedService.name);
-       console.log("Service duration:", selectedService.duration);
-     }
-   }
+    if (firstVehicle?.vehicleType) {
+      const selectedService = services[firstVehicle.service];
+      if (selectedService) {
+        console.log("Service name:", selectedService.name);
+        console.log("Service duration:", selectedService.duration);
+      }
+    }
   },
 
   computed: {
