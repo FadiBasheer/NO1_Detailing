@@ -139,14 +139,6 @@ export default {
     },
 
     addAnotherVehicle() {
-      const existingVehicles = JSON.parse(localStorage.getItem('vehicles')) || [];
-
-      // Only add if valid vehicle data is present
-      if (this.vehicles && this.vehicles[0]?.vehicleType) {
-        existingVehicles.push({ ...this.vehicles[0] });
-        localStorage.setItem('vehicles', JSON.stringify(existingVehicles));
-      }
-
       // Redirect to vehicle selection view
       this.$router.push({ name: 'vehicles' });
     },
