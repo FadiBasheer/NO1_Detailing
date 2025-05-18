@@ -54,43 +54,50 @@ export default {
     };
   },
 
-  created() {
-    const savedVehicles = JSON.parse(localStorage.getItem('vehicles')) || [];
+created() {
+  const savedVehicles = JSON.parse(localStorage.getItem('vehicles')) || [];
 
-    console.log("Raw $route.query:", this.$route.query);
+  console.log("Raw $route.query:", this.$route.query);
 
-    const vehicleFromRoute = {
-      vehicleType: this.$route.query.vehicle || "",
-      service: this.$route.query.service || "",
-      addons: this.$route.query.addons ? this.$route.query.addons.split(",") : [],
-      brand: this.$route.query.brand || "",
-      model: this.$route.query.model || ""
-    };
+  const vehicleFromRoute = {
+    vehicleType: this.$route.query.vehicle || "",
+    service: this.$route.query.service || "",
+    addons: this.$route.query.addons ? this.$route.query.addons.split(",") : [],
+    brand: this.$route.query.brand || "",
+    model: this.$route.query.model || ""
+  };
 
-    console.log("vehicleFromRoute:", vehicleFromRoute);
+  console.log("vehicleFromRoute:", vehicleFromRoute);
 
-    if (vehicleFromRoute.vehicleType) {
-      savedVehicles.push(vehicleFromRoute);
+  // ✅ Check for duplicate before pushing
+  const isDuplicate = savedVehicles.some(v =>
+    v.vehicleType === vehicleFromRoute.vehicleType &&
+    v.service === vehicleFromRoute.service &&
+    v.brand === vehicleFromRoute.brand &&
+    v.model === vehicleFromRoute.model &&
+    JSON.stringify(v.addons) === JSON.stringify(vehicleFromRoute.addons)
+  );
 
-      console.log("Saved vehicles before update:", savedVehicles);
-      localStorage.setItem('vehicles', JSON.stringify(savedVehicles));
+  if (vehicleFromRoute.vehicleType && !isDuplicate) {
+    savedVehicles.push(vehicleFromRoute);
+    localStorage.setItem('vehicles', JSON.stringify(savedVehicles));
+  }
+
+  this.vehicles = savedVehicles;
+
+  console.log("this.vehicles after update:", this.vehicles);
+
+  const lastVehicle = this.vehicles[this.vehicles.length - 1];
+  console.log("lastVehicle: ", lastVehicle?.vehicleType);
+
+  if (lastVehicle?.vehicleType) {
+    const selectedService = services[lastVehicle.service];
+    if (selectedService) {
+      console.log("Service name:", selectedService.name);
+      console.log("Service duration:", selectedService.duration);
     }
-
-    this.vehicles = savedVehicles;
-
-    console.log("this.vehicles after push:", this.vehicles);
-
-    const lastVehicle = this.vehicles[this.vehicles.length - 1];
-    console.log("lastVehicle: ", lastVehicle.vehicleType);
-
-    if (firstVehicle?.vehicleType) {
-      const selectedService = services[firstVehicle.service];
-      if (selectedService) {
-        console.log("Service name:", selectedService.name);
-        console.log("Service duration:", selectedService.duration);
-      }
-    }
-  },
+  }
+},
 
   computed: {
 
