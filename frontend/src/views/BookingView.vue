@@ -121,6 +121,7 @@ export default {
       this.selectedAddons.forEach(addon => {
         total += addon.duration;
       });
+      console.log("total:", total);
       return total;
     },
 
