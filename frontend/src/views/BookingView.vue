@@ -115,13 +115,13 @@ export default {
 
     totalDuration() {
       let total = 0;
-    
+
       this.vehicles.forEach(vehicle => {
         const service = services[vehicle.service];
         if (service) {
           total += service.duration;
         }
-    
+
         if (Array.isArray(vehicle.addons)) {
           vehicle.addons.forEach(addonKey => {
             const addon = addons[addonKey];
@@ -131,10 +131,10 @@ export default {
           });
         }
       });
-    
+
       console.log("Total duration for all vehicles:", total);
       return total;
-    }
+    },
 
 
     selectedService() {
