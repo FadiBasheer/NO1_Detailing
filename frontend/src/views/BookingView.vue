@@ -136,7 +136,6 @@ export default {
       return total;
     },
 
-
     selectedService() {
       const last = this.vehicles[this.vehicles.length - 1];
       return last ? services[last.service] : null;
