@@ -218,13 +218,21 @@ export default {
       if (!this.date) return;
 
       try {
-        const response = await axios.get('http://localhost:5000/api/bookings');
-        this.bookedTimes = response.data.filter(booking => booking.date === this.date).map(booking => booking.time);
+        const response = await axios.get('http://localhost:5000/api/available-times', {
+          params: {
+            date: this.date,
+            duration: this.totalDuration // <-- send total duration
+          }
+        });
+
+        this.availableTimeSlots = response.data; // Server returns filtered slots
       } catch (error) {
-        console.error('Error fetching booked times:', error);
+        console.error('Error fetching available times:', error);
       }
     },
 
+
+    
     async submitBooking() {
       try {
         const savedVehicles = JSON.parse(localStorage.getItem('vehicles')) || [];
