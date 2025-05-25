@@ -231,8 +231,6 @@ export default {
       }
     },
 
-
-    
     async submitBooking() {
       try {
         const savedVehicles = JSON.parse(localStorage.getItem('vehicles')) || [];
