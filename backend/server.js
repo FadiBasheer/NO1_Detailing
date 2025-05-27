@@ -84,9 +84,6 @@ app.get('/api/available-times', async (req, res) => {
   res.json(availableSlots); // e.g., ["08:00 AM", "08:30 AM", ...]
 });
 
-
-
-
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
