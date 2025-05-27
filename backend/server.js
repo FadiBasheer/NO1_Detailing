@@ -54,6 +54,39 @@ app.post('/api/bookings', async (req, res) => {
   }
 });
 
+app.get('/api/available-times', async (req, res) => {
+  const { date, duration } = req.query;
+  const jobDuration = parseInt(duration); // in minutes
+
+  const openTime = 8 * 60; // 8:00 AM in minutes
+  const closeTime = 20 * 60; // 8:00 PM in minutes
+  const interval = 30; // 30-minute slots
+
+  // Simulate loading booked slots from DB
+  const bookings = await getBookingsForDate(date); // [{ time: "10:00 AM" }, ...]
+
+  // Convert to minutes
+  const bookedMinutes = bookings.map(b => timeToMinutes(b.time));
+
+  const availableSlots = [];
+  for (let minutes = openTime; minutes + jobDuration <= closeTime; minutes += interval) {
+    const overlaps = bookedMinutes.some(bm => {
+      const end = minutes + jobDuration;
+      const bookedEnd = bm + 60; // assuming existing jobs are 60 min
+      return (minutes < bookedEnd && end > bm);
+    });
+
+    if (!overlaps) {
+      availableSlots.push(minutesToTime(minutes));
+    }
+  }
+
+  res.json(availableSlots); // e.g., ["08:00 AM", "08:30 AM", ...]
+});
+
+
+
+
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
