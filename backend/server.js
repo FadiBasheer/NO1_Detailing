@@ -84,6 +84,14 @@ app.get('/api/available-times', async (req, res) => {
   res.json(availableSlots); // e.g., ["08:00 AM", "08:30 AM", ...]
 });
 
+function timeToMinutes(timeStr) {
+  const [time, period] = timeStr.split(' ');
+  let [hour, minute] = time.split(':').map(Number);
+  if (period === 'PM' && hour !== 12) hour += 12;
+  if (period === 'AM' && hour === 12) hour = 0;
+  return hour * 60 + minute;
+}
+
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
