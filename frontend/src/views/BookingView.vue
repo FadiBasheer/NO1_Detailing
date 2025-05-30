@@ -51,6 +51,7 @@ export default {
       vehicles: [],
       message: '',
       bookedTimes: [],
+      availableTimeSlots: [],
     };
   },
 
