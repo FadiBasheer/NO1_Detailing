@@ -147,6 +147,10 @@ export default {
   },
 
   methods: {
+    onDateChange() {
+      this.time = '';
+      this.fetchBookedTimes();
+    }
 
     clearLocalStorage() {
       localStorage.removeItem('vehicles');
