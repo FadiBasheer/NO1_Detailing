@@ -18,7 +18,7 @@
       <select id="time" v-model="time" required>
         <option disabled value="">Choose a time</option>
         <option v-for="slot in availableTimeSlots" :key="slot" :value="slot" :disabled="isTimeBooked(slot)">
-          {{ slot }}
+          {{ slot }} ({{ totalDuration }} mins)
         </option>
       </select>
 
