@@ -10,7 +10,7 @@
         id="date"
         v-model="date"
         :min="todayDate"
-        @change="fetchBookedTimes"
+        @change="onDateChange"
         required
       />
 
