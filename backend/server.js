@@ -35,7 +35,7 @@ app.get('/api/bookings', async (req, res) => {
 
 app.post('/api/bookings', async (req, res) => {
   try {
-    const { vehicleType, date, time, address } = req.body;
+    const { vehicles, date, time, address } = req.body;
 
     // Check if the time slot is already booked
     const existingBooking = await Booking.findOne({ date, time });
@@ -43,8 +43,8 @@ app.post('/api/bookings', async (req, res) => {
       return res.status(400).json({ message: 'This time slot is already booked. Please choose another time.' });
     }
 
-    // Save the new booking
-    const newBooking = new Booking({ vehicleType, date, time, address });
+    // Create and save the booking with all vehicles
+    const newBooking = new Booking({ vehicles, date, time, address });
     await newBooking.save();
 
     res.status(201).json({ message: 'Booking confirmed!', booking: newBooking });
@@ -53,6 +53,7 @@ app.post('/api/bookings', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+
 
 app.get('/api/available-times', async (req, res) => {
   const { date, duration } = req.query;
