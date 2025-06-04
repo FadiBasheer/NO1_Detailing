@@ -63,7 +63,7 @@ app.get('/api/available-times', async (req, res) => {
   const interval = 30; // 30-minute slots
 
   // Simulate loading booked slots from DB
-  const bookings = await getBookingsForDate(date); // [{ time: "10:00 AM" }, ...]
+  const bookings = await Booking.find({ date });
 
   // Convert to minutes
   const bookedMinutes = bookings.map(b => timeToMinutes(b.time));
