@@ -70,7 +70,6 @@ export default {
   
     console.log("vehicleFromRoute:", vehicleFromRoute);
   
-    // ✅ Check for duplicate before pushing
     const isDuplicate = savedVehicles.some(v =>
       v.vehicleType === vehicleFromRoute.vehicleType &&
       v.service === vehicleFromRoute.service &&
