@@ -1,39 +1,74 @@
-
 <template>
-  <div class="booking-container">
-    <h2>Book Your Appointment</h2>
+  <div class="booking-page">
+    <!-- Booking Form -->
+    <div class="booking-container">
+      <h2>Book Your Appointment</h2>
 
-    <form @submit.prevent="submitBooking">
-      <label for="date">Select Date:</label>
-      <input
-        type="date"
-        id="date"
-        v-model="date"
-        :min="todayDate"
-        @change="onDateChange"
-        required
-      />
+      <form @submit.prevent="submitBooking">
+        <label for="date">Select Date:</label>
+        <input
+          type="date"
+          id="date"
+          v-model="date"
+          :min="todayDate"
+          @change="onDateChange"
+          required
+        />
 
-      <label for="time">Select Time:</label>
-      <select id="time" v-model="time" required>
-        <option disabled value="">Choose a time</option>
-        <option v-for="slot in availableTimeSlots" :key="slot" :value="slot" :disabled="isTimeBooked(slot)">
-          {{ slot }} ({{ totalDuration }} mins)
-        </option>
-      </select>
+        <label for="time">Select Time:</label>
+        <select id="time" v-model="time" required>
+          <option disabled value="">Choose a time</option>
+          <option
+            v-for="slot in availableTimeSlots"
+            :key="slot"
+            :value="slot"
+            :disabled="isTimeBooked(slot)"
+          >
+            {{ slot }} ({{ totalDuration }} mins)
+          </option>
+        </select>
 
-      <button type="submit">Confirm Booking</button>
+        <label for="address">Address:</label>
+        <input type="text" id="address" v-model="address" placeholder="Enter address" required />
 
-      <button @click="clearLocalStorage" style="margin-top: 10px;">Clear All Vehicles (Debug)</button>
+        <button type="submit">Confirm Booking</button>
 
+        <button @click="clearLocalStorage" style="margin-top: 10px;">
+          Clear All Vehicles (Debug)
+        </button>
 
-      <button type="button" @click="addAnotherVehicle" style="margin-top: 10px;">
-        Add Another Vehicle Before Your Appointment
-      </button>
+        <button type="button" @click="addAnotherVehicle" style="margin-top: 10px;">
+          Add Another Vehicle Before Your Appointment
+        </button>
 
+        <p v-if="message" class="message">{{ message }}</p>
+      </form>
+    </div>
 
-      <p v-if="message" class="message">{{ message }}</p>
-    </form>
+    <!-- Cart Sidebar -->
+    <div class="cart-container">
+      <h3>Your Vehicles</h3>
+      <div v-if="vehicles.length === 0">
+        <p>No vehicles added yet.</p>
+      </div>
+      <div v-else>
+        <div
+          v-for="(vehicle, index) in vehicles"
+          :key="index"
+          class="cart-item"
+        >
+          <p><strong>{{ vehicle.vehicleType }}</strong></p>
+          <p>Service: {{ getServiceName(vehicle.service) }}</p>
+          <p v-if="vehicle.addons.length">
+            Add-ons:
+            <span v-for="(addonKey, i) in vehicle.addons" :key="i">
+              {{ getAddonName(addonKey) }}<span v-if="i < vehicle.addons.length - 1">, </span>
+            </span>
+          </p>
+          <button @click="removeVehicle(index)" class="remove-btn">Remove</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -42,7 +77,6 @@ import axios from 'axios';
 import { services, addons } from '@/data/services';
 
 export default {
-
   data() {
     return {
       date: '',
@@ -57,9 +91,7 @@ export default {
 
   created() {
     const savedVehicles = JSON.parse(localStorage.getItem('vehicles')) || [];
-  
-    console.log("Raw $route.query:", this.$route.query);
-  
+
     const vehicleFromRoute = {
       vehicleType: this.$route.query.vehicle || "",
       service: this.$route.query.service || "",
@@ -67,9 +99,7 @@ export default {
       brand: this.$route.query.brand || "",
       model: this.$route.query.model || ""
     };
-  
-    console.log("vehicleFromRoute:", vehicleFromRoute);
-  
+
     const isDuplicate = savedVehicles.some(v =>
       v.vehicleType === vehicleFromRoute.vehicleType &&
       v.service === vehicleFromRoute.service &&
@@ -77,95 +107,61 @@ export default {
       v.model === vehicleFromRoute.model &&
       JSON.stringify(v.addons) === JSON.stringify(vehicleFromRoute.addons)
     );
-  
+
     if (vehicleFromRoute.vehicleType && !isDuplicate) {
       savedVehicles.push(vehicleFromRoute);
       localStorage.setItem('vehicles', JSON.stringify(savedVehicles));
     }
-  
+
     this.vehicles = savedVehicles;
-  
-    console.log("this.vehicles after update:", this.vehicles);
-  
-    const lastVehicle = this.vehicles[this.vehicles.length - 1];
-    console.log("lastVehicle: ", lastVehicle?.vehicleType);
-  
-    if (lastVehicle?.vehicleType) {
-      const selectedService = services[lastVehicle.service];
-      if (selectedService) {
-        console.log("Service name:", selectedService.name);
-        console.log("Service duration:", selectedService.duration);
-      }
-    }
   },
 
   computed: {
-
     todayDate() {
       const today = new Date();
-      const yyyy = today.getFullYear();
-      const mm = String(today.getMonth() + 1).padStart(2, '0');
-      const dd = String(today.getDate()).padStart(2, '0');
-      return `${yyyy}-${mm}-${dd}`;
+      return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
     },
 
     totalDuration() {
-      let total = 0;
-
-      this.vehicles.forEach(vehicle => {
+      return this.vehicles.reduce((total, vehicle) => {
         const service = services[vehicle.service];
-        if (service) {
-          total += service.duration;
-        }
+        if (service) total += service.duration;
 
-        if (Array.isArray(vehicle.addons)) {
-          vehicle.addons.forEach(addonKey => {
-            const addon = addons[addonKey];
-            if (addon) {
-              total += addon.duration;
-            }
-          });
-        }
-      });
+        vehicle.addons.forEach(addonKey => {
+          const addon = addons[addonKey];
+          if (addon) total += addon.duration;
+        });
 
-      console.log("Total duration for all vehicles:", total);
-      return total;
-    },
-
-    selectedService() {
-      const last = this.vehicles[this.vehicles.length - 1];
-      return last ? services[last.service] : null;
-    },
-
-    selectedAddons() {
-      const last = this.vehicles[this.vehicles.length - 1];
-      if (!last?.addons) return [];
-      return last.addons.map(key => addons[key]).filter(Boolean);
+        return total;
+      }, 0);
     }
-
   },
 
   methods: {
+    getServiceName(key) {
+      return services[key]?.name || 'Unknown Service';
+    },
+    getAddonName(key) {
+      return addons[key]?.name || 'Unknown Add-on';
+    },
+    removeVehicle(index) {
+      this.vehicles.splice(index, 1);
+      localStorage.setItem('vehicles', JSON.stringify(this.vehicles));
+    },
     onDateChange() {
       this.time = '';
       this.fetchBookedTimes();
     },
-
     clearLocalStorage() {
       localStorage.removeItem('vehicles');
       this.vehicles = [];
-      console.log("LocalStorage cleared.");
     },
-
     addAnotherVehicle() {
-      // Redirect to vehicle selection view
       this.$router.push({ name: 'vehicles' });
     },
-
     generateTimeSlots(startTime, endTime, intervalMinutes, jobDuration = 0) {
       const slots = [];
       const pad = n => (n < 10 ? "0" + n : n);
-
       let [startHour, startMin] = startTime.split(":").map(Number);
       let [endHour, endMin] = endTime.split(":").map(Number);
 
@@ -175,24 +171,18 @@ export default {
       end.setHours(endHour, endMin, 0, 0);
 
       const endMinutes = endHour * 60 + endMin;
-
       while (true) {
         const slotMinutes = current.getHours() * 60 + current.getMinutes();
         const jobEnd = slotMinutes + jobDuration;
-
         if (jobEnd > endMinutes) break;
 
         const hour = current.getHours();
         const minute = current.getMinutes();
-        const formatted = `${pad(hour % 12 || 12)}:${pad(minute)} ${hour < 12 ? "AM" : "PM"}`;
-        slots.push(formatted);
-
+        slots.push(`${pad(hour % 12 || 12)}:${pad(minute)} ${hour < 12 ? "AM" : "PM"}`);
         current.setMinutes(current.getMinutes() + intervalMinutes);
       }
       return slots;
     },
-
-
     timeStringToMinutes(timeStr) {
       const [time, period] = timeStr.split(" ");
       let [hour, minute] = time.split(":").map(Number);
@@ -200,107 +190,79 @@ export default {
       if (period === "AM" && hour === 12) hour = 0;
       return hour * 60 + minute;
     },
-
     isTimeBooked(slot) {
       const slotStart = this.timeStringToMinutes(slot);
       const slotEnd = slotStart + this.totalDuration;
-
       return this.bookedTimes.some(booked => {
         const bookedStart = this.timeStringToMinutes(booked);
-        const bookedEnd = bookedStart + 60; // Assuming each existing booking lasts 1 hour (you can store actual duration later)
-        return (
-          (slotStart < bookedEnd && slotEnd > bookedStart) // overlap check
-        );
+        const bookedEnd = bookedStart + 60;
+        return slotStart < bookedEnd && slotEnd > bookedStart;
       });
     },
-
     async fetchBookedTimes() {
       if (!this.date) return;
-
       try {
         const response = await axios.get('http://localhost:5000/api/available-times', {
-          params: {
-            date: this.date,
-            duration: this.totalDuration // <-- send total duration
-          }
+          params: { date: this.date, duration: this.totalDuration }
         });
-
-        this.availableTimeSlots = response.data; // Server returns filtered slots
+        this.availableTimeSlots = response.data;
       } catch (error) {
         console.error('Error fetching available times:', error);
       }
     },
-
     async submitBooking() {
       try {
-        const savedVehicles = JSON.parse(localStorage.getItem('vehicles')) || [];
-
         const bookingData = {
-          vehicles: savedVehicles,
+          vehicles: this.vehicles,
           date: this.date,
           time: this.time,
           address: this.address
         };
-
         const response = await axios.post('http://localhost:5000/api/bookings', bookingData);
         this.message = response.data.message;
-
-        // Clear everything
         localStorage.removeItem('vehicles');
+        this.vehicles = [];
         this.date = '';
         this.time = '';
         this.address = '';
-        this.vehicles = [];
-
         this.fetchBookedTimes();
       } catch (error) {
         this.message = error.response?.data?.message || 'Error submitting booking.';
       }
     }
-
   }
 };
 </script>
 
 <style scoped>
+.booking-page {
+  display: flex;
+  gap: 20px;
+}
 .booking-container {
-  max-width: 400px;
-  margin: auto;
-  padding: 20px;
+  flex: 2;
   background: white;
+  padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  text-align: center;
 }
-
-label {
-  display: block;
-  margin-top: 10px;
+.cart-container {
+  flex: 1;
+  background: #f8f8f8;
+  padding: 15px;
+  border-radius: 10px;
 }
-
-input, select {
-  width: 100%;
-  padding: 8px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-button {
-  background: #4CAF50;
-  color: white;
+.cart-item {
+  background: white;
+  border: 1px solid #ddd;
   padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+}
+.remove-btn {
+  background: red;
+  color: white;
   border: none;
+  padding: 5px;
   cursor: pointer;
-  margin-top: 10px;
-}
-
-button:hover {
-  background: #45a049;
-}
-
-.message {
-  margin-top: 10px;
-  font-weight: bold;
 }
 </style>
