@@ -53,19 +53,28 @@
       </div>
       <div v-else>
         <div
-          v-for="(vehicle, index) in vehicles"
-          :key="index"
+          v-for="(vehicle, vIndex) in vehicles"
+          :key="vIndex"
           class="cart-item"
         >
           <p><strong>{{ vehicle.vehicleType }}</strong></p>
-          <p>Service: {{ getServiceName(vehicle.service) }}</p>
-          <p v-if="vehicle.addons.length">
-            Add-ons:
-            <span v-for="(addonKey, i) in vehicle.addons" :key="i">
-              {{ getAddonName(addonKey) }}<span v-if="i < vehicle.addons.length - 1">, </span>
-            </span>
-          </p>
-          <button @click="removeVehicle(index)" class="remove-btn">Remove</button>
+
+          <div class="service-row">
+            <span>Service: {{ getServiceName(vehicle.service) }}</span>
+            <button @click="removeService(vIndex)" class="remove-btn small">✕</button>
+          </div>
+
+          <div v-if="vehicle.addons.length">
+            <p>Add-ons:</p>
+            <ul>
+              <li v-for="(addonKey, aIndex) in vehicle.addons" :key="aIndex" class="addon-row">
+                {{ getAddonName(addonKey) }}
+                <button @click="removeAddon(vIndex, aIndex)" class="remove-btn small">✕</button>
+              </li>
+            </ul>
+          </div>
+
+          <button @click="removeVehicle(vIndex)" class="remove-btn">Remove Vehicle</button>
         </div>
       </div>
     </div>
@@ -146,6 +155,14 @@ export default {
     },
     removeVehicle(index) {
       this.vehicles.splice(index, 1);
+      localStorage.setItem('vehicles', JSON.stringify(this.vehicles));
+    },
+    removeService(vehicleIndex) {
+      this.vehicles.splice(vehicleIndex, 1);
+      localStorage.setItem('vehicles', JSON.stringify(this.vehicles));
+    },
+    removeAddon(vehicleIndex, addonIndex) {
+      this.vehicles[vehicleIndex].addons.splice(addonIndex, 1);
       localStorage.setItem('vehicles', JSON.stringify(this.vehicles));
     },
     onDateChange() {
@@ -264,5 +281,20 @@ export default {
   border: none;
   padding: 5px;
   cursor: pointer;
+}
+.remove-btn.small {
+  padding: 2px 5px;
+  font-size: 0.8rem;
+  margin-left: 8px;
+}
+.service-row,
+.addon-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+ul {
+  list-style: none;
+  padding: 0;
 }
 </style>
