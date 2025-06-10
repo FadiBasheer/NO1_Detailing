@@ -101,14 +101,15 @@ export default {
   created() {
     const savedVehicles = JSON.parse(localStorage.getItem('vehicles')) || [];
 
-    const vehicleFromRoute = {
-      vehicleType: this.$route.query.vehicle || "",
-      service: this.$route.query.service || "",
-      addons: this.$route.query.addons ? this.$route.query.addons.split(",") : [],
-      brand: this.$route.query.brand || "",
-      model: this.$route.query.model || ""
-    };
-
+    if (this.$route.query.vehicle) {
+      const vehicleFromRoute = {
+        vehicleType: this.$route.query.vehicle || "",
+        service: this.$route.query.service || "",
+        addons: this.$route.query.addons ? this.$route.query.addons.split(",") : [],
+        brand: this.$route.query.brand || "",
+        model: this.$route.query.model || ""
+      };
+      
     const isDuplicate = savedVehicles.some(v =>
       v.vehicleType === vehicleFromRoute.vehicleType &&
       v.service === vehicleFromRoute.service &&
