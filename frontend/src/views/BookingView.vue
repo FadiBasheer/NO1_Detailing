@@ -109,18 +109,19 @@ export default {
         brand: this.$route.query.brand || "",
         model: this.$route.query.model || ""
       };
-      
-    const isDuplicate = savedVehicles.some(v =>
-      v.vehicleType === vehicleFromRoute.vehicleType &&
-      v.service === vehicleFromRoute.service &&
-      v.brand === vehicleFromRoute.brand &&
-      v.model === vehicleFromRoute.model &&
-      JSON.stringify(v.addons) === JSON.stringify(vehicleFromRoute.addons)
-    );
 
-    if (vehicleFromRoute.vehicleType && !isDuplicate) {
-      savedVehicles.push(vehicleFromRoute);
-      localStorage.setItem('vehicles', JSON.stringify(savedVehicles));
+      const isDuplicate = savedVehicles.some(v =>
+        v.vehicleType === vehicleFromRoute.vehicleType &&
+        v.service === vehicleFromRoute.service &&
+        v.brand === vehicleFromRoute.brand &&
+        v.model === vehicleFromRoute.model &&
+        JSON.stringify(v.addons) === JSON.stringify(vehicleFromRoute.addons)
+      );
+
+      if (!isDuplicate) {
+        savedVehicles.push(vehicleFromRoute);
+        localStorage.setItem('vehicles', JSON.stringify(savedVehicles));
+      }
     }
 
     this.vehicles = savedVehicles;
