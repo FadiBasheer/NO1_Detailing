@@ -102,7 +102,6 @@ export default {
   created() {
     const savedVehicles = JSON.parse(localStorage.getItem("vehicles")) || [];
 
-    // Only add from route if query params exist
     if (this.$route.query.vehicle) {
       const vehicleFromRoute = {
         vehicleType: this.$route.query.vehicle || "",
@@ -114,13 +113,13 @@ export default {
         model: this.$route.query.model || "",
       };
 
+      // Check for duplicates based only on vehicle type, service, brand, and model
       const isDuplicate = savedVehicles.some(
         (v) =>
           v.vehicleType === vehicleFromRoute.vehicleType &&
           v.service === vehicleFromRoute.service &&
           v.brand === vehicleFromRoute.brand &&
-          v.model === vehicleFromRoute.model &&
-          JSON.stringify(v.addons) === JSON.stringify(vehicleFromRoute.addons)
+          v.model === vehicleFromRoute.model
       );
 
       if (!isDuplicate) {
@@ -129,7 +128,7 @@ export default {
       }
     }
 
-    this.vehicles = savedVehicles;
+      this.vehicles = savedVehicles;
   },
 
   computed: {
