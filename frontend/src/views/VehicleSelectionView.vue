@@ -2,6 +2,7 @@
   <div class="vehicle-selection">
     <h1>Select Your Vehicle Type</h1>
 
+    <!-- Vehicle type grid -->
     <div class="vehicle-grid">
       <button
         v-for="vehicle in vehicles"
@@ -15,23 +16,32 @@
       </button>
     </div>
 
+    <!-- Brand + Model dropdowns -->
     <div class="form-section">
-      <input
-        type="text"
-        v-model="brand"
-        placeholder="Car Brand (e.g. Toyota)"
-      />
-      <input
-        type="text"
-        v-model="model"
-        placeholder="Car Model (e.g. Camry)"
-      />
+      <label for="brand">Car Brand:</label>
+      <select id="brand" v-model="brand" @change="resetModel">
+        <option disabled value="">Choose a brand</option>
+        <option v-for="(models, brandName) in brands" :key="brandName" :value="brandName">
+          {{ brandName }}
+        </option>
+      </select>
+
+      <label for="model">Car Model:</label>
+      <select id="model" v-model="model" :disabled="!brand">
+        <option disabled value="">Choose a model</option>
+        <option v-for="m in brands[brand] || []" :key="m" :value="m">
+          {{ m }}
+        </option>
+      </select>
+
       <button @click="goToServiceSelection" :disabled="!canProceed">Next</button>
     </div>
   </div>
 </template>
 
 <script>
+import brands from "@/data/vehicles.js"; // ✅ import your brand/model list
+
 export default {
   data() {
     return {
@@ -49,8 +59,9 @@ export default {
         { name: "Boats", image: "/src/assets/boats.jpg" }
       ],
       selectedVehicle: null,
-      brand: '',
-      model: ''
+      brand: "",
+      model: "",
+      brands // ✅ imported car brands/models
     };
   },
   computed: {
@@ -62,10 +73,13 @@ export default {
     selectVehicle(name) {
       this.selectedVehicle = name;
     },
+    resetModel() {
+      this.model = "";
+    },
     goToServiceSelection() {
       if (this.canProceed) {
         this.$router.push({
-          name: 'ChoosingServiceView', // Use route name, not path string
+          name: "ChoosingServiceView", // must exist in your router
           query: {
             vehicle: this.selectedVehicle,
             brand: this.brand,
@@ -130,7 +144,12 @@ export default {
   gap: 15px;
 }
 
-.form-section input {
+.form-section label {
+  font-weight: bold;
+}
+
+.form-section select,
+.form-section button {
   padding: 10px 12px;
   width: 250px;
   font-size: 16px;
@@ -139,12 +158,9 @@ export default {
 }
 
 .form-section button {
-  padding: 10px 20px;
   background-color: #007bff;
   border: none;
   color: white;
-  font-size: 16px;
-  border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.2s;
 }
