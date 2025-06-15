@@ -3,8 +3,6 @@
     <router-link to="/" class="logo">Star Detailing</router-link>
     <nav>
       <ul>
-        
-        
         <li class="dropdown" style="position: relative">
           <p class="dropdown-btn">Business Programs &#x2BC6;</p>
           <ul class="dropdown-menu">
