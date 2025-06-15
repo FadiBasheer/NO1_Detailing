@@ -3,7 +3,7 @@
     <router-link to="/" class="logo">Star Detailing</router-link>
     <nav>
       <ul>
-        <li><a href="#">Car Services</a></li>
+        
         
         <li class="dropdown" style="position: relative">
           <p class="dropdown-btn">Business Programs &#x2BC6;</p>
@@ -15,6 +15,7 @@
           </ul>
         </li>
 
+        <li><a href="#">Car Services</a></li>
         <li><a href="#">RV services</a></li>
         <li><a href="#">Boats Services</a></li>
         <li><router-link to="/FAQs">FAQs</router-link></li>
