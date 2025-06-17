@@ -17,7 +17,7 @@
         <li><a href="#">RV services</a></li>
         <li><a href="#">Boats Services</a></li>
 
-        <li><a href="#">Car Servs</a></li>
+        <li><a href="#">Gift Cards</a></li>
         <li><a href="#">Car Services</a></li>
 
         <li><router-link to="/FAQs">FAQs</router-link></li>
