@@ -18,7 +18,7 @@
         <li><a href="#">Boats Services</a></li>
 
         <li><a href="#">Gift Cards</a></li>
-        <li><a href="#">Car Services</a></li>
+        <li><a href="#">Membership</a></li>
 
         <li><router-link to="/FAQs">FAQs</router-link></li>
         <li><a href="#">Contact</a></li>
