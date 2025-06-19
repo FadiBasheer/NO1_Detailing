@@ -1,6 +1,6 @@
 <template>
   <header class="header">
-    <router-link to="/" class="logo">Star Detailing</router-link>
+    <router-link to="/" class="logo">Yumeeco</router-link>
     <nav>
       <ul>
         <li class="dropdown" style="position: relative">
