@@ -23,10 +23,7 @@
         <li><router-link to="/FAQs">FAQs</router-link></li>
         <li><a href="#">Contact</a></li>
       </ul>
-
-
     </nav>
-    <a href="#" class="pricing-btn">VIEW OUR PRICING</a>
   </header>
 </template>
 
