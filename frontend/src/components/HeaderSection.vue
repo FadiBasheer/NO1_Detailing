@@ -9,7 +9,7 @@
             <li><a href="#">Fleet Services</a></li>
             <li><a href="#">Dealerships</a></li>
             <li><a href="#">Another item</a></li> <!-- Uber Drives -->
-            <li><a href="#">Another item</a></li> //Turo <!-- Uber Drives -->
+            <li><a href="#">Another item</a></li> <!-- Turo -->
             <li><a href="#">Another item</a></li> //Hotels <!-- Uber Drives -->
             <li><a href="#">Another item</a></li> //Resturants
             <li><a href="#">Another item</a></li> //Barbershops
