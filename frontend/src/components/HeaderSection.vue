@@ -11,8 +11,8 @@
             <li><a href="#">Another item</a></li> <!-- Uber Drives -->
             <li><a href="#">Another item</a></li> <!-- Turo -->
             <li><a href="#">Another item</a></li>  <!-- Hotels -->
-            <li><a href="#">Another item</a></li> //Resturants
-            <li><a href="#">Another item</a></li> //Barbershops
+            <li><a href="#">Another item</a></li> //Resturants <!-- Uber Drives -->
+            <li><a href="#">Another item</a></li> //Barbershops <!-- Uber Drives -->
           </ul>
         </li>
 
