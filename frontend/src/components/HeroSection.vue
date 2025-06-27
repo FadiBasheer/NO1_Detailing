@@ -1,14 +1,22 @@
 <template>
   <section class="hero">
-    <div class="overlay">
-      <h1>Mobile Car Detailing & Wash</h1>
-      <p>We come to your home, office, or job site</p>
-      <p>We bring electricity and water</p>
-      <div class="buttons">
-        <router-link to="/vehicles">
-          <button>BOOK NOW</button>
-        </router-link>
-        <button class="pricing-btn">VIEW OUR PRICING</button>
+    <div class="hero-content">
+      <!-- Left side: illustration -->
+      <div class="hero-image">
+        <img src="@/assets/looks_clean.jpg" alt="Car, RV, Boat, Motorcycle, and Airplane" />
+      </div>
+
+      <!-- Right side: text -->
+      <div class="hero-text">
+        <h1>Mobile Detailing & Wash</h1>
+        <p>We’ll come to your home, office, or job site.</p>
+        <p>We bring electricity and water!</p>
+        <div class="buttons">
+          <router-link to="/vehicles">
+            <button class="book-btn">BOOK NOW</button>
+          </router-link>
+          <button class="pricing-btn">VIEW OUR PRICING</button>
+        </div>
       </div>
     </div>
   </section>
@@ -16,22 +24,42 @@
 
 <style scoped>
 .hero {
-  position: relative;
-  height: 100vh;
-  background: url('@/assets/looks_clean.jpg') no-repeat center center/cover;
   display: flex;
-  align-items: center;
   justify-content: center;
-  text-align: center;
+  align-items: center;
+  padding: 4rem 2rem;
+  background: #f9fafb; /* light background instead of overlay */
 }
 
-.overlay {
-  background: rgba(0, 0, 0, 0.7);
-  padding: 30px;
-  border-radius: 10px;
-  color: white;
-  max-width: 600px;
+.hero-content {
+  display: flex;
+  align-items: center;
+  max-width: 1200px;
   width: 100%;
+  gap: 3rem;
+}
+
+.hero-image img {
+  max-width: 450px;
+  width: 100%;
+  height: auto;
+}
+
+.hero-text {
+  flex: 1;
+  text-align: left;
+}
+
+.hero-text h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #0a0a0a;
+}
+
+.hero-text p {
+  margin-top: 10px;
+  font-size: 1.2rem;
+  color: #333;
 }
 
 .buttons {
@@ -39,19 +67,33 @@
 }
 
 .book-btn {
-  background-color: red;
+  background-color: #1e40af;
   color: white;
-  padding: 10px 20px;
+  padding: 12px 24px;
   border: none;
+  border-radius: 8px;
   cursor: pointer;
   margin-right: 10px;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.book-btn:hover {
+  background-color: #1e3a8a;
 }
 
 .pricing-btn {
-  background-color: green;
-  color: white;
-  padding: 10px 20px;
-  border: none;
+  background-color: #f3f4f6;
+  color: #111827;
+  padding: 12px 24px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
   cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.pricing-btn:hover {
+  background-color: #e5e7eb;
 }
 </style>
