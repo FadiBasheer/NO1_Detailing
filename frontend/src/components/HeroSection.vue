@@ -3,7 +3,7 @@
     <div class="hero-content">
       <!-- Left side: illustration -->
       <div class="hero-image">
-        <img src="@/assets/looks_clean.jpg" alt="Car, RV, Boat, Motorcycle, and Airplane" />
+        <img src="@/assets/illustration-image.png" alt="Car, RV, Boat, Motorcycle, and Airplane" />
       </div>
 
       <!-- Right side: text -->
