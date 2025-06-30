@@ -15,7 +15,6 @@
           <router-link to="/vehicles">
             <button class="book-btn">BOOK NOW</button>
           </router-link>
-          <button class="pricing-btn">VIEW OUR PRICING</button>
         </div>
       </div>
     </div>
