@@ -17,6 +17,16 @@
         <h3>Your Car Gets Shiny</h3>
         <p>We service the interior and exterior of your car.</p>
       </div>
+            <div class="step">
+        <img :src="carIcon" alt="Your Car Gets Shiny" />
+        <h3>Your Car Gets Shiny</h3>
+        <p>We service the interior and exterior of your car.</p>
+      </div>
+            <div class="step">
+        <img :src="carIcon" alt="Your Car Gets Shiny" />
+        <h3>Your Car Gets Shiny</h3>
+        <p>We service the interior and exterior of your car.</p>
+      </div>
     </div>
   </section>
 </template>
