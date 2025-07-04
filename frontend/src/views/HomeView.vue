@@ -4,6 +4,7 @@
   <div>
     <HeroSection />
     <HowItWorks />
+    <MainSection />
   </div>
 </template>
 
