@@ -10,12 +10,13 @@
 <script>
 import HeroSection from '../components/HeroSection.vue';
 import HowItWorks from '../components/HowItWorks.vue';
-import HowItWorks from '../components/MainSection.vue';
+import MainSection from '../components/MainSection.vue';
 
 export default {
   components: {
     HeroSection,
     HowItWorks,
+    MainSection,
   }
 };
 </script>
