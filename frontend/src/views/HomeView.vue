@@ -15,9 +15,7 @@ import MainSection from '../components/MainSection.vue';
 
 export default {
   components: {
-    HeroSection,
-    HowItWorks,
-    MainSection,
+    //HeroSection,
   }
 };
 </script>
