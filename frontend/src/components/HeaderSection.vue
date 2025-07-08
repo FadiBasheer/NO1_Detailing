@@ -39,6 +39,9 @@
   padding: 15px 30px;
   background-color: white;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+  width: 100%;       /* 🔑 Make header full width */
+  box-sizing: border-box; /* Prevent padding from pushing it wider */
 }
 
 .logo {
