@@ -13,6 +13,7 @@ import FooterSection from './components/FooterSection.vue';
 export default {
   components: {
     HeaderSection,
+    FooterSection,
   }
 };
 </script>
