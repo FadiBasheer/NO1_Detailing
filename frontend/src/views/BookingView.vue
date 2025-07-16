@@ -39,7 +39,11 @@
 
       <!-- Submit -->
       <div>
-        <button @click="submitBooking">Confirm Booking</button>
+        <button @click="submitBooking">Pay to Book</button>
+        
+        <!-- <a href="https://yoom.myhelcim.com/hosted/?token=your-token">Pay to Book</a> -->
+
+
       </div>
 
       <p v-if="message" style="margin-top: 10px; color: green;">{{ message }}</p>
