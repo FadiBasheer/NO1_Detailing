@@ -22,6 +22,49 @@ app.get('/', (req, res) => {
   res.send('Mobile Detailing Backend is running');
 });
 
+
+// Reserve a slot temporarily (status: "pending")
+app.post('/api/reserve-slot', async (req, res) => {
+  try {
+    const { vehicles, date, time, address } = req.body;
+
+    // Check if the slot is already booked
+    const existingBooking = await Booking.findOne({ date, time });
+    if (existingBooking) {
+      return res.status(400).json({ message: 'Slot already booked.' });
+    }
+
+    // Create a pending booking
+    const pendingBooking = new Booking({
+      vehicles,
+      date,
+      time,
+      address,
+      status: 'pending',
+    });
+    await pendingBooking.save();
+
+    // Auto-cancel after 10 minutes if not confirmed
+    setTimeout(async () => {
+      const stillPending = await Booking.findById(pendingBooking._id);
+      if (stillPending && stillPending.status === 'pending') {
+        await Booking.findByIdAndDelete(pendingBooking._id);
+        console.log(`Pending booking expired for ${date} at ${time}`);
+      }
+    }, 10 * 60 * 1000);
+
+    res.json({
+      message: 'Slot reserved for 10 minutes. Proceed to payment.',
+      bookingId: pendingBooking._id,
+    });
+  } catch (error) {
+    console.error('Error reserving slot:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
+
 app.get('/api/bookings', async (req, res) => {
   try {
     const bookings = await Booking.find();
