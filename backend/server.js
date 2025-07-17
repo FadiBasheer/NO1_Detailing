@@ -64,6 +64,39 @@ app.post('/api/reserve-slot', async (req, res) => {
 });
 
 
+import crypto from 'crypto';
+
+// Generate Helcim payment form details
+app.post('/api/payment-link', async (req, res) => {
+  try {
+    const { bookingId, totalAmount } = req.body;
+
+    // Validate booking exists
+    const booking = await Booking.findById(bookingId);
+    if (!booking || booking.status !== 'pending') {
+      return res.status(400).json({ message: 'Invalid or expired booking.' });
+    }
+
+    // Generate Helcim amount hash
+    const privateKey = process.env.HELCIM_PRIVATE_KEY || 'your_private_key_here';
+    const amountHash = crypto
+      .createHash('sha256')
+      .update(totalAmount + privateKey)
+      .digest('hex');
+
+    const formData = {
+      action: 'https://yoom.myhelcim.com/hosted/?token=yourtoken',
+      amount: totalAmount,
+      amountHash,
+    };
+
+    res.json(formData);
+  } catch (error) {
+    console.error('Error generating payment link:', error);
+    res.status(500).json({ message: 'Error generating payment link.' });
+  }
+});
+
 
 app.get('/api/bookings', async (req, res) => {
   try {
