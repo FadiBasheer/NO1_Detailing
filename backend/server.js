@@ -2,7 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import Booking from './models/Booking.js';
-
+import crypto from 'crypto';
 
 const app = express();
 const port = 5000;
@@ -64,7 +64,6 @@ app.post('/api/reserve-slot', async (req, res) => {
 });
 
 
-import crypto from 'crypto';
 
 // Generate Helcim payment form details
 app.post('/api/payment-link', async (req, res) => {
