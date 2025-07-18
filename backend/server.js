@@ -108,6 +108,24 @@ app.get('/api/bookings', async (req, res) => {
 });
 
 
+// Helcim webhook - payment confirmation
+app.post('/api/payment-success', async (req, res) => {
+  try {
+    const { bookingId, paymentStatus } = req.body;
+
+    if (paymentStatus === 'approved') {
+      await Booking.findByIdAndUpdate(bookingId, { status: 'confirmed' });
+      console.log(`Booking ${bookingId} confirmed and paid.`);
+    }
+
+    res.sendStatus(200);
+  } catch (error) {
+    console.error('Error confirming payment:', error);
+    res.sendStatus(500);
+  }
+});
+
+
 app.post('/api/bookings', async (req, res) => {
   try {
     const { vehicles, date, time, address } = req.body;
