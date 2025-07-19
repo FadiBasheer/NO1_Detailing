@@ -97,17 +97,6 @@ app.post('/api/payment-link', async (req, res) => {
 });
 
 
-app.get('/api/bookings', async (req, res) => {
-  try {
-    const bookings = await Booking.find();
-    res.json(bookings);
-  } catch (error) {
-    console.error('Error fetching bookings:', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-});
-
-
 // Helcim webhook - payment confirmation
 app.post('/api/payment-success', async (req, res) => {
   try {
@@ -125,7 +114,15 @@ app.post('/api/payment-success', async (req, res) => {
   }
 });
 
-
+app.get('/api/bookings', async (req, res) => {
+  try {
+    const bookings = await Booking.find();
+    res.json(bookings);
+  } catch (error) {
+    console.error('Error fetching bookings:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
 app.get('/api/available-times', async (req, res) => {
   const { date, duration } = req.query;
