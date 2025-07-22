@@ -27,7 +27,7 @@ const router = createRouter({
     {
       path: '/choosing-service',
       name: 'ChoosingServiceView',
-       component: () => import('../views/ChoosingServiceView.vue')
+      component: () => import('../views/ChoosingServiceView.vue')
     },
     {
       path: '/thank-you',
