@@ -1,9 +1,23 @@
+<script setup>
+import { useRoute } from 'vue-router';
+
+// Get the payment status from the URL (e.g. ?status=approved or ?status=failed)
+const route = useRoute();
+const status = route.query.status || 'approved';
+</script>
+
 <template>
   <div class="thank-you">
     <div class="thank-you-box">
-      <h1>🎉 Thank You!</h1>
-      <p>Your booking has been successfully confirmed and payment received.</p>
-      <p>We’ll be in touch soon to confirm details.</p>
+      <h1 v-if="status === 'approved'">🎉 Thank You!</h1>
+      <h1 v-else>❌ Payment Failed</h1>
+
+      <p v-if="status === 'approved'">
+        Your booking has been successfully confirmed and payment received.
+      </p>
+      <p v-else>
+        Unfortunately, your payment didn’t go through. Please try again or contact support.
+      </p>
 
       <router-link to="/">
         <button class="home-btn">Return Home</button>
