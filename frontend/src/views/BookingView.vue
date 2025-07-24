@@ -31,12 +31,6 @@
         </select>
       </div>
 
-      <!-- Address -->
-      <div>
-        <label>Address:</label>
-        <input type="text" v-model="address" />
-      </div>
-
       <!-- Submit -->
       <div>
         <button @click="submitBooking">Pay to Book</button>
@@ -127,7 +121,6 @@ export default {
         localStorage.setItem("vehicles", JSON.stringify(savedVehicles));
       }
     }
-
       this.vehicles = savedVehicles;
   },
 
@@ -256,8 +249,8 @@ export default {
     },
     
     async submitBooking() {
-      if (!this.date || !this.time || !this.address) {
-        alert("Please fill in date, time, and address before proceeding.");
+      if (!this.date || !this.time) {
+        alert("Please fill in date, and time before proceeding.");
         return;
       }
     
@@ -267,7 +260,6 @@ export default {
           vehicles: this.vehicles,
           date: this.date,
           time: this.time,
-          address: this.address,
         };
     
         // 1️⃣ Reserve the slot temporarily (pending)
