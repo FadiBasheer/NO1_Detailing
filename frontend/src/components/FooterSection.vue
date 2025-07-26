@@ -23,8 +23,8 @@
       <!-- Right side: Contact -->
       <div class="footer-contact">
         <h3>Contact Us</h3>
-        <p>Email: support@yumeeco.com</p>
-        <p>Phone: (123) 456-7890</p>
+        <p>Email: </p>
+        <p>Phone: (236) 662-5225</p>
       </div>
     </div>
 
