@@ -31,7 +31,7 @@ export default {
       steps: [
         { icon: calendarIcon, title: "Book Online", text: "Select your vehicle and service type. Choose a date and time." },
         { icon: locationIcon, title: "We come to your location", text: "We bring water and electricity. All we need are your keys." },
-        { icon: carIcon, title: "Your Car Gets Shiny", text: "We service the interior and exterior of your car." },
+        { icon: carIcon, title: "Your vehicle Gets Shiny", text: "We service the interior and exterior of your car." },
         { icon: carIcon, title: "Another Step", text: "Extra description for demo." },
         { icon: carIcon, title: "Step Five", text: "Some details here." }
       ]
