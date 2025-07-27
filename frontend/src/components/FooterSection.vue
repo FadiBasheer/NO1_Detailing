@@ -23,7 +23,7 @@
       <!-- Right side: Contact -->
       <div class="footer-contact">
         <h3>Contact Us</h3>
-        <p>Email: </p>
+        <p>Email: hello@yumeeco.ca </p>
         <p>Phone: (236) 662-5225</p>
       </div>
     </div>
