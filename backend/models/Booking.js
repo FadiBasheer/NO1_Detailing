@@ -12,7 +12,8 @@ const BookingSchema = new mongoose.Schema({
   vehicles: [VehicleSchema],
   date: String,
   time: String,
-  address: String
+  address: String,
+  status: { type: String, default: 'pending' },
 });
 
 const Booking = mongoose.model('Booking', BookingSchema);

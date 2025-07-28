@@ -1,3 +1,7 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
+
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
@@ -6,6 +10,9 @@ import crypto from 'crypto';
 
 const app = express();
 const port = 5000;
+
+const helcimToken = process.env.HELCIM_API_TOKEN;
+const helcimPrivateKey = process.env.HELCIM_PRIVATE_KEY;
 
 // Middleware
 app.use(cors());
@@ -72,6 +79,7 @@ app.post('/api/payment-link', async (req, res) => {
 
     // Validate booking exists
     const booking = await Booking.findById(bookingId);
+    console.log("booking:",booking);
     if (!booking || booking.status !== 'pending') {
       return res.status(400).json({ message: 'Invalid or expired booking.' });
     }
