@@ -1,7 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
@@ -84,20 +83,12 @@ app.post('/api/payment-link', async (req, res) => {
       return res.status(400).json({ message: 'Invalid or expired booking.' });
     }
 
-    // Generate Helcim amount hash
-    const privateKey = process.env.HELCIM_PRIVATE_KEY || 'your_private_key_here';
-    const amountHash = crypto
-      .createHash('sha256')
-      .update(totalAmount + privateKey)
-      .digest('hex');
+    const helcimUrl = `https://yoom.myhelcim.com/hosted/?token=${process.env.HELCIM_TOKEN}`;
 
-    const formData = {
-      action: 'https://yoom.myhelcim.com/hosted/?token=yourtoken',
-      amount: totalAmount,
-      amountHash,
-    };
-
-    res.json(formData);
+    res.json({
+      action: helcimUrl,
+      amount: totalAmount
+    });
   } catch (error) {
     console.error('Error generating payment link:', error);
     res.status(500).json({ message: 'Error generating payment link.' });
