@@ -11,7 +11,6 @@ const app = express();
 const port = 5000;
 
 const helcimToken = process.env.HELCIM_API_TOKEN;
-const helcimPrivateKey = process.env.HELCIM_PRIVATE_KEY;
 
 // Middleware
 app.use(cors());
@@ -83,7 +82,7 @@ app.post('/api/payment-link', async (req, res) => {
       return res.status(400).json({ message: 'Invalid or expired booking.' });
     }
 
-    const helcimUrl = `https://yoom.myhelcim.com/hosted/?token=${process.env.HELCIM_TOKEN}`;
+    const helcimUrl = `https://yumeeco.myhelcim.com/hosted/?token=${helcimToken}`;
 
     res.json({
       action: helcimUrl,
