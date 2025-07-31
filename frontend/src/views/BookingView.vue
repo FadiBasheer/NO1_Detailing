@@ -247,13 +247,13 @@ export default {
         console.error("Error fetching available times:", error);
       }
     },
-    
+
     async submitBooking() {
       if (!this.date || !this.time) {
-        alert("Please fill in date, and time before proceeding.");
+        alert("Please fill in date and time before proceeding.");
         return;
       }
-    
+
       try {
         this.message = "Reserving your slot...";
         const bookingData = {
@@ -261,33 +261,34 @@ export default {
           date: this.date,
           time: this.time,
         };
-    
+
         // 1️⃣ Reserve the slot temporarily (pending)
         const reserveRes = await axios.post("http://localhost:5000/api/reserve-slot", bookingData);
         const bookingId = reserveRes.data.bookingId;
-    
+
         this.message = "Redirecting to secure payment...";
-    
+
         // 2️⃣ Get payment form data from your server
-        const totalAmount = 50.0; // ⚙️ You can calculate this dynamically later
+        const totalAmount = 50.0; // ⚙️ Replace with dynamic total if needed
         const paymentRes = await axios.post("http://localhost:5000/api/payment-link", {
           bookingId,
           totalAmount,
         });
-    
-        const { action, amount, amountHash } = paymentRes.data;
-    
+
+        const { action, amount } = paymentRes.data;
+
         // 3️⃣ Build Helcim payment form dynamically and auto-submit
         const form = document.createElement("form");
         form.method = "POST";
         form.action = action;
         form.target = "_self"; // same tab
-    
+
         const fields = [
           { name: "amount", value: amount },
-          { name: "amountHash", value: amountHash },
+          // Optional: include booking ID so you can match it later if Helcim redirects back
+          { name: "bookingId", value: bookingId },
         ];
-    
+
         fields.forEach((f) => {
           const input = document.createElement("input");
           input.type = "hidden";
@@ -295,10 +296,10 @@ export default {
           input.value = f.value;
           form.appendChild(input);
         });
-    
+
         document.body.appendChild(form);
         form.submit();
-    
+
       } catch (error) {
         console.error("Error starting payment:", error);
         this.message = error.response?.data?.message || "Error starting payment. Please try again.";
