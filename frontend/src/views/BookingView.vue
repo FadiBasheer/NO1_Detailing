@@ -78,6 +78,7 @@
 
 <script>
 import axios from "axios";
+import API_BASE_URL from '../config.js';
 import { services, addons } from "@/data/services";
 
 export default {
