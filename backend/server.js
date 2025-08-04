@@ -14,7 +14,7 @@ const helcimToken = process.env.HELCIM_API_TOKEN;
 
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:5173', 'https://yourdomain.com'],
+  origin: ['http://localhost:5173', 'https://yumeeco.ca'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
