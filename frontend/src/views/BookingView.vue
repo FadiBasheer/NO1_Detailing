@@ -264,7 +264,7 @@ export default {
         };
 
         // 1️⃣ Reserve the slot temporarily (pending)
-        const reserveRes = await axios.post("http://localhost:5000/api/reserve-slot", bookingData);
+        const reserveRes = await axios.post("${API_BASE_URL}/api/reserve-slot", bookingData);
         const bookingId = reserveRes.data.bookingId;
 
         this.message = "Redirecting to secure payment...";
