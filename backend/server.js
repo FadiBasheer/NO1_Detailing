@@ -14,7 +14,7 @@ const helcimToken = process.env.HELCIM_API_TOKEN;
 
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:5173', 'https://yiurwebsite.ca'],
+  origin: ['http://localhost:5173', 'https://yumeeco.ca'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
@@ -22,9 +22,10 @@ app.use(cors({
 app.use(express.json());
 
 // MongoDB connection
-mongoose.connect('mongodb://localhost:27017/mobile-detailing')
-  .then(() => console.log('Connected to MongoDB'))
-  .catch((err) => console.error(err));
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('✅ Connected to MongoDB'))
+  .catch((err) => console.error('❌ MongoDB connection error:', err));
+
 
 
 // Routes
