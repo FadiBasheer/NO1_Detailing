@@ -42,22 +42,35 @@
 <script>
 import brands from "@/data/vehicles.js"; // ✅ import your brand/model list
 
+import sedan from "@/assets/sedan.jpg";
+import smallSUV from "@/assets/small-suv.jpg";
+import midSuv from "@/assets/mid-suv.jpg";
+import suv7 from "@/assets/suv-7.jpg";
+import minivan from "@/assets/minivan.jpg";
+import smallTruck from "@/assets/small-truck.jpg";
+import bigTruck from "@/assets/big-truck.jpg";
+import commercialVan from "@/assets/commercial-van.jpg";
+import motorcycle from "@/assets/motorcycle.jpg";
+import rvTrailer from "@/assets/rv-trailer.jpg";
+import boats from "@/assets/boats.jpg";
+
 export default {
   data() {
     return {
       vehicles: [
-        { name: "Sedan/Coupe", image: "/src/assets/sedan.jpg" },
-        { name: "Small SUV", image: "/src/assets/small-suv.jpg" },
-        { name: "Mid-size SUV", image: "/src/assets/mid-suv.jpg" },
-        { name: "SUV 7 seats", image: "/src/assets/suv-7.jpg" },
-        { name: "Mini Van", image: "/src/assets/minivan.jpg" },
-        { name: "Small Truck", image: "/src/assets/small-truck.jpg" },
-        { name: "Big Truck", image: "/src/assets/big-truck.jpg" },
-        { name: "Commercial Van", image: "/src/assets/commercial-van.jpg" },
-        { name: "Motorcycle", image: "/src/assets/motorcycle.jpg" },
-        { name: "RV/Trailer", image: "/src/assets/rv-trailer.jpg" },
-        { name: "Boats", image: "/src/assets/boats.jpg" }
+        { name: "Sedan/Coupe", image: sedan },
+        { name: "Small SUV", image: smallSUV },
+        { name: "Mid-size SUV", image: midSuv },
+        { name: "SUV 7 seats", image: suv7 },
+        { name: "Mini Van", image: minivan },
+        { name: "Small Truck", image: smallTruck },
+        { name: "Big Truck", image: bigTruck },
+        { name: "Commercial Van", image: commercialVan },
+        { name: "Motorcycle", image: motorcycle },
+        { name: "RV/Trailer", image: rvTrailer },
+        { name: "Boats", image: boats }
       ],
+
       selectedVehicle: null,
       brand: "",
       model: "",
