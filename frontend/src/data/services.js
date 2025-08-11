@@ -2,9 +2,9 @@ import interiorImg from "@/assets/services/interior.jpg";
 import exteriorImg from "@/assets/services/exterior.jpg";
 import bothImg from "@/assets/services/both.jpg";
 
-import engineCleaningImg from "@/assets/addons/engine-cleaning.jpg";
-import polishingImg from "@/assets/addons/polishing.jpg";
-import moldCleaningImg from "@/assets/addons/mold-cleaning.jpg";
+import engineCleaningImg from "@/assets/services/engine-cleaning.jpg";
+import polishingImg from "@/assets/services/polishing.jpg";
+import moldCleaningImg from "@/assets/services/mold-cleaning.jpg";
 
 
 
