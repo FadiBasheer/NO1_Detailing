@@ -66,4 +66,21 @@ export default {
 h2 {
   margin-bottom: 20px;
 }
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .how-it-works {
+    padding: 30px 10px;
+  }
+
+  .steps {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .step {
+    width: 100%;
+    max-width: 300px;
+  }
+}
 </style>

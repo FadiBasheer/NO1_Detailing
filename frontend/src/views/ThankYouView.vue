@@ -58,4 +58,22 @@ const status = route.query.status || 'approved';
 .home-btn:hover {
   background-color: #009241;
 }
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .thank-you {
+    padding: 20px;
+    height: auto;
+    min-height: 80vh;
+  }
+
+  .thank-you-box {
+    padding: 30px 20px;
+  }
+
+  .home-btn {
+    width: 100%;
+    max-width: 200px;
+  }
+}
 </style>

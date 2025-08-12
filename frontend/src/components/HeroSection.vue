@@ -95,4 +95,34 @@
 .pricing-btn:hover {
   background-color: #e5e7eb;
 }
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .hero {
+    padding: 2rem 1rem;
+  }
+
+  .hero-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 2rem;
+  }
+
+  .hero-image img {
+    max-width: 300px;
+  }
+
+  .hero-text h1 {
+    font-size: 2rem;
+  }
+
+  .hero-text p {
+    font-size: 1rem;
+  }
+
+  .book-btn, .pricing-btn {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+}
 </style>

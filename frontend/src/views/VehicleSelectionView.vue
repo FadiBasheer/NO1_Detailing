@@ -186,4 +186,39 @@ export default {
 .form-section button:hover:enabled {
   background-color: #0056b3;
 }
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .vehicle-selection {
+    margin: 20px auto;
+    padding: 0 10px;
+  }
+
+  .vehicle-grid {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 15px;
+  }
+
+  .vehicle-button {
+    padding: 10px;
+  }
+
+  .vehicle-button img {
+    max-width: 80px;
+  }
+
+  .vehicle-button span {
+    font-size: 14px;
+  }
+
+  .form-section {
+    margin-top: 30px;
+  }
+
+  .form-section select,
+  .form-section button {
+    width: 100%;
+    max-width: 300px;
+  }
+}
 </style>

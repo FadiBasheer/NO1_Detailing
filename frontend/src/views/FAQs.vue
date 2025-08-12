@@ -15,4 +15,12 @@
     align-items: center;
   }
 }
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .about {
+    padding: 20px;
+    text-align: center;
+  }
+}
 </style>

@@ -133,4 +133,34 @@ button {
   background: #f0fff0;
 }
 
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .choose-service {
+    margin-top: 20px;
+    padding: 0 10px;
+  }
+
+  .service-options {
+    gap: 15px;
+  }
+
+  .service-card {
+    width: 100%;
+    max-width: 300px;
+    padding: 10px;
+  }
+
+  .service-image {
+    height: 120px;
+  }
+
+  .addons-section {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  button {
+    width: 100%;
+  }
+}
 </style>

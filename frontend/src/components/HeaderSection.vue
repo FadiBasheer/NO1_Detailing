@@ -1,11 +1,11 @@
 <template>
   <header class="header">
     <router-link to="/" class="logo">Yumeeco</router-link>
-    <nav>
+    <nav :class="{ 'nav-open': isMenuOpen }">
       <ul>
         <li class="dropdown" style="position: relative">
-          <p class="dropdown-btn">Business Programs &#x2BC6;</p>
-          <ul class="dropdown-menu">
+          <p class="dropdown-btn" @click="toggleDropdown">Business Programs &#x2BC6;</p>
+          <ul class="dropdown-menu" :class="{ 'open': isDropdownOpen }">
             <li><a href="#">Fleet Services</a></li>
             <li><a href="#">Dealerships</a></li>
             <li><a href="#">Another item</a></li> <!-- Uber Drives -->
@@ -27,9 +27,32 @@
         <li><a href="#">Contact</a></li>
       </ul>
     </nav>
+    <button class="hamburger" @click="toggleMenu" :class="{ 'open': isMenuOpen }">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </header>
 </template>
 
+<script>
+export default {
+  data() {
+    return {
+      isMenuOpen: false,
+      isDropdownOpen: false
+    };
+  },
+  methods: {
+    toggleMenu() {
+      this.isMenuOpen = !this.isMenuOpen;
+    },
+    toggleDropdown() {
+      this.isDropdownOpen = !this.isDropdownOpen;
+    }
+  }
+};
+</script>
 
 <style>
 .header {
@@ -100,4 +123,88 @@ nav a, p {
   display: block;
 }
 
+/* Hamburger menu */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.hamburger span {
+  width: 25px;
+  height: 3px;
+  background: #333;
+  margin: 3px 0;
+  transition: 0.3s;
+}
+
+.hamburger.open span:nth-child(1) {
+  transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+.hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.open span:nth-child(3) {
+  transform: rotate(45deg) translate(-5px, -6px);
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .header {
+    padding: 15px 20px;
+  }
+
+  nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+
+  nav.nav-open {
+    display: block;
+  }
+
+  nav ul {
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+  }
+
+  nav li {
+    width: 100%;
+    text-align: left;
+  }
+
+  nav a, nav p {
+    display: block;
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .dropdown-menu {
+    position: static;
+    display: none;
+    box-shadow: none;
+    border: none;
+  }
+
+  .dropdown:hover .dropdown-menu,
+  .dropdown-menu.open {
+    display: block;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+}
 </style>

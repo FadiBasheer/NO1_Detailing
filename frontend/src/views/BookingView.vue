@@ -1,11 +1,11 @@
 <template>
-  <div class="booking-page" style="display: flex; gap: 20px;">
+  <div class="booking-page">
     <!-- Main booking form -->
-    <div class="booking-form" style="flex: 2;">
+    <div class="booking-form">
       <h2>Book Your Appointment</h2>
 
       <!-- Date -->
-      <div>
+      <div class="form-group">
         <label>Select Date:</label>
         <input
           type="date"
@@ -16,7 +16,7 @@
       </div>
 
       <!-- Time -->
-      <div>
+      <div class="form-group">
         <label>Select Time:</label>
         <select v-model="time">
           <option value="">-- Select a time --</option>
@@ -32,46 +32,46 @@
       </div>
 
       <!-- Submit -->
-      <div>
-        <button @click="submitBooking">Pay to Book</button>
+      <div class="form-group">
+        <button @click="submitBooking" class="submit-btn">Pay to Book</button>
       </div>
 
-      <p v-if="message" style="margin-top: 10px; color: green;">{{ message }}</p>
+      <p v-if="message" class="message">{{ message }}</p>
     </div>
 
     <!-- Cart Sidebar -->
-    <div class="cart" style="flex: 1; border: 1px solid #ccc; padding: 10px;">
+    <div class="cart">
       <h3>Your Booking Cart</h3>
 
-      <div v-if="vehicles.length === 0">
+      <div v-if="vehicles.length === 0" class="empty-cart">
         <p>No vehicles added yet.</p>
       </div>
 
       <div
         v-for="(vehicle, vIndex) in vehicles"
         :key="vIndex"
-        style="border-bottom: 1px solid #ddd; padding-bottom: 8px; margin-bottom: 8px;"
+        class="vehicle-item"
       >
         <strong>{{ vehicle.vehicleType }} - {{ getServiceName(vehicle.service) }}</strong>
-        <button @click="removeVehicle(vIndex)" style="margin-left: 5px; color: red;">X</button>
+        <button @click="removeVehicle(vIndex)" class="remove-btn">X</button>
 
         <!-- Add-ons list -->
-        <ul v-if="vehicle.addons.length > 0">
+        <ul v-if="vehicle.addons.length > 0" class="addons-list">
           <li
             v-for="(addon, aIndex) in vehicle.addons"
             :key="aIndex"
-            style="display: flex; justify-content: space-between; align-items: center;"
+            class="addon-item"
           >
             {{ getAddonName(addon) }}
-            <button @click="removeAddon(vIndex, aIndex)" style="color: red;">X</button>
+            <button @click="removeAddon(vIndex, aIndex)" class="remove-btn">X</button>
           </li>
         </ul>
       </div>
 
       <!-- Add Another Vehicle -->
-      <button @click="addAnotherVehicle">+ Add Another Vehicle</button>
+      <button @click="addAnotherVehicle" class="add-btn">+ Add Another Vehicle</button>
       <br />
-      <button @click="clearLocalStorage" style="margin-top: 5px;">Clear Cart</button>
+      <button @click="clearLocalStorage" class="clear-btn">Clear Cart</button>
     </div>
   </div>
 </template>
@@ -318,3 +318,126 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.booking-page {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.booking-form {
+  flex: 2;
+}
+
+.cart {
+  flex: 1;
+  border: 1px solid #ccc;
+  padding: 10px;
+  height: fit-content;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.submit-btn {
+  background-color: #007BFF;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.submit-btn:hover {
+  background-color: #0056b3;
+}
+
+.message {
+  margin-top: 10px;
+  color: green;
+}
+
+.empty-cart {
+  text-align: center;
+  color: #666;
+}
+
+.vehicle-item {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+}
+
+.remove-btn {
+  margin-left: 5px;
+  color: red;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.addons-list {
+  list-style: none;
+  padding: 0;
+  margin: 5px 0 0 0;
+}
+
+.addon-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 0;
+}
+
+.add-btn,
+.clear-btn {
+  margin-top: 10px;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  background: #f9f9f9;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.clear-btn {
+  margin-top: 5px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .booking-page {
+    flex-direction: column;
+    padding: 10px;
+    gap: 15px;
+  }
+
+  .booking-form,
+  .cart {
+    flex: none;
+  }
+
+  .cart {
+    order: -1; /* Show cart first on mobile */
+  }
+}
+</style>

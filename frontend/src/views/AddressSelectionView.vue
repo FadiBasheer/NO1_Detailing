@@ -62,4 +62,22 @@ export default {
   padding: 10px;
   margin-bottom: 20px;
 }
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .address-selection {
+    margin-top: 30px;
+    padding: 0 20px;
+  }
+
+  .address-input {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  button {
+    width: 100%;
+    max-width: 300px;
+  }
+}
 </style>

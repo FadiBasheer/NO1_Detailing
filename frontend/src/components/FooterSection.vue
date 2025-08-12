@@ -100,4 +100,27 @@
   font-size: 14px;
   color: #aaa;
 }
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .footer {
+    padding: 30px 15px 15px;
+  }
+
+  .footer-container {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .footer-about,
+  .footer-links,
+  .footer-contact {
+    min-width: auto;
+    text-align: center;
+  }
+
+  .footer-links ul {
+    text-align: center;
+  }
+}
 </style>

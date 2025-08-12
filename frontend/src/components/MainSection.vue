@@ -107,4 +107,33 @@ export default {
 .arrow.right {
   right: -40px;
 }
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .how-it-works {
+    padding: 30px 10px;
+  }
+
+  .step {
+    width: 250px;
+    padding: 15px;
+  }
+
+  .step img {
+    width: 50px;
+  }
+
+  .arrow {
+    font-size: 1.5rem;
+    padding: 8px 12px;
+  }
+
+  .arrow.left {
+    left: -30px;
+  }
+
+  .arrow.right {
+    right: -30px;
+  }
+}
 </style>
