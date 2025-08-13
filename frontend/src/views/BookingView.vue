@@ -237,12 +237,12 @@ export default {
     async fetchBookedTimes() {
       if (!this.date) return;
       try {
-      const response = await axios.get(
-        '${API_BASE_URL}/api/available-times',
-        {
-          params: { date: this.date, duration: this.totalDuration },
-        }
-      );
+        const response = await axios.get(
+          `${API_BASE_URL}/api/available-times`,
+          {
+            params: { date: this.date, duration: this.totalDuration },
+          }
+        );
 
         this.availableTimeSlots = response.data;
       } catch (error) {
@@ -266,7 +266,7 @@ export default {
 
         // 1️⃣ Reserve the slot temporarily (pending)
         const reserveRes = await axios.post(
-          '${API_BASE_URL}/api/reserve-slot',
+          `${API_BASE_URL}/api/reserve-slot`,
           bookingData
           );
 
@@ -277,7 +277,7 @@ export default {
         // 2️⃣ Get payment form data from your server
         const totalAmount = 50.0; // ⚙️ Replace with dynamic total if needed
         const paymentRes = await axios.post(
-          '${API_BASE_URL}/api/payment-link',
+          `${API_BASE_URL}/api/payment-link`,
           {
             bookingId,
             totalAmount,
