@@ -14,6 +14,7 @@ const BookingSchema = new mongoose.Schema({
   time: String,
   address: String,
   status: { type: String, default: 'pending' },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // Associate booking with user
 });
 
 const Booking = mongoose.model('Booking', BookingSchema);

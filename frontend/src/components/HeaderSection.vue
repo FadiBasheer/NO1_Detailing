@@ -27,6 +27,11 @@
         <li><a href="#">Contact</a></li>
       </ul>
     </nav>
+    <div class="auth-buttons">
+      <router-link v-if="!user" to="/login" class="btn">Login</router-link>
+      <router-link v-if="!user" to="/register" class="btn">Register</router-link>
+      <button v-if="user" @click="logout" class="btn">Logout</button>
+    </div>
     <button class="hamburger" @click="toggleMenu" :class="{ 'open': isMenuOpen }">
       <span></span>
       <span></span>
@@ -35,22 +40,26 @@
   </header>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      isMenuOpen: false,
-      isDropdownOpen: false
-    };
-  },
-  methods: {
-    toggleMenu() {
-      this.isMenuOpen = !this.isMenuOpen;
-    },
-    toggleDropdown() {
-      this.isDropdownOpen = !this.isDropdownOpen;
-    }
-  }
+<script setup>
+import { ref, computed } from 'vue';
+import { useAuthStore } from '../stores/auth.js';
+
+const auth = useAuthStore();
+const user = computed(() => auth.user);
+
+const isMenuOpen = ref(false);
+const isDropdownOpen = ref(false);
+
+const toggleMenu = () => {
+  isMenuOpen.value = !isMenuOpen.value;
+};
+
+const toggleDropdown = () => {
+  isDropdownOpen.value = !isDropdownOpen.value;
+};
+
+const logout = () => {
+  auth.logout();
 };
 </script>
 
@@ -206,5 +215,30 @@ nav a, p {
   .hamburger {
     display: flex;
   }
+}
+
+/* Auth buttons */
+.auth-buttons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.auth-buttons .btn {
+  padding: 8px 16px;
+  background-color: #007BFF;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.auth-buttons .btn:hover {
+  background-color: #0056b3;
+}
+
+.auth-buttons button {
+  border: none;
+  cursor: pointer;
 }
 </style>
