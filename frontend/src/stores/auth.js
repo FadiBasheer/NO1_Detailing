@@ -29,6 +29,7 @@ export const useAuthStore = defineStore('auth', {
     logout() {
       if (this.refreshToken) {
         axios.post('/api/auth/logout', { refreshToken: this.refreshToken });
+        localStorage.removeItem("vehicles");
       }
       this.user = null;
       this.accessToken = null;
