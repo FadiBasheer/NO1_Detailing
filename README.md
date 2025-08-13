@@ -4,3 +4,5 @@
 
 ## cd backend
 # node server.js
+
+## Add the deployment steps
