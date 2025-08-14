@@ -60,6 +60,7 @@ const toggleDropdown = () => {
 
 const logout = () => {
   auth.logout();
+  router.push('/');
 };
 </script>
 
