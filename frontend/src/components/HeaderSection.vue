@@ -43,6 +43,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { useAuthStore } from '../stores/auth.js';
+import { useRouter } from 'vue-router';
 
 const auth = useAuthStore();
 const user = computed(() => auth.user);
@@ -57,6 +58,9 @@ const toggleMenu = () => {
 const toggleDropdown = () => {
   isDropdownOpen.value = !isDropdownOpen.value;
 };
+
+
+const router = useRouter();
 
 const logout = () => {
   auth.logout();
