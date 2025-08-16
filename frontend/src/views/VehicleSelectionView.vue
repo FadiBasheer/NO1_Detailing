@@ -51,7 +51,7 @@ import smallTruck from "@/assets/small-truck.jpg";
 import bigTruck from "@/assets/big-truck.jpg";
 import commercialVan from "@/assets/commercial-van.jpg";
 import motorcycle from "@/assets/motorcycle.jpg";
-import rvTrailer from "@/assets/rv-trailer.jpg";
+import rvTrailer from "@/assets/Rv-trailer.jpg";
 import boats from "@/assets/boats.jpg";
 
 export default {
