@@ -42,7 +42,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import { useAuthStore } from '../stores/auth.js';
+import { useAuthStore } from '../stores/auth.ts';
 import { useRouter } from 'vue-router';
 
 const auth = useAuthStore();

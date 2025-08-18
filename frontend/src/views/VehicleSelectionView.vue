@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import brands from "@/data/vehicles.js"; // ✅ import your brand/model list
+import brands from "@/data/vehicles.ts"; // ✅ import your brand/model list
 
 import sedan from "@/assets/sedan.jpg";
 import smallSUV from "@/assets/small-suv.jpg";

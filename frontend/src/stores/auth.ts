@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import axios from '../axios.js';
+import axios from '../axios.ts';
 
 // 1. Define what your Auth State looks like
 interface AuthState {
@@ -26,6 +26,12 @@ export const useAuthStore = defineStore('auth', {
       
       if (this.refreshToken) {
         localStorage.setItem('refreshToken', this.refreshToken);
+      }
+      if (this.user) {
+        localStorage.setItem('user', JSON.stringify(this.user));
+      }
+      if (this.accessToken) {
+        localStorage.setItem('accessToken', this.accessToken);
       }
     },
 
@@ -66,6 +72,14 @@ export const useAuthStore = defineStore('auth', {
       if (refreshToken) {
         this.refreshToken = refreshToken;
         this.refreshAccessToken();
+      }
+      const user = localStorage.getItem('user');
+      if (user) {
+        this.user = JSON.parse(user);
+      }
+      const accessToken = localStorage.getItem('accessToken');
+      if (accessToken) {
+        this.accessToken = accessToken;
       }
     }
   }

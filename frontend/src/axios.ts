@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useAuthStore } from './stores/auth.js';
+import { useAuthStore } from './stores/auth.ts';
 
 const instance = axios.create({
   baseURL: 'http://localhost:5000',  // Your backend URL

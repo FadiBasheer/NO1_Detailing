@@ -78,8 +78,8 @@
 
 <script>
 import axios from "axios";
-import API_BASE_URL from '../config.js';
-import { services, addons } from "@/data/services";
+import API_BASE_URL from '../config.ts';
+import { services, addons } from "@/data/services.ts";
 
 export default {
   data() {

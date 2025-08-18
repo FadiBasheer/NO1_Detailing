@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { services, addons } from "@/data/services.js";
+import { services, addons } from "@/data/services.ts";
 
 export default {
   name: "ChoosingServiceView",
