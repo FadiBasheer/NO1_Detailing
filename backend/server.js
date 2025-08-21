@@ -169,50 +169,120 @@ app.get('/', (req, res) => {
 // Reserve a slot temporarily (status: "PENDING")
 app.post('/api/reserve-slot', authMiddleware, async (req, res) => {
   try {
-    const { vehicles, date, time, address } = req.body;
+    const { vehicleId, date, time, serviceIds, addonIds, address } = req.body;
 
     // Validate input
-    if (!vehicles || !date || !time || !address) {
-      return res.status(400).json({ message: 'Missing required fields' });
+    if (!vehicleId || !date || !time || !address || !serviceIds || !Array.isArray(serviceIds)) {
+      return res.status(400).json({ 
+        message: 'Missing or invalid required fields: vehicleId, date, time, address, serviceIds (array)' 
+      });
     }
 
-    // Check if the slot is already booked
-    const existingBooking = await prisma.booking.findFirst({
+    if (serviceIds.length === 0) {
+      return res.status(400).json({ message: 'At least one service must be selected' });
+    }
+
+    // Verify vehicle exists
+    const vehicle = await prisma.vehicle.findUnique({ where: { id: vehicleId } });
+    if (!vehicle) {
+      return res.status(400).json({ message: 'Invalid vehicle ID' });
+    }
+
+    // Fetch service durations to calculate endTime
+    const services = await prisma.service.findMany({
+      where: { id: { in: serviceIds } },
+      select: { id: true, durationMinutes: true, price: true }
+    });
+
+    if (services.length !== serviceIds.length) {
+      return res.status(400).json({ message: 'One or more service IDs are invalid' });
+    }
+
+    // Fetch addon durations if provided
+    let addons = [];
+    if (addonIds && Array.isArray(addonIds) && addonIds.length > 0) {
+      addons = await prisma.addon.findMany({
+        where: { id: { in: addonIds } },
+        select: { id: true, durationMinutes: true, price: true }
+      });
+
+      if (addons.length !== addonIds.length) {
+        return res.status(400).json({ message: 'One or more addon IDs are invalid' });
+      }
+    }
+
+    // Parse date and time to create DateTime
+    const bookingDate = new Date(`${date}T${time}:00`);
+    if (isNaN(bookingDate.getTime())) {
+      return res.status(400).json({ message: 'Invalid date or time format' });
+    }
+
+    // Calculate total duration in minutes
+    const totalDurationMinutes = services.reduce((sum, s) => sum + s.durationMinutes, 0) +
+                                  addons.reduce((sum, a) => sum + a.durationMinutes, 0);
+
+    // Calculate end time
+    const endTime = new Date(bookingDate.getTime() + totalDurationMinutes * 60000);
+
+    // Check for overlapping confirmed bookings
+    const overlappingBooking = await prisma.booking.findFirst({
       where: {
-        date,
-        time,
-        status: 'CONFIRMED' // Only check confirmed bookings
+        status: 'CONFIRMED',
+        address: address,
+        OR: [
+          {
+            // New booking starts before existing booking ends
+            date: { lte: endTime },
+            endTime: { gte: bookingDate }
+          }
+        ]
       }
     });
 
-    if (existingBooking) {
-      return res.status(400).json({ message: 'Slot already booked.' });
+    if (overlappingBooking) {
+      return res.status(409).json({ 
+        message: 'This time slot conflicts with an existing booking. Please select a different time.' 
+      });
     }
 
-    // Create a pending booking
+    // Create booking with nested writes for services and addons
     const booking = await prisma.booking.create({
       data: {
-        vehicles: {
-          create: vehicles.map(v => ({
-            vehicleType: v.vehicleType,
-            service: v.service,
-            addons: v.addons || [],
-            brand: v.brand,
-            model: v.model
+        customerId: req.user.id,
+        vehicleId: vehicleId,
+        date: bookingDate,
+        endTime: endTime,
+        address: address,
+        status: 'PENDING',
+        services: {
+          create: serviceIds.map(serviceId => ({
+            serviceId: serviceId
           }))
         },
-        date,
-        time,
-        address,
-        status: 'PENDING',
-        userId: req.user.id
+        addons: {
+          create: (addonIds || []).map(addonId => ({
+            addonId: addonId
+          }))
+        }
       },
-      include: { vehicles: true }
+      include: {
+        services: { include: { serviceId: true } },
+        addons: { include: { addonId: true } },
+        vehicle: true
+      }
     });
 
-    res.json({
+    res.status(201).json({
       message: 'Slot reserved for 10 minutes. Proceed to payment.',
-      bookingId: booking.id
+      bookingId: booking.id,
+      booking: {
+        id: booking.id,
+        date: booking.date,
+        endTime: booking.endTime,
+        address: booking.address,
+        vehicleId: booking.vehicleId,
+        totalDuration: totalDurationMinutes
+      }
     });
   } catch (error) {
     console.error('Error reserving slot:', error);
