@@ -339,9 +339,56 @@ app.post('/api/payment-success', async (req, res) => {
 app.get('/api/bookings', authMiddleware, adminMiddleware, async (req, res) => {
   try {
     const bookings = await prisma.booking.findMany({
-      include: { vehicles: true, user: { select: { id: true, email: true } } }
+      include: {
+        customer: {
+          select: { id: true, email: true, role: true }
+        },
+        vehicle: true,
+        services: {
+          include: {
+            service: {
+              select: { id: true, name: true, price: true, durationMinutes: true }
+            }
+          }
+        },
+        addons: {
+          include: {
+            addon: {
+              select: { id: true, name: true, price: true, durationMinutes: true }
+            }
+          }
+        }
+      }
     });
-    res.json(bookings);
+
+    // Format response
+    const formattedBookings = bookings.map(booking => ({
+      id: booking.id,
+      customerId: booking.customerId,
+      customer: booking.customer,
+      vehicleId: booking.vehicleId,
+      vehicle: booking.vehicle,
+      date: booking.date,
+      endTime: booking.endTime,
+      address: booking.address,
+      status: booking.status,
+      createdAt: booking.createdAt,
+      updatedAt: booking.updatedAt,
+      services: booking.services.map(bs => ({
+        serviceId: bs.service.id,
+        name: bs.service.name,
+        price: bs.service.price,
+        durationMinutes: bs.service.durationMinutes
+      })),
+      addons: booking.addons.map(ba => ({
+        addonId: ba.addon.id,
+        name: ba.addon.name,
+        price: ba.addon.price,
+        durationMinutes: ba.addon.durationMinutes
+      }))
+    }));
+
+    res.json(formattedBookings);
   } catch (error) {
     console.error('Error fetching bookings:', error);
     res.status(500).json({ message: 'Internal server error' });
