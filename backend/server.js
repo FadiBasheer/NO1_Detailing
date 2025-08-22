@@ -396,55 +396,98 @@ app.get('/api/bookings', authMiddleware, adminMiddleware, async (req, res) => {
 });
 
 app.get('/api/available-times', async (req, res) => {
-  const { date, duration } = req.query;
-  const jobDuration = parseInt(duration); // in minutes
+  try {
+    const { date, duration } = req.query;
 
-  const openTime = 8 * 60; // 8:00 AM in minutes
-  const closeTime = 20 * 60; // 8:00 PM in minutes
-  const interval = 30; // 30-minute slots
-
-  // Load booked slots from database
-  const bookings = await prisma.booking.findMany({
-    where: {
-      date,
-      status: 'CONFIRMED'
+    // Validate input
+    if (!date || !duration) {
+      return res.status(400).json({ 
+        message: 'Missing required query parameters: date (ISO string), duration (minutes)' 
+      });
     }
-  });
 
-  // Convert to minutes
-  const bookedMinutes = bookings.map(b => timeToMinutes(b.time));
+    const jobDuration = parseInt(duration);
+    if (isNaN(jobDuration) || jobDuration <= 0) {
+      return res.status(400).json({ message: 'Duration must be a positive number' });
+    }
 
-  const availableSlots = [];
-  for (let minutes = openTime; minutes + jobDuration <= closeTime; minutes += interval) {
-    const overlaps = bookedMinutes.some(bm => {
-      const end = minutes + jobDuration;
-      const bookedEnd = bm + 60; // assuming existing jobs are 60 min
-      return (minutes < bookedEnd && end > bm);
+    // Parse the date parameter (ISO format: YYYY-MM-DD)
+    const selectedDate = new Date(`${date}T00:00:00Z`);
+    if (isNaN(selectedDate.getTime())) {
+      return res.status(400).json({ message: 'Invalid date format. Use ISO format (YYYY-MM-DD)' });
+    }
+
+    // Define business hours
+    const openTime = 8 * 60; // 8:00 AM in minutes
+    const closeTime = 20 * 60; // 8:00 PM in minutes
+    const interval = 30; // 30-minute slot intervals
+
+    // Get the next day for the date range query
+    const dayStart = new Date(`${date}T00:00:00Z`);
+    const dayEnd = new Date(`${date}T23:59:59Z`);
+
+    // Fetch confirmed bookings for this date
+    const bookings = await prisma.booking.findMany({
+      where: {
+        status: 'CONFIRMED',
+        date: {
+          gte: dayStart,
+          lte: dayEnd
+        }
+      },
+      select: {
+        date: true,
+        endTime: true
+      }
     });
 
-    if (!overlaps) {
-      availableSlots.push(minutesToTime(minutes));
+    // Generate available time slots
+    const availableSlots = [];
+
+    for (let minutes = openTime; minutes + jobDuration <= closeTime; minutes += interval) {
+      // Calculate slot start and end times
+      const slotStartDate = new Date(dayStart);
+      slotStartDate.setHours(0, minutes, 0, 0);
+
+      const slotEndDate = new Date(slotStartDate);
+      slotEndDate.setMinutes(slotEndDate.getMinutes() + jobDuration);
+
+      // Check for overlaps with confirmed bookings
+      const hasOverlap = bookings.some(booking => {
+        // Overlap occurs if: slotStart < bookingEnd AND slotEnd > bookingStart
+        return slotStartDate < booking.endTime && slotEndDate > booking.date;
+      });
+
+      if (!hasOverlap) {
+        // Format time slot as HH:MM
+        const hours = Math.floor(minutes / 60);
+        const mins = minutes % 60;
+        const timeString = `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
+
+        availableSlots.push({
+          time: timeString,
+          startDateTime: slotStartDate.toISOString(),
+          endDateTime: slotEndDate.toISOString()
+        });
+      }
     }
+
+    res.json({
+      date: date,
+      duration: jobDuration,
+      businessHours: {
+        open: '08:00',
+        close: '20:00'
+      },
+      slotInterval: `${interval} minutes`,
+      availableSlots: availableSlots,
+      totalAvailable: availableSlots.length
+    });
+  } catch (error) {
+    console.error('Error fetching available times:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
-
-  res.json(availableSlots); // e.g., ["08:00 AM", "08:30 AM", ...]
 });
-
-function timeToMinutes(timeStr) {
-  const [time, period] = timeStr.split(' ');
-  let [hour, minute] = time.split(':').map(Number);
-  if (period === 'PM' && hour !== 12) hour += 12;
-  if (period === 'AM' && hour === 12) hour = 0;
-  return hour * 60 + minute;
-}
-
-function minutesToTime(minutes) {
-  const h = Math.floor(minutes / 60);
-  const m = minutes % 60;
-  const hour12 = h % 12 || 12;
-  const ampm = h < 12 ? 'AM' : 'PM';
-  return `${hour12.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')} ${ampm}`;
-}
 
 // Auto-delete expired pending bookings every minute
 cron.schedule('* * * * *', async () => {
