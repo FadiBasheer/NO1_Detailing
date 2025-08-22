@@ -321,18 +321,52 @@ app.post('/api/payment-success', async (req, res) => {
   try {
     const { bookingId, paymentStatus } = req.body;
 
-    if (paymentStatus === 'approved') {
-      await prisma.booking.update({
-        where: { id: bookingId },
-        data: { status: 'CONFIRMED' }
+    // Validate input
+    if (!bookingId || !paymentStatus) {
+      return res.status(400).json({ 
+        message: 'Missing required fields: bookingId, paymentStatus' 
       });
-      console.log(`Booking ${bookingId} confirmed and paid.`);
     }
 
-    res.sendStatus(200);
+    // Verify booking exists
+    const booking = await prisma.booking.findUnique({
+      where: { id: bookingId }
+    });
+
+    if (!booking) {
+      return res.status(404).json({ message: 'Booking not found' });
+    }
+
+    // Only process if payment is approved
+    if (paymentStatus !== 'approved') {
+      return res.status(400).json({ 
+        message: `Payment status '${paymentStatus}' does not confirm the booking` 
+      });
+    }
+
+    // Only update if booking is still in PENDING status
+    if (booking.status !== 'PENDING') {
+      return res.status(409).json({ 
+        message: `Booking is already ${booking.status}. Cannot update status from non-PENDING state.` 
+      });
+    }
+
+    // Update booking status to CONFIRMED
+    const updatedBooking = await prisma.booking.update({
+      where: { id: bookingId },
+      data: { status: 'CONFIRMED' },
+      select: { id: true, status: true, customerId: true, date: true, address: true }
+    });
+
+    console.log(`Booking ${bookingId} confirmed and paid.`);
+
+    res.status(200).json({
+      message: 'Payment confirmed. Booking status updated to CONFIRMED.',
+      booking: updatedBooking
+    });
   } catch (error) {
     console.error('Error confirming payment:', error);
-    res.sendStatus(500);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
