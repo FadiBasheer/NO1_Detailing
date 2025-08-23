@@ -58,7 +58,7 @@ prisma.$connect()
 
 // Auth routes
 app.post('/api/auth/register', async (req, res) => {
-  const { email, password, role } = req.body;
+  const { email, password } = req.body;
   try {
     // Validate input
     if (!email || !password) {
@@ -79,7 +79,7 @@ app.post('/api/auth/register', async (req, res) => {
       data: {
         email,
         password: hashedPassword,
-        role: role === 'admin' ? 'ADMIN' : 'USER'
+        role: 'CUSTOMER'
       }
     });
 
