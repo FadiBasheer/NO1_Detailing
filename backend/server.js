@@ -429,6 +429,82 @@ app.get('/api/bookings', authMiddleware, adminMiddleware, async (req, res) => {
   }
 });
 
+// Update booking status (Admin only)
+app.patch('/api/admin/bookings/:id/status', authMiddleware, adminMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    // Validate status
+    const validStatuses = ['PENDING', 'CONFIRMED', 'CANCELLED', 'COMPLETED'];
+    if (!status || !validStatuses.includes(status)) {
+      return res.status(400).json({ message: 'Invalid status. Must be one of: PENDING, CONFIRMED, CANCELLED, COMPLETED' });
+    }
+
+    // Update booking status
+    const updatedBooking = await prisma.booking.update({
+      where: { id },
+      data: { status },
+      include: {
+        customer: {
+          select: { id: true, email: true, role: true }
+        },
+        vehicle: true,
+        services: {
+          include: {
+            service: {
+              select: { id: true, name: true, price: true, durationMinutes: true }
+            }
+          }
+        },
+        addons: {
+          include: {
+            addon: {
+              select: { id: true, name: true, price: true, durationMinutes: true }
+            }
+          }
+        }
+      }
+    });
+
+    // Format response similar to GET /api/bookings
+    const formattedBooking = {
+      id: updatedBooking.id,
+      customerId: updatedBooking.customerId,
+      customer: updatedBooking.customer,
+      vehicleId: updatedBooking.vehicleId,
+      vehicle: updatedBooking.vehicle,
+      date: updatedBooking.date,
+      endTime: updatedBooking.endTime,
+      address: updatedBooking.address,
+      status: updatedBooking.status,
+      createdAt: updatedBooking.createdAt,
+      updatedAt: updatedBooking.updatedAt,
+      services: updatedBooking.services.map(bs => ({
+        serviceId: bs.service.id,
+        name: bs.service.name,
+        price: bs.service.price,
+        durationMinutes: bs.service.durationMinutes
+      })),
+      addons: updatedBooking.addons.map(ba => ({
+        addonId: ba.addon.id,
+        name: ba.addon.name,
+        price: ba.addon.price,
+        durationMinutes: ba.addon.durationMinutes
+      }))
+    };
+
+    res.json(formattedBooking);
+  } catch (error) {
+    if (error.code === 'P2025') {
+      // Prisma error for record not found
+      return res.status(404).json({ message: 'Booking not found' });
+    }
+    console.error('Error updating booking status:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 app.get('/api/available-times', async (req, res) => {
   try {
     const { date, duration } = req.query;
