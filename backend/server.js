@@ -7,6 +7,7 @@ import cors from "cors";
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import cron from 'node-cron';
+import { authMiddleware, adminMiddleware } from './middleware/auth.middleware.js';
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -25,26 +26,6 @@ app.use(cors({
 }));
 
 app.use(express.json());
-
-// Auth middleware
-const authMiddleware = async (req, res, next) => {
-  const token = req.header('Authorization')?.replace('Bearer ', '');
-  if (!token) return res.status(401).json({ message: 'Access token required' });
-  try {
-    req.user = jwt.verify(token, process.env.JWT_SECRET);
-    next();
-  } catch (error) {
-    if (error.name === 'TokenExpiredError') {
-      return res.status(401).json({ message: 'Access token expired' });
-    }
-    res.status(401).json({ message: 'Invalid access token' });
-  }
-};
-
-const adminMiddleware = (req, res, next) => {
-  if (req.user.role !== 'ADMIN') return res.status(403).json({ message: 'Admin access required' });
-  next();
-};
 
 
 
