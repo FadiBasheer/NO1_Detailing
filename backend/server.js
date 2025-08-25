@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import express from "express";
-import { PrismaClient } from "@prisma/client";
+import prisma from "./prisma/client.js";
 import cors from "cors";
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
@@ -10,7 +10,6 @@ import cron from 'node-cron';
 
 const app = express();
 const port = process.env.PORT || 5000;
-const prisma = new PrismaClient();
 
 const helcimToken = process.env.HELCIM_API_TOKEN;
 
@@ -46,11 +45,6 @@ const adminMiddleware = (req, res, next) => {
   if (req.user.role !== 'ADMIN') return res.status(403).json({ message: 'Admin access required' });
   next();
 };
-
-// Database connection test
-prisma.$connect()
-  .then(() => console.log('✅ Connected to PostgreSQL'))
-  .catch((err) => console.error('❌ Database connection error:', err));
 
 
 
