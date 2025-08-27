@@ -4,8 +4,6 @@ dotenv.config();
 import express from "express";
 import prisma from "./prisma/client.js";
 import cors from "cors";
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
 import cron from 'node-cron';
 import { authMiddleware, adminMiddleware } from './middleware/auth.middleware.js';
 import authRoutes from './routes/auth.routes.js';
