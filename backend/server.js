@@ -5,7 +5,6 @@ import express from "express";
 import prisma from "./prisma/client.js";
 import cors from "cors";
 import cron from 'node-cron';
-import { authMiddleware, adminMiddleware } from './middleware/auth.middleware.js';
 import authRoutes from './routes/auth.routes.js';
 import bookingRoutes from './routes/booking.routes.js';
 import adminRoutes from './routes/admin.routes.js';
