@@ -8,6 +8,8 @@ import cron from 'node-cron';
 import authRoutes from './routes/auth.routes.js';
 import bookingRoutes from './routes/booking.routes.js';
 import adminRoutes from './routes/admin.routes.js';
+import { startBookingCleanupJob } from './jobs/bookingCleanup.job.js';
+import { startTokenCleanupJob } from './jobs/tokenCleanup.job.js';
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -26,44 +28,10 @@ app.use('/api/auth', authRoutes);
 app.use('/api', bookingRoutes);
 app.use('/api/admin', adminRoutes);
 
-// Auto-delete expired pending bookings every minute
-cron.schedule('* * * * *', async () => {
-  try {
-    const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
-    const deletedBookings = await prisma.booking.deleteMany({
-      where: {
-        status: 'PENDING',
-        createdAt: {
-          lt: tenMinutesAgo
-        }
-      }
-    });
-    if (deletedBookings.count > 0) {
-      console.log(`Deleted ${deletedBookings.count} expired pending bookings`);
-    }
-  } catch (error) {
-    console.error('Error cleaning up expired bookings:', error);
-  }
-});
-
-// Clean up expired refresh tokens daily at 2 AM
-cron.schedule('0 2 * * *', async () => {
-  try {
-    const now = new Date();
-    const deletedTokens = await prisma.refreshToken.deleteMany({
-      where: {
-        expiresAt: {
-          lt: now
-        }
-      }
-    });
-    if (deletedTokens.count > 0) {
-      console.log(`Deleted ${deletedTokens.count} expired refresh tokens`);
-    }
-  } catch (error) {
-    console.error('Error cleaning up expired tokens:', error);
-  }
-});
+// Start the booking cleanup job
+startBookingCleanupJob();
+// Start the token cleanup job
+startTokenCleanupJob();
 
 // Gracefully shutdown
 process.on('SIGINT', async () => {
