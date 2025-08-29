@@ -1,8 +1,8 @@
 import prisma from '../prisma/client.js';
 import cron from 'node-cron';
 
+// Auto-delete expired pending bookings every minute
 export function startBookingCleanupJob() {
-  // Auto-delete expired pending bookings every minute
   cron.schedule('* * * * *', async () => {
     try {
       const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
