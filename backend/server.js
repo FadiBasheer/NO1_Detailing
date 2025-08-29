@@ -2,7 +2,6 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import express from "express";
-import prisma from "./prisma/client.js";
 import cors from "cors";
 import cron from 'node-cron';
 import authRoutes from './routes/auth.routes.js';
@@ -10,6 +9,7 @@ import bookingRoutes from './routes/booking.routes.js';
 import adminRoutes from './routes/admin.routes.js';
 import { startBookingCleanupJob } from './jobs/bookingCleanup.job.js';
 import { startTokenCleanupJob } from './jobs/tokenCleanup.job.js';
+import { setupGracefulShutdown } from './jobs/shutdown.js';
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -33,12 +33,7 @@ startBookingCleanupJob();
 // Start the token cleanup job
 startTokenCleanupJob();
 
-// Gracefully shutdown
-process.on('SIGINT', async () => {
-  console.log('Shutting down...');
-  await prisma.$disconnect();
-  process.exit(0);
-});
+setupGracefulShutdown();
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
