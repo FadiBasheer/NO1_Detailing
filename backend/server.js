@@ -30,9 +30,11 @@ app.use('/api/admin', adminRoutes);
 
 // Start the booking cleanup job
 startBookingCleanupJob();
+
 // Start the token cleanup job
 startTokenCleanupJob();
 
+// Setup shutdown
 setupGracefulShutdown();
 
 app.listen(port, () => {
