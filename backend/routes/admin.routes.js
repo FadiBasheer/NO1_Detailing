@@ -144,4 +144,64 @@ router.patch('/bookings/:id/status', async (req, res) => {
   }
 });
 
+// Update booking details (Admin only)
+router.patch('/bookings/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { date, endTime, address } = req.body;
+
+    if (!date && !endTime && !address) {
+      return res.status(400).json({ message: 'At least one field (date, endTime, address) is required' });
+    }
+
+    const data = {};
+    if (date) data.date = new Date(date);
+    if (endTime) data.endTime = new Date(endTime);
+    if (address) data.address = address;
+
+    const updatedBooking = await prisma.booking.update({
+      where: { id },
+      data,
+      include: {
+        customer: { select: { id: true, email: true, role: true } },
+        vehicle: true,
+        services: { include: { service: { select: { id: true, name: true, price: true, durationMinutes: true } } } },
+        addons: { include: { addon: { select: { id: true, name: true, price: true, durationMinutes: true } } } }
+      }
+    });
+
+    res.json({
+      id: updatedBooking.id,
+      customerId: updatedBooking.customerId,
+      customer: updatedBooking.customer,
+      vehicleId: updatedBooking.vehicleId,
+      vehicle: updatedBooking.vehicle,
+      date: updatedBooking.date,
+      endTime: updatedBooking.endTime,
+      address: updatedBooking.address,
+      status: updatedBooking.status,
+      createdAt: updatedBooking.createdAt,
+      updatedAt: updatedBooking.updatedAt,
+      services: updatedBooking.services.map(bs => ({
+        serviceId: bs.service.id,
+        name: bs.service.name,
+        price: bs.service.price,
+        durationMinutes: bs.service.durationMinutes
+      })),
+      addons: updatedBooking.addons.map(ba => ({
+        addonId: ba.addon.id,
+        name: ba.addon.name,
+        price: ba.addon.price,
+        durationMinutes: ba.addon.durationMinutes
+      }))
+    });
+  } catch (error) {
+    if (error.code === 'P2025') {
+      return res.status(404).json({ message: 'Booking not found' });
+    }
+    console.error('Error updating booking:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 export default router;

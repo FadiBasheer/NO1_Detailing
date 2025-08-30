@@ -52,10 +52,13 @@ const router = createRouter({
     {
       path: '/FAQs',
       name: 'FAQs',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/FAQs.vue'),
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: () => import('../views/admin/AdminBookings.vue'),
+      meta: { requiresAuth: true, requiresAdmin: true },
     },
   ],
 })
@@ -64,6 +67,8 @@ router.beforeEach((to, from, next) => {
   const auth = useAuthStore();
   if (to.meta.requiresAuth && !auth.accessToken) {
     next('/login');
+  } else if (to.meta.requiresAdmin && auth.user?.role !== 'ADMIN') {
+    next('/');
   } else {
     next();
   }
