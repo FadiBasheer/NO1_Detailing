@@ -156,52 +156,75 @@ router.post('/payment-link', async (req, res) => {
   }
 });
 
-// Helcim webhook - payment confirmation
-router.post('/payment-success', async (req, res) => {
+// Helcim payment confirmation
+// Called by the frontend after Helcim redirects back with a transactionId.
+// We verify the transaction directly with Helcim's API — never trust the client's status claim.
+router.post('/payment-success', authMiddleware, async (req, res) => {
   try {
-    const { bookingId, paymentStatus } = req.body;
+    const { bookingId, transactionId } = req.body;
 
-    // Validate input
-    if (!bookingId || !paymentStatus) {
-      return res.status(400).json({
-        message: 'Missing required fields: bookingId, paymentStatus'
-      });
+    if (!bookingId || !transactionId) {
+      return res.status(400).json({ message: 'Missing required fields: bookingId, transactionId' });
     }
 
-    // Verify booking exists
-    const booking = await prisma.booking.findUnique({
-      where: { id: bookingId }
-    });
+    // Verify the transaction with Helcim's API
+    let helcimTransaction;
+    try {
+      const helcimRes = await fetch(
+        `https://api.helcim.com/v2/transactions/${encodeURIComponent(transactionId)}`,
+        {
+          method: 'GET',
+          headers: {
+            'api-token': helcimToken,
+            'accept': 'application/json',
+          },
+        }
+      );
+
+      if (!helcimRes.ok) {
+        console.error(`Helcim verification failed — HTTP ${helcimRes.status}`);
+        return res.status(402).json({ message: 'Payment could not be verified with Helcim.' });
+      }
+
+      helcimTransaction = await helcimRes.json();
+    } catch (fetchError) {
+      console.error('Error contacting Helcim API:', fetchError);
+      return res.status(502).json({ message: 'Unable to reach payment provider. Please contact support.' });
+    }
+
+    // Helcim returns status as 'APPROVED' for successful transactions
+    if (helcimTransaction.status?.toUpperCase() !== 'APPROVED') {
+      console.warn(`Transaction ${transactionId} not approved — status: ${helcimTransaction.status}`);
+      return res.status(402).json({ message: 'Payment was not approved.' });
+    }
+
+    // Fetch the booking and make sure it belongs to the authenticated user
+    const booking = await prisma.booking.findUnique({ where: { id: bookingId } });
 
     if (!booking) {
-      return res.status(404).json({ message: 'Booking not found' });
+      return res.status(404).json({ message: 'Booking not found.' });
     }
 
-    // Only process if payment is approved
-    if (paymentStatus !== 'approved') {
-      return res.status(400).json({
-        message: `Payment status '${paymentStatus}' does not confirm the booking`
-      });
+    if (booking.customerId !== req.user.id) {
+      return res.status(403).json({ message: 'This booking does not belong to you.' });
     }
 
-    // Only update if booking is still in PENDING status
     if (booking.status !== 'PENDING') {
       return res.status(409).json({
-        message: `Booking is already ${booking.status}. Cannot update status from non-PENDING state.`
+        message: `Booking is already ${booking.status}.`
       });
     }
 
-    // Update booking status to CONFIRMED
     const updatedBooking = await prisma.booking.update({
       where: { id: bookingId },
       data: { status: 'CONFIRMED' },
       select: { id: true, status: true, customerId: true, date: true, address: true }
     });
 
-    console.log(`Booking ${bookingId} confirmed and paid.`);
+    console.log(`Booking ${bookingId} confirmed via verified Helcim transaction ${transactionId}.`);
 
     res.status(200).json({
-      message: 'Payment confirmed. Booking status updated to CONFIRMED.',
+      message: 'Payment verified. Booking confirmed.',
       booking: updatedBooking
     });
   } catch (error) {
