@@ -1,27 +1,62 @@
-<script setup>
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+import axios from '../axios';
 
-// Get the payment status from the URL (e.g. ?status=approved or ?status=failed)
+// Helcim redirects back with transactionId in the query string
 const route = useRoute();
-const status = route.query.status || 'approved';
+
+type State = 'verifying' | 'confirmed' | 'failed';
+const state = ref<State>('verifying');
+const errorMsg = ref('');
+
+onMounted(async () => {
+  // transactionId comes from Helcim's redirect query params
+  const transactionId = route.query.transactionId as string | undefined;
+  const bookingId = localStorage.getItem('pendingBookingId');
+
+  if (!transactionId || !bookingId) {
+    // No transaction data — likely a direct page visit or Helcim declined before redirecting
+    state.value = 'failed';
+    errorMsg.value = 'No payment data received.';
+    return;
+  }
+
+  try {
+    await axios.post('/api/payment-success', { bookingId, transactionId });
+    localStorage.removeItem('pendingBookingId');
+    state.value = 'confirmed';
+  } catch (err: any) {
+    state.value = 'failed';
+    errorMsg.value = err.response?.data?.message || 'Payment verification failed.';
+  }
+});
 </script>
 
 <template>
   <div class="thank-you">
     <div class="thank-you-box">
-      <h1 v-if="status === 'approved'">🎉 Thank You!</h1>
-      <h1 v-else>❌ Payment Failed</h1>
 
-      <p v-if="status === 'approved'">
-        Your booking has been successfully confirmed and payment received.
-      </p>
-      <p v-else>
-        Unfortunately, your payment didn’t go through. Please try again or contact support.
-      </p>
+      <!-- Verifying -->
+      <template v-if="state === 'verifying'">
+        <h1>Verifying payment…</h1>
+        <p>Please wait while we confirm your booking.</p>
+      </template>
 
-      <router-link to="/">
-        <button class="home-btn">Return Home</button>
-      </router-link>
+      <!-- Confirmed -->
+      <template v-else-if="state === 'confirmed'">
+        <h1>🎉 Thank You!</h1>
+        <p>Your booking has been successfully confirmed and payment received.</p>
+        <router-link to="/"><button class="home-btn">Return Home</button></router-link>
+      </template>
+
+      <!-- Failed -->
+      <template v-else>
+        <h1>❌ Payment Failed</h1>
+        <p>{{ errorMsg || 'Unfortunately, your payment didn\'t go through. Please try again or contact support.' }}</p>
+        <router-link to="/booking"><button class="home-btn retry-btn">Try Again</button></router-link>
+      </template>
+
     </div>
   </div>
 </template>
@@ -41,7 +76,11 @@ const status = route.query.status || 'approved';
   background: rgba(255, 255, 255, 0.1);
   padding: 40px;
   border-radius: 15px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.thank-you-box h1 {
+  margin-bottom: 0.75rem;
 }
 
 .home-btn {
@@ -59,7 +98,14 @@ const status = route.query.status || 'approved';
   background-color: #009241;
 }
 
-/* Mobile responsiveness */
+.retry-btn {
+  background-color: #c0392b;
+}
+
+.retry-btn:hover {
+  background-color: #a93226;
+}
+
 @media (max-width: 768px) {
   .thank-you {
     padding: 20px;

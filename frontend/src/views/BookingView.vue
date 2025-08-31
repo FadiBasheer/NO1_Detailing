@@ -307,6 +307,9 @@ export default {
           form.appendChild(input);
         });
 
+        // Store bookingId so ThankYouView can confirm it after Helcim redirects back
+        localStorage.setItem('pendingBookingId', bookingId);
+
         document.body.appendChild(form);
         form.submit();
 
