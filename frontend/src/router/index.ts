@@ -55,6 +55,12 @@ const router = createRouter({
       component: () => import('../views/FAQs.vue'),
     },
     {
+      path: '/my-bookings',
+      name: 'my-bookings',
+      component: () => import('../views/MyBookingsView.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
       path: '/admin',
       name: 'admin',
       component: () => import('../views/admin/AdminBookings.vue'),

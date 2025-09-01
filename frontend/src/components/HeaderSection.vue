@@ -30,6 +30,7 @@
     <div class="auth-buttons">
       <router-link v-if="!user" to="/login" class="btn">Login</router-link>
       <router-link v-if="!user" to="/register" class="btn">Register</router-link>
+      <router-link v-if="user" to="/my-bookings" class="btn btn-my-bookings">My Bookings</router-link>
       <router-link v-if="user?.role === 'ADMIN'" to="/admin" class="btn btn-admin">Admin</router-link>
       <button v-if="user" @click="logout" class="btn">Logout</button>
     </div>
@@ -246,6 +247,14 @@ nav a, p {
 .auth-buttons button {
   border: none;
   cursor: pointer;
+}
+
+.auth-buttons .btn-my-bookings {
+  background-color: #6c63ff;
+}
+
+.auth-buttons .btn-my-bookings:hover {
+  background-color: #574fd6;
 }
 
 .auth-buttons .btn-admin {

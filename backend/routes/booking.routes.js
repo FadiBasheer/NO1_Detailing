@@ -233,6 +233,52 @@ router.post('/payment-success', authMiddleware, async (req, res) => {
   }
 });
 
+// Get current user's bookings
+router.get('/bookings/my', authMiddleware, async (req, res) => {
+  try {
+    const bookings = await prisma.booking.findMany({
+      where: { customerId: req.user.id },
+      orderBy: { date: 'desc' },
+      include: {
+        vehicle: true,
+        services: {
+          include: { service: { select: { id: true, name: true, price: true, durationMinutes: true } } }
+        },
+        addons: {
+          include: { addon: { select: { id: true, name: true, price: true, durationMinutes: true } } }
+        }
+      }
+    });
+
+    const formatted = bookings.map(b => ({
+      id: b.id,
+      date: b.date,
+      endTime: b.endTime,
+      address: b.address,
+      status: b.status,
+      createdAt: b.createdAt,
+      vehicle: b.vehicle,
+      services: b.services.map(bs => ({
+        serviceId: bs.service.id,
+        name: bs.service.name,
+        price: bs.service.price,
+        durationMinutes: bs.service.durationMinutes,
+      })),
+      addons: b.addons.map(ba => ({
+        addonId: ba.addon.id,
+        name: ba.addon.name,
+        price: ba.addon.price,
+        durationMinutes: ba.addon.durationMinutes,
+      })),
+    }));
+
+    res.json(formatted);
+  } catch (error) {
+    console.error('Error fetching user bookings:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 router.get('/available-times', async (req, res) => {
   try {
     const { date, duration } = req.query;
