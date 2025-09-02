@@ -16,7 +16,7 @@
       <section v-if="upcoming.length">
         <h2 class="section-title">Upcoming</h2>
         <div class="card" v-for="b in upcoming" :key="b.id">
-          <BookingCard :booking="b" />
+          <BookingCard :booking="b" :cancel-fn="cancelBooking" />
         </div>
       </section>
 
@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, defineComponent, h } from 'vue';
+import { ref, computed, onMounted, defineComponent, h, type PropType } from 'vue';
 import axios from '../axios';
 
 interface Service { serviceId: string; name: string; price: number }
@@ -51,7 +51,10 @@ interface Booking {
 
 // ── Inline BookingCard component ───────────────────────────────────────────────
 const BookingCard = defineComponent({
-  props: { booking: { type: Object as () => Booking, required: true } },
+  props: {
+    booking: { type: Object as () => Booking, required: true },
+    cancelFn: { type: Function as PropType<(id: string) => void>, default: undefined },
+  },
   setup(props) {
     function formatDate(iso: string) {
       return new Date(iso).toLocaleDateString('en-CA', {
@@ -85,6 +88,8 @@ const BookingCard = defineComponent({
 
     return () => {
       const b = props.booking;
+      const canCancel = !!props.cancelFn && (b.status === 'CONFIRMED' || b.status === 'PENDING');
+
       return h('div', { class: 'card-inner' }, [
         h('div', { class: 'card-top' }, [
           h('div', { class: 'card-date' }, [
@@ -117,6 +122,11 @@ const BookingCard = defineComponent({
             h('span', { class: 'total' }, `$${total(b)}`),
           ]),
         ]),
+        canCancel
+          ? h('div', { class: 'card-footer' }, [
+              h('button', { class: 'btn-cancel', onClick: () => props.cancelFn!(b.id) }, 'Cancel Booking'),
+            ])
+          : null,
       ]);
     };
   },
@@ -147,6 +157,17 @@ onMounted(async () => {
     loading.value = false;
   }
 });
+
+async function cancelBooking(id: string) {
+  if (!confirm('Are you sure you want to cancel this booking?')) return;
+  try {
+    await axios.patch(`/api/bookings/${id}/cancel`);
+    const idx = bookings.value.findIndex(b => b.id === id);
+    if (idx !== -1) bookings.value[idx] = { ...bookings.value[idx], status: 'CANCELLED' };
+  } catch (err: any) {
+    alert(err.response?.data?.message ?? 'Could not cancel booking. Please try again.');
+  }
+}
 </script>
 
 <style scoped>
@@ -282,4 +303,23 @@ onMounted(async () => {
 }
 
 .btn-book:hover { opacity: 0.88; }
+
+:deep(.card-footer) {
+  padding: 0.75rem 1.5rem 1.25rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+:deep(.btn-cancel) {
+  background: none;
+  border: 1px solid #fca5a5;
+  color: #dc2626;
+  padding: 0.4rem 1rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+:deep(.btn-cancel:hover) { background: #fee2e2; }
 </style>
