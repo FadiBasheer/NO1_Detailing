@@ -22,11 +22,11 @@
           <option value="">-- Select a time --</option>
           <option
             v-for="slot in availableTimeSlots"
-            :key="slot"
-            :value="slot"
-            :disabled="isTimeBooked(slot)"
+            :key="slot.time"
+            :value="slot.time"
+            :disabled="isTimeBooked(slot.time)"
           >
-            {{ slot }}
+            {{ slot.time }}
           </option>
         </select>
       </div>
@@ -244,7 +244,7 @@ export default {
           }
         );
 
-        this.availableTimeSlots = response.data;
+        this.availableTimeSlots = response.data.availableSlots;
       } catch (error) {
         console.error("Error fetching available times:", error);
       }
