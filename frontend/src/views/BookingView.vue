@@ -24,9 +24,8 @@
             v-for="slot in availableTimeSlots"
             :key="slot.time"
             :value="slot.time"
-            :disabled="isTimeBooked(slot.time)"
           >
-            {{ slot.time }}
+            {{ formatTime(slot.time) }}
           </option>
         </select>
       </div>
@@ -89,7 +88,6 @@ export default {
       address: "",
       vehicles: [],
       message: "",
-      bookedTimes: [],
       availableTimeSlots: [],
     };
   },
@@ -182,56 +180,12 @@ export default {
       this.$router.push({ name: "vehicles" });
     },
 
-    generateTimeSlots(startTime, endTime, intervalMinutes, jobDuration = 0) {
-      const slots = [];
-      const pad = (n) => (n < 10 ? "0" + n : n);
-
-      let [startHour, startMin] = startTime.split(":").map(Number);
-      let [endHour, endMin] = endTime.split(":").map(Number);
-
-      let current = new Date();
-      current.setHours(startHour, startMin, 0, 0);
-
-      const end = new Date();
-      end.setHours(endHour, endMin, 0, 0);
-
-      const endMinutes = endHour * 60 + endMin;
-      while (true) {
-        const slotMinutes =
-          current.getHours() * 60 + current.getMinutes();
-        const jobEnd = slotMinutes + jobDuration;
-        if (jobEnd > endMinutes) break;
-
-        const hour = current.getHours();
-        const minute = current.getMinutes();
-        slots.push(
-          `${pad(hour % 12 || 12)}:${pad(minute)} ${
-            hour < 12 ? "AM" : "PM"
-          }`
-        );
-
-        current.setMinutes(current.getMinutes() + intervalMinutes);
-      }
-      return slots;
-    },
-
-    timeStringToMinutes(timeStr) {
-      const [time, period] = timeStr.split(" ");
-      let [hour, minute] = time.split(":").map(Number);
-      if (period === "PM" && hour !== 12) hour += 12;
-      if (period === "AM" && hour === 12) hour = 0;
-      return hour * 60 + minute;
-    },
-
-    isTimeBooked(slot) {
-      const slotStart = this.timeStringToMinutes(slot);
-      const slotEnd = slotStart + this.totalDuration;
-
-      return this.bookedTimes.some((booked) => {
-        const bookedStart = this.timeStringToMinutes(booked);
-        const bookedEnd = bookedStart + 60;
-        return slotStart < bookedEnd && slotEnd > bookedStart;
-      });
+    formatTime(time24) {
+      const [hourStr, minute] = time24.split(":");
+      let hour = parseInt(hourStr, 10);
+      const period = hour < 12 ? "AM" : "PM";
+      hour = hour % 12 || 12;
+      return `${hour}:${minute} ${period}`;
     },
 
     async fetchBookedTimes() {
