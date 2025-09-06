@@ -1,4 +1,5 @@
 <template>
+  <div class="booking-wrapper">
   <div class="booking-page">
     <!-- Main booking form -->
     <div class="booking-form">
