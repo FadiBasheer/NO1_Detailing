@@ -74,6 +74,7 @@
       <button @click="clearLocalStorage" class="clear-btn">Clear Cart</button>
     </div>
   </div>
+  </div>
 </template>
 
 <script>
