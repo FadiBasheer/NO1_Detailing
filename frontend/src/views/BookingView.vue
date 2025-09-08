@@ -279,115 +279,196 @@ export default {
 </script>
 
 <style scoped>
+.booking-wrapper {
+  background: #f9fafb;
+  min-height: calc(100vh - 140px);
+  padding: 40px 20px 60px;
+}
+
 .booking-page {
   display: flex;
-  gap: 20px;
-  padding: 20px;
-  max-width: 1200px;
+  gap: 28px;
+  max-width: 1100px;
   margin: 0 auto;
+  align-items: flex-start;
 }
 
 .booking-form {
   flex: 2;
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+}
+
+.booking-form h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0a0a0a;
+  margin: 0 0 24px;
 }
 
 .cart {
   flex: 1;
-  border: 1px solid #ccc;
-  padding: 10px;
+  background: white;
+  border: none;
+  border-radius: 16px;
+  padding: 24px;
   height: fit-content;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+  position: sticky;
+  top: 20px;
+}
+
+.cart h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 18px;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
+  margin-bottom: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #374151;
 }
 
 .form-group input,
 .form-group select {
   width: 100%;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #111827;
+  background: #f9fafb;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #1e40af;
+  background: white;
 }
 
 .submit-btn {
-  background-color: #007BFF;
+  background-color: #1e40af;
   color: white;
-  padding: 10px 20px;
+  padding: 12px 28px;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 1rem;
+  font-weight: 700;
+  width: 100%;
+  transition: background-color 0.2s;
 }
 
 .submit-btn:hover {
-  background-color: #0056b3;
+  background-color: #1e3a8a;
 }
 
 .message {
-  margin-top: 10px;
-  color: green;
+  margin-top: 12px;
+  color: #16a34a;
+  font-size: 0.9rem;
 }
 
 .empty-cart {
   text-align: center;
-  color: #666;
+  color: #9ca3af;
+  font-size: 0.9rem;
+  padding: 20px 0;
 }
 
 .vehicle-item {
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 8px;
-  margin-bottom: 8px;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.vehicle-item strong {
+  display: block;
+  color: #111827;
+  margin-bottom: 4px;
 }
 
 .remove-btn {
-  margin-left: 5px;
-  color: red;
+  margin-left: 6px;
+  color: #ef4444;
   border: none;
   background: none;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px;
+  font-weight: 700;
 }
 
 .addons-list {
   list-style: none;
   padding: 0;
-  margin: 5px 0 0 0;
+  margin: 6px 0 0 0;
 }
 
 .addon-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 2px 0;
+  padding: 3px 0;
+  font-size: 0.85rem;
+  color: #6b7280;
 }
 
 .add-btn,
 .clear-btn {
+  display: block;
+  width: 100%;
   margin-top: 10px;
-  padding: 8px 12px;
-  border: 1px solid #ccc;
-  background: #f9f9f9;
+  padding: 9px 12px;
+  border: 1px solid #d1d5db;
+  background: #f9fafb;
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #374151;
+  transition: background-color 0.15s;
+}
+
+.add-btn:hover,
+.clear-btn:hover {
+  background: #e5e7eb;
 }
 
 .clear-btn {
-  margin-top: 5px;
+  margin-top: 8px;
+  color: #ef4444;
+  border-color: #fca5a5;
 }
 
-/* Mobile responsiveness */
+.clear-btn:hover {
+  background: #fef2f2;
+}
+
 @media (max-width: 768px) {
+  .booking-wrapper {
+    padding: 20px 12px 40px;
+  }
+
   .booking-page {
     flex-direction: column;
-    padding: 10px;
-    gap: 15px;
+    gap: 20px;
   }
 
   .booking-form,
@@ -396,7 +477,12 @@ export default {
   }
 
   .cart {
-    order: -1; /* Show cart first on mobile */
+    order: -1;
+    position: static;
+  }
+
+  .booking-form {
+    padding: 20px;
   }
 }
 </style>
