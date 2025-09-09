@@ -37,10 +37,10 @@
 
 <style scoped>
 .footer {
-  background: #222;
+  background: #111827;
   color: white;
-  padding: 40px 20px 20px;
-  margin-top: 50px;
+  padding: 50px 20px 24px;
+  border-top: 3px solid #1e40af;
 }
 
 .footer-container {
