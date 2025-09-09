@@ -112,12 +112,21 @@
     max-width: 300px;
   }
 
+  .hero-text {
+    text-align: center;
+  }
+
   .hero-text h1 {
     font-size: 2rem;
   }
 
   .hero-text p {
     font-size: 1rem;
+  }
+
+  .buttons {
+    justify-content: center;
+    display: flex;
   }
 
   .book-btn, .pricing-btn {
