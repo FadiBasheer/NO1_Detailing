@@ -67,9 +67,11 @@
 
 .footer-links h3,
 .footer-contact h3 {
-  margin-bottom: 10px;
-  font-size: 18px;
-  color: #007BFF;
+  margin-bottom: 12px;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #93c5fd;
 }
 
 .footer-links ul {
