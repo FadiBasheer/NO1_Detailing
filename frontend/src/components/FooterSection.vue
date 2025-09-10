@@ -95,12 +95,12 @@
 }
 
 .footer-bottom {
-  border-top: 1px solid #444;
-  margin-top: 20px;
-  padding-top: 15px;
+  border-top: 1px solid #374151;
+  margin-top: 30px;
+  padding-top: 18px;
   text-align: center;
-  font-size: 14px;
-  color: #aaa;
+  font-size: 13px;
+  color: #9ca3af;
 }
 
 /* Mobile responsiveness */
