@@ -59,8 +59,8 @@
   min-width: 250px;
 }
 
-.footer .logo {
-  color: #007BFF;
+.footer-about h2.logo {
+  color: #93c5fd;
   font-size: 22px;
   margin-bottom: 10px;
 }
