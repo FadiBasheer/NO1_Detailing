@@ -78,6 +78,7 @@ export default {
   flex-direction: column;
   align-items: center;
   margin-top: 40px;
+  padding-bottom: 60px;
 }
 
 .addons-section {
