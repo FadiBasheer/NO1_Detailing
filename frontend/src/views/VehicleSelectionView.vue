@@ -109,7 +109,7 @@ export default {
 .vehicle-selection {
   text-align: center;
   margin: 40px auto;
-  padding: 0 20px;
+  padding: 0 20px 60px;
 }
 
 .vehicle-grid {
