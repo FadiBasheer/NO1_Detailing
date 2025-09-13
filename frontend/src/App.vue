@@ -28,8 +28,16 @@ body {
 }
 
 .app-container {
-  width: 100%;   /* ✅ make wrapper full width */
-  margin: 0;     /* no auto-centering */
+  width: 100%;
+  margin: 0;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-container > .router-view-wrapper,
+.app-container > *:not(footer):not(header) {
+  flex: 1;
 }
 </style>
