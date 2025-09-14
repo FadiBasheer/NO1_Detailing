@@ -281,7 +281,6 @@ export default {
 <style scoped>
 .booking-wrapper {
   background: #f9fafb;
-  min-height: calc(100vh - 140px);
   padding: 40px 20px 30px;
 }
 
