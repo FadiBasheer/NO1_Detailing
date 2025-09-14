@@ -282,7 +282,7 @@ export default {
 .booking-wrapper {
   background: #f9fafb;
   min-height: calc(100vh - 140px);
-  padding: 40px 20px 60px;
+  padding: 40px 20px 30px;
 }
 
 .booking-page {
