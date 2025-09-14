@@ -40,5 +40,11 @@ body {
 
 .page-content {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-content > * {
+  flex: 1;
 }
 </style>
