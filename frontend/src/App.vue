@@ -1,7 +1,9 @@
 <template>
   <div class="app-container">
     <HeaderSection />
-    <router-view />
+    <div class="page-content">
+      <router-view />
+    </div>
     <FooterSection />
   </div>
 </template>
@@ -36,8 +38,7 @@ body {
   min-height: 100vh;
 }
 
-.app-container > .router-view-wrapper,
-.app-container > *:not(footer):not(header) {
+.page-content {
   flex: 1;
 }
 </style>
