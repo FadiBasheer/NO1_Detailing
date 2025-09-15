@@ -282,6 +282,8 @@ export default {
 .booking-wrapper {
   background: #f9fafb;
   padding: 40px 20px 30px;
+  min-height: 100%;
+  box-sizing: border-box;
 }
 
 .booking-page {
