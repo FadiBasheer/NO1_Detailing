@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from "../axios.ts";
 import API_BASE_URL from '../config.ts';
 import { services, addons } from "@/data/services.ts";
 
