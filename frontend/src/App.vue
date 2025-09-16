@@ -40,5 +40,6 @@ body {
 
 .page-content {
   flex: 1;
+  height: 100%;
 }
 </style>
