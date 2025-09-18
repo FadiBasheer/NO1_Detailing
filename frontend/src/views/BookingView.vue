@@ -221,7 +221,7 @@ export default {
 
         // 1️⃣ Reserve the slot temporarily (pending)
         const reserveRes = await axios.post(
-          `${API_BASE_URL}/api/reserve-slot`,
+          `/api/reserve-slot`,
           bookingData
           );
 
