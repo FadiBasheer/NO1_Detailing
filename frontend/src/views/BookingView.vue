@@ -232,7 +232,7 @@ export default {
         // 2️⃣ Get payment form data from your server
         const totalAmount = 50.0; // ⚙️ Replace with dynamic total if needed
         const paymentRes = await axios.post(
-          `${API_BASE_URL}/api/payment-link`,
+          `/api/payment-link`,
           {
             bookingId,
             totalAmount,
