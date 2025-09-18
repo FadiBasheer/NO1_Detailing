@@ -193,7 +193,7 @@ export default {
       if (!this.date) return;
       try {
         const response = await axios.get(
-          `${API_BASE_URL}/api/available-times`,
+          `/api/available-times`,
           {
             params: { date: this.date, duration: this.totalDuration },
           }
