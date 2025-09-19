@@ -9,73 +9,26 @@ const helcimToken = process.env.HELCIM_API_TOKEN;
 // Reserve a slot temporarily (status: "PENDING")
 router.post('/reserve-slot', authMiddleware, async (req, res) => {
   try {
-    const { vehicleId, date, time, serviceIds, addonIds, address } = req.body;
+    const { vehicles, date, time } = req.body;
 
     // Validate input
-    if (!vehicleId || !date || !time || !address || !serviceIds || !Array.isArray(serviceIds)) {
+    if (!date || !time || !vehicles || !Array.isArray(vehicles) || vehicles.length === 0) {
       return res.status(400).json({
-        message: 'Missing or invalid required fields: vehicleId, date, time, address, serviceIds (array)'
+        message: 'Missing required fields: vehicles (array), date, time'
       });
     }
 
-    if (serviceIds.length === 0) {
-      return res.status(400).json({ message: 'At least one service must be selected' });
-    }
-
-    // Verify vehicle exists
-    const vehicle = await prisma.vehicle.findUnique({ where: { id: vehicleId } });
-    if (!vehicle) {
-      return res.status(400).json({ message: 'Invalid vehicle ID' });
-    }
-
-    // Fetch service durations to calculate endTime
-    const services = await prisma.service.findMany({
-      where: { id: { in: serviceIds } },
-      select: { id: true, durationMinutes: true, price: true }
-    });
-
-    if (services.length !== serviceIds.length) {
-      return res.status(400).json({ message: 'One or more service IDs are invalid' });
-    }
-
-    // Fetch addon durations if provided
-    let addons = [];
-    if (addonIds && Array.isArray(addonIds) && addonIds.length > 0) {
-      addons = await prisma.addon.findMany({
-        where: { id: { in: addonIds } },
-        select: { id: true, durationMinutes: true, price: true }
-      });
-
-      if (addons.length !== addonIds.length) {
-        return res.status(400).json({ message: 'One or more addon IDs are invalid' });
-      }
-    }
-
-    // Parse date and time to create DateTime
+    // Parse date and time
     const bookingDate = new Date(`${date}T${time}:00`);
     if (isNaN(bookingDate.getTime())) {
       return res.status(400).json({ message: 'Invalid date or time format' });
     }
 
-    // Calculate total duration in minutes
-    const totalDurationMinutes = services.reduce((sum, s) => sum + s.durationMinutes, 0) +
-                                  addons.reduce((sum, a) => sum + a.durationMinutes, 0);
-
-    // Calculate end time
-    const endTime = new Date(bookingDate.getTime() + totalDurationMinutes * 60000);
-
-    // Check for overlapping confirmed bookings
+    // Check for overlapping confirmed bookings at this time
     const overlappingBooking = await prisma.booking.findFirst({
       where: {
         status: 'CONFIRMED',
-        address: address,
-        OR: [
-          {
-            // New booking starts before existing booking ends
-            date: { lte: endTime },
-            endTime: { gte: bookingDate }
-          }
-        ]
+        OR: [{ date: { lte: bookingDate }, endTime: { gte: bookingDate } }]
       }
     });
 
@@ -85,44 +38,84 @@ router.post('/reserve-slot', authMiddleware, async (req, res) => {
       });
     }
 
-    // Create booking with nested writes for services and addons
-    const booking = await prisma.booking.create({
-      data: {
-        customerId: req.user.id,
-        vehicleId: vehicleId,
-        date: bookingDate,
-        endTime: endTime,
-        address: address,
-        status: 'PENDING',
-        services: {
-          create: serviceIds.map(serviceId => ({
-            serviceId: serviceId
-          }))
-        },
-        addons: {
-          create: (addonIds || []).map(addonId => ({
-            addonId: addonId
-          }))
+    // Create one booking per vehicle in the cart
+    const bookings = [];
+    let currentStart = bookingDate;
+
+    for (const v of vehicles) {
+      // Find or create the Vehicle record for this user
+      let vehicle = await prisma.vehicle.findFirst({
+        where: {
+          userId: req.user.id,
+          type: v.vehicleType,
+          brand: v.brand || null,
+          model: v.model || null,
         }
-      },
-      include: {
-        services: { include: { serviceId: true } },
-        addons: { include: { addonId: true } },
-        vehicle: true
+      });
+
+      if (!vehicle) {
+        vehicle = await prisma.vehicle.create({
+          data: {
+            userId: req.user.id,
+            type: v.vehicleType,
+            brand: v.brand || null,
+            model: v.model || null,
+          }
+        });
       }
-    });
+
+      // Look up service by name (upsert so it always exists)
+      const service = await prisma.service.upsert({
+        where: { name: v.service },
+        update: {},
+        create: {
+          name: v.service,
+          price: 0,
+          durationMinutes: 60,
+        }
+      });
+
+      // Look up addons by name
+      const addonRecords = [];
+      for (const addonName of (v.addons || [])) {
+        const addon = await prisma.addon.upsert({
+          where: { name: addonName },
+          update: {},
+          create: {
+            name: addonName,
+            price: 0,
+            durationMinutes: 30,
+          }
+        });
+        addonRecords.push(addon);
+      }
+
+      const totalDuration = service.durationMinutes +
+        addonRecords.reduce((sum, a) => sum + a.durationMinutes, 0);
+      const endTime = new Date(currentStart.getTime() + totalDuration * 60000);
+
+      const booking = await prisma.booking.create({
+        data: {
+          customerId: req.user.id,
+          vehicleId: vehicle.id,
+          date: currentStart,
+          endTime: endTime,
+          address: 'TBD',
+          status: 'PENDING',
+          services: { create: [{ serviceId: service.id }] },
+          addons: { create: addonRecords.map(a => ({ addonId: a.id })) }
+        }
+      });
+
+      bookings.push(booking);
+      currentStart = endTime; // next vehicle starts where this one ends
+    }
+
+    const primaryBooking = bookings[0];
 
     res.status(201).json({
-      message: 'Slot reserved for 10 minutes. Proceed to payment.',
-      bookingId: booking.id,
-      booking: {
-        id: booking.id,
-        date: booking.date,
-        endTime: booking.endTime,
-        address: booking.address,
-        vehicleId: booking.vehicleId,
-        totalDuration: totalDurationMinutes
-      }
+      message: 'Slot reserved. Proceed to payment.',
+      bookingId: primaryBooking.id,
     });
   } catch (error) {
     console.error('Error reserving slot:', error);
