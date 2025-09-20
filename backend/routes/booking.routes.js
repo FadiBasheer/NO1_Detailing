@@ -64,29 +64,23 @@ router.post('/reserve-slot', authMiddleware, async (req, res) => {
         });
       }
 
-      // Look up service by name (upsert so it always exists)
-      const service = await prisma.service.upsert({
-        where: { name: v.service },
-        update: {},
-        create: {
-          name: v.service,
-          price: 0,
-          durationMinutes: 60,
-        }
-      });
+      // Look up service by name, create if missing
+      let service = await prisma.service.findFirst({ where: { name: v.service } });
+      if (!service) {
+        service = await prisma.service.create({
+          data: { name: v.service, price: 0, durationMinutes: 60 }
+        });
+      }
 
-      // Look up addons by name
+      // Look up addons by name, create if missing
       const addonRecords = [];
       for (const addonName of (v.addons || [])) {
-        const addon = await prisma.addon.upsert({
-          where: { name: addonName },
-          update: {},
-          create: {
-            name: addonName,
-            price: 0,
-            durationMinutes: 30,
-          }
-        });
+        let addon = await prisma.addon.findFirst({ where: { name: addonName } });
+        if (!addon) {
+          addon = await prisma.addon.create({
+            data: { name: addonName, price: 0, durationMinutes: 30 }
+          });
+        }
         addonRecords.push(addon);
       }
 
