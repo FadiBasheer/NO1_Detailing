@@ -55,6 +55,21 @@ const router = createRouter({
       component: () => import('../views/FAQs.vue'),
     },
     {
+      path: '/services/:type',
+      name: 'service-detail',
+      component: () => import('../views/ServiceDetailView.vue'),
+    },
+    {
+      path: '/membership',
+      name: 'membership',
+      component: () => import('../views/MembershipView.vue'),
+    },
+    {
+      path: '/gift-cards',
+      name: 'gift-cards',
+      component: () => import('../views/GiftCardsView.vue'),
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: 'not-found',
       component: () => import('../views/NotFoundView.vue'),
