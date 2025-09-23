@@ -4,24 +4,44 @@
     <nav :class="{ 'nav-open': isMenuOpen }">
       <ul>
 
-        <li><a href="#">Membership</a></li>
-        <li class="dropdown" style="position: relative">
-          <p class="dropdown-btn" @click="toggleDropdown">Business Programs &#x2BC6;</p>
-          <ul class="dropdown-menu" :class="{ 'open': isDropdownOpen }">
-            <li><a href="#">Fleet Services</a></li>
-            <li><a href="#">Dealerships</a></li>
-            <li><a href="#">Another item</a></li> <!-- Uber Drives -->
-            <li><a href="#">Another item</a></li> <!-- Turo -->
-            <li><a href="#">Another item</a></li>  <!-- Hotels -->
-            <li><a href="#">Another item</a></li>  <!-- Resturants -->
-            <li><a href="#">Another item</a></li>  <!-- Barbershops -->
+        <!-- Services dropdown -->
+        <li class="dropdown">
+          <p class="dropdown-btn" @click="toggleDropdown('services')">Services &#x2BC6;</p>
+          <ul class="dropdown-menu" :class="{ 'open': activeDropdown === 'services' }">
+            <li><router-link to="/services/car" @click="closeAll">Car Detailing</router-link></li>
+            <li><router-link to="/services/rv" @click="closeAll">RV Detailing</router-link></li>
+            <li><router-link to="/services/boat" @click="closeAll">Boat Detailing</router-link></li>
+            <li><router-link to="/services/motorcycle" @click="closeAll">Motorcycle Detailing</router-link></li>
           </ul>
         </li>
 
-        <li><a href="#">Car Services</a></li>
-        <li><a href="#">RV services</a></li>
-        <li><a href="#">Boats Services</a></li>
-        <li><a href="#">Gift Cards</a></li>
+        <!-- Business Programs dropdown -->
+        <li class="dropdown">
+          <p class="dropdown-btn" @click="toggleDropdown('business')">Business Programs &#x2BC6;</p>
+          <ul class="dropdown-menu" :class="{ 'open': activeDropdown === 'business' }">
+            <li><a href="#">Fleet Management</a></li>
+            <li><a href="#">Car Dealerships</a></li>
+            <li><a href="#">Uber / Rideshare Drivers</a></li>
+            <li><a href="#">Turo Hosts</a></li>
+            <li><a href="#">Hotels &amp; Hospitality</a></li>
+            <li><a href="#">Restaurants &amp; Cafes</a></li>
+            <li><a href="#">Barbershops &amp; Salons</a></li>
+          </ul>
+        </li>
+
+        <!-- Membership dropdown -->
+        <li class="dropdown">
+          <p class="dropdown-btn" @click="toggleDropdown('membership')">Membership &#x2BC6;</p>
+          <ul class="dropdown-menu" :class="{ 'open': activeDropdown === 'membership' }">
+            <li><router-link to="/membership#monthly" @click="closeAll">Monthly Plan</router-link></li>
+            <li><router-link to="/membership#annual" @click="closeAll">Annual Plan</router-link></li>
+            <li><router-link to="/membership#benefits" @click="closeAll">Compare Benefits</router-link></li>
+          </ul>
+        </li>
+
+        <li><router-link to="/gift-cards">Gift Cards</router-link></li>
+        <li><router-link to="/FAQs">FAQ</router-link></li>
+
       </ul>
     </nav>
     <div class="auth-buttons">
@@ -48,16 +68,20 @@ const auth = useAuthStore();
 const user = computed(() => auth.user);
 
 const isMenuOpen = ref(false);
-const isDropdownOpen = ref(false);
+const activeDropdown = ref(null); // 'services' | 'business' | 'membership' | null
 
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value;
 };
 
-const toggleDropdown = () => {
-  isDropdownOpen.value = !isDropdownOpen.value;
+const toggleDropdown = (name) => {
+  activeDropdown.value = activeDropdown.value === name ? null : name;
 };
 
+const closeAll = () => {
+  activeDropdown.value = null;
+  isMenuOpen.value = false;
+};
 
 const router = useRouter();
 
@@ -76,8 +100,8 @@ const logout = () => {
   background-color: white;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 
-  width: 100%;       /* 🔑 Make header full width */
-  box-sizing: border-box; /* Prevent padding from pushing it wider */
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .logo {
@@ -99,16 +123,13 @@ nav a, p {
   font-weight: bold;
 }
 
-.pricing-btn {
-  background-color: #007BFF;
-  color: white;
-  padding: 10px 15px;
-  text-decoration: none;
-  border-radius: 5px;
+.dropdown {
+  position: relative;
 }
 
-.dropdown {
-  position: relative; /* 🔑 Needed so the submenu positions correctly */
+.dropdown-btn {
+  cursor: pointer;
+  user-select: none;
 }
 
 .dropdown-menu {
@@ -116,20 +137,33 @@ nav a, p {
   position: absolute;
   top: 100%;
   left: 0;
-  min-width: 160px;
+  min-width: 200px;
   background: white;
   border: 1px solid #ccc;
   list-style: none;
-  padding: 0;
+  padding: 6px 0;
   margin: 0;
   z-index: 1001;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  flex-direction: column; /* ✅ Optional if needed for layout fix */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  border-radius: 6px;
 }
 
-/* ✅ This ensures vertical list display inside dropdown */
 .dropdown-menu li {
   display: block;
+}
+
+.dropdown-menu li a {
+  display: block;
+  padding: 10px 16px;
+  color: #333;
+  text-decoration: none;
+  font-weight: normal;
+  white-space: nowrap;
+}
+
+.dropdown-menu li a:hover {
+  background-color: #f0f6ff;
+  color: #007BFF;
 }
 
 .dropdown:hover .dropdown-menu {
@@ -209,9 +243,20 @@ nav a, p {
     display: none;
     box-shadow: none;
     border: none;
+    border-radius: 0;
+    padding: 0;
   }
 
-  .dropdown:hover .dropdown-menu,
+  .dropdown-menu li a {
+    padding: 12px 20px 12px 36px;
+    font-weight: normal;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .dropdown:hover .dropdown-menu {
+    display: none;
+  }
+
   .dropdown-menu.open {
     display: block;
   }
