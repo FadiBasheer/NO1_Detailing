@@ -65,6 +65,11 @@ const router = createRouter({
       component: () => import('../views/BoatDetailView.vue'),
     },
     {
+      path: '/services/motorcycle',
+      name: 'service-motorcycle',
+      component: () => import('../views/MotorcycleDetailView.vue'),
+    },
+    {
       path: '/services/:type',
       name: 'service-detail',
       component: () => import('../views/ServiceDetailView.vue'),
