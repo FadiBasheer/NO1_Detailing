@@ -29,15 +29,7 @@
           </ul>
         </li>
 
-        <!-- Membership dropdown -->
-        <li class="dropdown">
-          <p class="dropdown-btn" @click="toggleDropdown('membership')">Membership &#x2BC6;</p>
-          <ul class="dropdown-menu" :class="{ 'open': activeDropdown === 'membership' }">
-            <li><router-link to="/membership#monthly" @click="closeAll">Monthly Plan</router-link></li>
-            <li><router-link to="/membership#annual" @click="closeAll">Annual Plan</router-link></li>
-            <li><router-link to="/membership#benefits" @click="closeAll">Compare Benefits</router-link></li>
-          </ul>
-        </li>
+        <li><router-link to="/membership">Membership</router-link></li>
 
         <li><router-link to="/gift-cards">Gift Cards</router-link></li>
         <li><router-link to="/FAQs">FAQ</router-link></li>
