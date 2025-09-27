@@ -109,8 +109,9 @@ model Booking {
   date         DateTime      // 🔥 replaces string date/time
   endTime      DateTime
 
-  address      String
-  status       BookingStatus @default(PENDING)
+  address        String
+  status         BookingStatus @default(PENDING)
+  discountAmount Float         @default(0)
 
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
