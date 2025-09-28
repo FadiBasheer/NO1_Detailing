@@ -28,7 +28,7 @@ const generateRefreshToken = (user) => jwt.sign({ id: user.id }, process.env.JWT
 
 // Auth routes
 router.post('/register', registerLimiter, async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, promoCode } = req.body;
   try {
     // Validate input
     if (!email || !password) {
@@ -44,12 +44,13 @@ router.post('/register', registerLimiter, async (req, res) => {
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    // Create user
+    // Create user — attach promo code if provided
     const user = await prisma.user.create({
       data: {
         email,
         password: hashedPassword,
-        role: 'CUSTOMER'
+        role: 'CUSTOMER',
+        ...(promoCode ? { promoCode: promoCode.toUpperCase() } : {})
       }
     });
 
