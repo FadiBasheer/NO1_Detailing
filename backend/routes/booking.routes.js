@@ -118,24 +118,55 @@ router.post('/reserve-slot', authMiddleware, async (req, res) => {
 });
 
 // Generate Helcim payment form details
-router.post('/payment-link', async (req, res) => {
+router.post('/payment-link', authMiddleware, async (req, res) => {
   try {
-    const { bookingId, totalAmount } = req.body;
+    const { bookingId } = req.body;
 
-    // Validate booking exists
+    // Validate booking exists and belongs to this user
     const booking = await prisma.booking.findUnique({
-      where: { id: bookingId }
+      where: { id: bookingId },
+      include: {
+        services: { include: { service: true } },
+        addons: { include: { addon: true } }
+      }
     });
 
     if (!booking || booking.status !== 'PENDING') {
       return res.status(400).json({ message: 'Invalid or expired booking.' });
     }
 
+    if (booking.customerId !== req.user.id) {
+      return res.status(403).json({ message: 'This booking does not belong to you.' });
+    }
+
+    // Calculate total server-side from actual service/addon prices
+    const serviceTotal = booking.services.reduce((sum, bs) => sum + bs.service.price, 0);
+    const addonTotal = booking.addons.reduce((sum, ba) => sum + ba.addon.price, 0);
+    let totalAmount = serviceTotal + addonTotal;
+
+    // Apply promo discount — free exterior wash ($80) on first booking
+    const PROMO_DISCOUNT = 80;
+    const user = await prisma.user.findUnique({ where: { id: req.user.id } });
+    let discountAmount = 0;
+
+    if (user.promoCode && !user.promoUsed) {
+      discountAmount = Math.min(PROMO_DISCOUNT, totalAmount);
+      totalAmount = Math.max(0, totalAmount - PROMO_DISCOUNT);
+
+      // Record the discount on this booking
+      await prisma.booking.update({
+        where: { id: bookingId },
+        data: { discountAmount }
+      });
+    }
+
     const helcimUrl = `https://yumeeco.myhelcim.com/hosted/?token=${helcimToken}`;
 
     res.json({
       action: helcimUrl,
-      amount: totalAmount
+      amount: totalAmount,
+      discountApplied: discountAmount > 0,
+      discountAmount
     });
   } catch (error) {
     console.error('Error generating payment link:', error);
