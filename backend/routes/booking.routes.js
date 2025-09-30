@@ -236,8 +236,16 @@ router.post('/payment-success', authMiddleware, async (req, res) => {
     const updatedBooking = await prisma.booking.update({
       where: { id: bookingId },
       data: { status: 'CONFIRMED' },
-      select: { id: true, status: true, customerId: true, date: true, address: true }
+      select: { id: true, status: true, customerId: true, date: true, address: true, discountAmount: true }
     });
+
+    // Mark promo as used if a discount was applied on this booking
+    if (updatedBooking.discountAmount > 0) {
+      await prisma.user.update({
+        where: { id: req.user.id },
+        data: { promoUsed: true }
+      });
+    }
 
     console.log(`Booking ${bookingId} confirmed via verified Helcim transaction ${transactionId}.`);
 
