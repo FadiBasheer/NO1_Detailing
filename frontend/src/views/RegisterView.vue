@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../stores/auth.ts';
 
@@ -27,12 +27,21 @@ const auth = useAuthStore();
 const userData = ref({ email: '', password: '' });
 const loading = ref(false);
 const error = ref('');
+const promoCode = ref('');
+
+onMounted(() => {
+  const stored = sessionStorage.getItem('promoCode');
+  if (stored) promoCode.value = stored;
+});
 
 const handleRegister = async () => {
   loading.value = true;
   error.value = '';
   try {
-    await auth.register(userData.value);
+    const payload = { ...userData.value };
+    if (promoCode.value) payload.promoCode = promoCode.value;
+    await auth.register(payload);
+    sessionStorage.removeItem('promoCode');
     router.push('/login');
   } catch (err) {
     error.value = 'Registration failed';
