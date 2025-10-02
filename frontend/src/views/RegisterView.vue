@@ -60,6 +60,16 @@ const handleRegister = async () => {
   margin: 0 auto;
   padding: 20px;
 }
+.promo-notice {
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 0.92rem;
+  color: #166534;
+  margin-bottom: 18px;
+  font-weight: 500;
+}
 form div {
   margin-bottom: 10px;
 }
