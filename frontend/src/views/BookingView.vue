@@ -204,8 +204,16 @@ export default {
       return services[key]?.name || "Unknown Service";
     },
 
+    getServicePrice(key) {
+      return services[key]?.price ?? 0;
+    },
+
     getAddonName(key) {
       return addons[key]?.name || "Unknown Add-on";
+    },
+
+    getAddonPrice(key) {
+      return addons[key]?.price ?? 0;
     },
 
     removeVehicle(index) {
