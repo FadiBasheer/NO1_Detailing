@@ -173,6 +173,30 @@ export default {
         return total;
       }, 0);
     },
+
+    subtotal() {
+      return this.vehicles.reduce((total, vehicle) => {
+        const service = services[vehicle.service];
+        if (service) total += service.price;
+        vehicle.addons.forEach((addonKey) => {
+          const addon = addons[addonKey];
+          if (addon) total += addon.price;
+        });
+        return total;
+      }, 0);
+    },
+
+    hasActivePromo() {
+      const auth = useAuthStore();
+      return !!(auth.user?.promoCode && !auth.user?.promoUsed);
+    },
+
+    totalAmount() {
+      if (this.hasActivePromo) {
+        return Math.max(0, this.subtotal - 80);
+      }
+      return this.subtotal;
+    },
   },
 
   methods: {
