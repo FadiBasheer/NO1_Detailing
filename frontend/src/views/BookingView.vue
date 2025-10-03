@@ -52,7 +52,10 @@
         :key="vIndex"
         class="vehicle-item"
       >
-        <strong>{{ vehicle.vehicleType }} - {{ getServiceName(vehicle.service) }}</strong>
+        <div class="vehicle-header">
+          <strong>{{ vehicle.vehicleType }} - {{ getServiceName(vehicle.service) }}</strong>
+          <span class="item-price">${{ getServicePrice(vehicle.service) }}</span>
+        </div>
         <button @click="removeVehicle(vIndex)" class="remove-btn">X</button>
 
         <!-- Add-ons list -->
@@ -62,10 +65,33 @@
             :key="aIndex"
             class="addon-item"
           >
-            {{ getAddonName(addon) }}
-            <button @click="removeAddon(vIndex, aIndex)" class="remove-btn">X</button>
+            <span>{{ getAddonName(addon) }}</span>
+            <span class="addon-right">
+              +${{ getAddonPrice(addon) }}
+              <button @click="removeAddon(vIndex, aIndex)" class="remove-btn">X</button>
+            </span>
           </li>
         </ul>
+      </div>
+
+      <!-- Promo banner -->
+      <div v-if="hasActivePromo" class="promo-banner">
+        🎉 Free exterior wash applied! (-$80)
+      </div>
+
+      <!-- Total -->
+      <div v-if="vehicles.length > 0" class="cart-total">
+        <template v-if="hasActivePromo">
+          <div class="total-row original">
+            <span>Subtotal</span><span>${{ subtotal }}</span>
+          </div>
+          <div class="total-row discount">
+            <span>Promo discount</span><span>-$80</span>
+          </div>
+        </template>
+        <div class="total-row final">
+          <span>Total</span><span>${{ totalAmount }}</span>
+        </div>
       </div>
 
       <!-- Add Another Vehicle -->
