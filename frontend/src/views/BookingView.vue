@@ -106,6 +106,7 @@
 <script>
 import axios from "../axios.ts";
 import { services, addons } from "@/data/services.ts";
+import { useAuthStore } from "@/stores/auth.ts";
 
 export default {
   data() {
