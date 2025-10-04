@@ -288,14 +288,10 @@ export default {
 
         this.message = "Redirecting to secure payment...";
 
-        // 2️⃣ Get payment form data from your server
-        const totalAmount = 50.0; // ⚙️ Replace with dynamic total if needed
+        // 2️⃣ Get payment form data from your server (amount calculated server-side)
         const paymentRes = await axios.post(
           `/api/payment-link`,
-          {
-            bookingId,
-            totalAmount,
-          }
+          { bookingId }
         );
 
 
