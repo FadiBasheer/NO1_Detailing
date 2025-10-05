@@ -476,6 +476,20 @@ export default {
   margin: 6px 0 0 0;
 }
 
+.vehicle-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.item-price {
+  font-weight: 600;
+  color: #1e40af;
+  white-space: nowrap;
+  font-size: 0.9rem;
+}
+
 .addon-item {
   display: flex;
   justify-content: space-between;
@@ -483,6 +497,56 @@ export default {
   padding: 3px 0;
   font-size: 0.85rem;
   color: #6b7280;
+}
+
+.addon-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.promo-banner {
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 0.85rem;
+  color: #166534;
+  font-weight: 600;
+  margin: 12px 0 4px;
+}
+
+.cart-total {
+  border-top: 2px solid #e5e7eb;
+  margin-top: 12px;
+  padding-top: 12px;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  padding: 3px 0;
+  color: #374151;
+}
+
+.total-row.original {
+  color: #9ca3af;
+  font-size: 0.85rem;
+}
+
+.total-row.discount {
+  color: #16a34a;
+  font-size: 0.85rem;
+}
+
+.total-row.final {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #111827;
+  margin-top: 4px;
+  padding-top: 6px;
+  border-top: 1px solid #e5e7eb;
 }
 
 .add-btn,
