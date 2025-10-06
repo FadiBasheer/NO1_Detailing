@@ -80,11 +80,50 @@ router.patch('/bookings/:id/status', async (req, res) => {
       return res.status(400).json({ message: 'Invalid status. Must be one of: PENDING, CONFIRMED, CANCELLED, COMPLETED' });
     }
 
-    // Update booking status
-    const updatedBooking = await prisma.booking.update({
-      where: { id },
-      data: { status },
-      include: {
+    // Fetch current booking to detect status transition
+    const existingBooking = await prisma.booking.findUnique({ where: { id }, select: { status: true, customerId: true } });
+    if (!existingBooking) {
+      return res.status(404).json({ message: 'Booking not found' });
+    }
+
+    const wasCompleted = existingBooking.status === 'COMPLETED';
+    const willBeCompleted = status === 'COMPLETED';
+
+    // Update booking status and adjust completedBookingsCount atomically
+    const [updatedBooking] = await prisma.$transaction([
+      prisma.booking.update({
+        where: { id },
+        data: { status },
+        include: {
+          customer: {
+            select: { id: true, email: true, role: true }
+          },
+          vehicle: true,
+          services: {
+            include: {
+              service: {
+                select: { id: true, name: true, price: true, durationMinutes: true }
+              }
+            }
+          },
+          addons: {
+            include: {
+              addon: {
+                select: { id: true, name: true, price: true, durationMinutes: true }
+              }
+            }
+          }
+        }
+      }),
+      ...(!wasCompleted && willBeCompleted
+        ? [prisma.user.update({ where: { id: existingBooking.customerId }, data: { completedBookingsCount: { increment: 1 } } })]
+        : wasCompleted && !willBeCompleted
+        ? [prisma.user.update({ where: { id: existingBooking.customerId }, data: { completedBookingsCount: { decrement: 1 } } })]
+        : [])
+    ]);
+
+    // Format response similar to GET /api/bookings
+    const formattedBooking = {
         customer: {
           select: { id: true, email: true, role: true }
         },
