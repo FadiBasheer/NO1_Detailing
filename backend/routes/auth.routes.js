@@ -88,7 +88,7 @@ router.post('/login', loginLimiter, async (req, res) => {
       }
     });
 
-    res.json({ accessToken, refreshToken, user: { id: user.id, email: user.email, role: user.role, promoCode: user.promoCode, promoUsed: user.promoUsed } });
+    res.json({ accessToken, refreshToken, user: { id: user.id, email: user.email, role: user.role, promoCode: user.promoCode, promoUsed: user.promoUsed, completedBookingsCount: user.completedBookingsCount } });
   } catch (error) {
     console.error('Login error:', error);
     res.status(400).json({ message: 'Login failed' });
