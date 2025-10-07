@@ -124,29 +124,6 @@ router.patch('/bookings/:id/status', async (req, res) => {
 
     // Format response similar to GET /api/bookings
     const formattedBooking = {
-        customer: {
-          select: { id: true, email: true, role: true }
-        },
-        vehicle: true,
-        services: {
-          include: {
-            service: {
-              select: { id: true, name: true, price: true, durationMinutes: true }
-            }
-          }
-        },
-        addons: {
-          include: {
-            addon: {
-              select: { id: true, name: true, price: true, durationMinutes: true }
-            }
-          }
-        }
-      }
-    });
-
-    // Format response similar to GET /api/bookings
-    const formattedBooking = {
       id: updatedBooking.id,
       customerId: updatedBooking.customerId,
       customer: updatedBooking.customer,
