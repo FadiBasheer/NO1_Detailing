@@ -26,9 +26,12 @@ const registerLimiter = rateLimit({
 const generateAccessToken = (user) => jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '15m' });
 const generateRefreshToken = (user) => jwt.sign({ id: user.id }, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
 
+// Generate a short unique referral code
+const generateReferralCode = () => Math.random().toString(36).substring(2, 10).toUpperCase();
+
 // Auth routes
 router.post('/register', registerLimiter, async (req, res) => {
-  const { email, password, promoCode } = req.body;
+  const { email, password, promoCode, referralCode } = req.body;
   try {
     // Validate input
     if (!email || !password) {
@@ -41,18 +44,38 @@ router.post('/register', registerLimiter, async (req, res) => {
       return res.status(400).json({ message: 'User already exists' });
     }
 
+    // If a referral code was provided, find the referrer
+    let referrer = null;
+    if (referralCode) {
+      referrer = await prisma.user.findUnique({ where: { referralCode: referralCode.toUpperCase() } });
+    }
+
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    // Create user — attach promo code if provided
+    // Generate a unique referral code for the new user
+    let newReferralCode;
+    do {
+      newReferralCode = generateReferralCode();
+    } while (await prisma.user.findUnique({ where: { referralCode: newReferralCode } }));
+
+    // Create user
     const user = await prisma.user.create({
       data: {
         email,
         password: hashedPassword,
         role: 'CUSTOMER',
+        referralCode: newReferralCode,
         ...(promoCode ? { promoCode: promoCode.toUpperCase() } : {})
       }
     });
+
+    // Link the referral if a valid referrer was found
+    if (referrer) {
+      await prisma.referral.create({
+        data: { referrerId: referrer.id, refereeId: user.id }
+      });
+    }
 
     res.status(201).json({ message: 'User created', user: { id: user.id, email: user.email, role: user.role } });
   } catch (error) {
