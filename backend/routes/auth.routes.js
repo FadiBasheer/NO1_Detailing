@@ -111,7 +111,14 @@ router.post('/login', loginLimiter, async (req, res) => {
       }
     });
 
-    res.json({ accessToken, refreshToken, user: { id: user.id, email: user.email, role: user.role, promoCode: user.promoCode, promoUsed: user.promoUsed, completedBookingsCount: user.completedBookingsCount } });
+    // Check if this user has an unused referral discount
+    const pendingReferral = await prisma.referral.findUnique({
+      where: { refereeId: user.id },
+      select: { discountUsed: true }
+    });
+    const referralDiscountPending = !!(pendingReferral && !pendingReferral.discountUsed);
+
+    res.json({ accessToken, refreshToken, user: { id: user.id, email: user.email, role: user.role, promoCode: user.promoCode, promoUsed: user.promoUsed, completedBookingsCount: user.completedBookingsCount, referralCode: user.referralCode, referralDiscountPending } });
   } catch (error) {
     console.error('Login error:', error);
     res.status(400).json({ message: 'Login failed' });
