@@ -144,16 +144,30 @@ router.post('/payment-link', authMiddleware, async (req, res) => {
     const addonTotal = booking.addons.reduce((sum, ba) => sum + ba.addon.price, 0);
     let totalAmount = serviceTotal + addonTotal;
 
-    // Apply promo discount — free exterior wash ($80) on first booking
-    const PROMO_DISCOUNT = 80;
     const user = await prisma.user.findUnique({ where: { id: req.user.id } });
     let discountAmount = 0;
 
+    // Apply promo discount — free exterior wash ($80) on first booking
+    const PROMO_DISCOUNT = 80;
     if (user.promoCode && !user.promoUsed) {
       discountAmount = Math.min(PROMO_DISCOUNT, totalAmount);
       totalAmount = Math.max(0, totalAmount - PROMO_DISCOUNT);
+    }
 
-      // Record the discount on this booking
+    // Apply referral discount — 10% off (only if no promo discount already applied)
+    if (discountAmount === 0) {
+      const pendingReferral = await prisma.referral.findUnique({
+        where: { refereeId: req.user.id },
+        select: { id: true, discountUsed: true }
+      });
+      if (pendingReferral && !pendingReferral.discountUsed) {
+        discountAmount = Math.round(totalAmount * 0.10 * 100) / 100;
+        totalAmount = Math.round((totalAmount - discountAmount) * 100) / 100;
+      }
+    }
+
+    // Record the discount on this booking
+    if (discountAmount > 0) {
       await prisma.booking.update({
         where: { id: bookingId },
         data: { discountAmount }
