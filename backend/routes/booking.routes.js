@@ -253,12 +253,18 @@ router.post('/payment-success', authMiddleware, async (req, res) => {
       select: { id: true, status: true, customerId: true, date: true, address: true, discountAmount: true }
     });
 
-    // Mark promo as used if a discount was applied on this booking
+    // Mark promo/referral as used if a discount was applied on this booking
     if (updatedBooking.discountAmount > 0) {
-      await prisma.user.update({
-        where: { id: req.user.id },
-        data: { promoUsed: true }
-      });
+      const user = await prisma.user.findUnique({ where: { id: req.user.id }, select: { promoCode: true, promoUsed: true } });
+      if (user.promoCode && !user.promoUsed) {
+        await prisma.user.update({ where: { id: req.user.id }, data: { promoUsed: true } });
+      } else {
+        // Mark referral discount as used
+        await prisma.referral.updateMany({
+          where: { refereeId: req.user.id, discountUsed: false },
+          data: { discountUsed: true }
+        });
+      }
     }
 
     console.log(`Booking ${bookingId} confirmed via verified Helcim transaction ${transactionId}.`);
