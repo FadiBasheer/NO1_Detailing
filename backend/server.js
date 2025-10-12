@@ -27,6 +27,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api', bookingRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/referral', referralRoutes);
 
 // Start the booking cleanup job
 startBookingCleanupJob();
