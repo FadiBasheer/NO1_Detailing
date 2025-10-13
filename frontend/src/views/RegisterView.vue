@@ -4,6 +4,9 @@
     <div v-if="promoCode" class="promo-notice">
       🎉 Your free exterior wash is reserved — it will be applied automatically on your first booking.
     </div>
+    <div v-if="referralCode" class="referral-notice">
+      🎁 10% off your first booking will be applied automatically at checkout.
+    </div>
     <form @submit.prevent="handleRegister">
       <div>
         <label for="email">Email:</label>
