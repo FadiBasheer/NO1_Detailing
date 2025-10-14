@@ -78,6 +78,16 @@ const handleRegister = async () => {
   margin-bottom: 18px;
   font-weight: 500;
 }
+.referral-notice {
+  background: #ecfdf5;
+  border: 1px solid #6ee7b7;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 0.92rem;
+  color: #065f46;
+  margin-bottom: 18px;
+  font-weight: 500;
+}
 form div {
   margin-bottom: 10px;
 }
