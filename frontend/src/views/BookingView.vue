@@ -79,6 +79,11 @@
         🎉 Free exterior wash applied! (-$80)
       </div>
 
+      <!-- Referral discount banner -->
+      <div v-if="hasReferralDiscount" class="referral-banner">
+        🎁 Referral discount applied! (10% off)
+      </div>
+
       <!-- Total -->
       <div v-if="vehicles.length > 0" class="cart-total">
         <template v-if="hasActivePromo">
