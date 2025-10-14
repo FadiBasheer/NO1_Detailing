@@ -34,10 +34,13 @@ const userData = ref({ email: '', password: '' });
 const loading = ref(false);
 const error = ref('');
 const promoCode = ref('');
+const referralCode = ref('');
 
 onMounted(() => {
-  const stored = sessionStorage.getItem('promoCode');
-  if (stored) promoCode.value = stored;
+  const storedPromo = sessionStorage.getItem('promoCode');
+  if (storedPromo) promoCode.value = storedPromo;
+  const storedReferral = sessionStorage.getItem('referralCode');
+  if (storedReferral) referralCode.value = storedReferral;
 });
 
 const handleRegister = async () => {
@@ -46,8 +49,10 @@ const handleRegister = async () => {
   try {
     const payload = { ...userData.value };
     if (promoCode.value) payload.promoCode = promoCode.value;
+    if (referralCode.value) payload.referralCode = referralCode.value;
     await auth.register(payload);
     sessionStorage.removeItem('promoCode');
+    sessionStorage.removeItem('referralCode');
     router.push('/login');
   } catch (err) {
     error.value = 'Registration failed';
