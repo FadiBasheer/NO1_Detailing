@@ -94,6 +94,14 @@
             <span>Promo discount</span><span>-$80</span>
           </div>
         </template>
+        <template v-else-if="hasReferralDiscount">
+          <div class="total-row original">
+            <span>Subtotal</span><span>${{ subtotal }}</span>
+          </div>
+          <div class="total-row discount">
+            <span>Referral discount (10%)</span><span>-${{ referralDiscountAmount }}</span>
+          </div>
+        </template>
         <div class="total-row final">
           <span>Total</span><span>${{ totalAmount }}</span>
         </div>
