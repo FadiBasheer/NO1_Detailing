@@ -204,9 +204,21 @@ export default {
       return !!(auth.user?.promoCode && !auth.user?.promoUsed);
     },
 
+    hasReferralDiscount() {
+      const auth = useAuthStore();
+      return !this.hasActivePromo && !!(auth.user?.referralDiscountPending);
+    },
+
+    referralDiscountAmount() {
+      return (Math.round(this.subtotal * 0.10 * 100) / 100).toFixed(2);
+    },
+
     totalAmount() {
       if (this.hasActivePromo) {
         return Math.max(0, this.subtotal - 80);
+      }
+      if (this.hasReferralDiscount) {
+        return Math.round((this.subtotal - this.subtotal * 0.10) * 100) / 100;
       }
       return this.subtotal;
     },
