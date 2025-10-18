@@ -87,7 +87,7 @@ router.post('/register', registerLimiter, async (req, res) => {
 router.post('/login', loginLimiter, async (req, res) => {
   const { email, password } = req.body;
   try {
-    const user = await prisma.user.findUnique({ where: { email } });
+    let user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
@@ -110,6 +110,18 @@ router.post('/login', loginLimiter, async (req, res) => {
         expiresAt
       }
     });
+
+    // Auto-generate a referral code for legacy users who don't have one
+    if (!user.referralCode) {
+      let newReferralCode;
+      do {
+        newReferralCode = generateReferralCode();
+      } while (await prisma.user.findUnique({ where: { referralCode: newReferralCode } }));
+      user = await prisma.user.update({
+        where: { id: user.id },
+        data: { referralCode: newReferralCode }
+      });
+    }
 
     // Check if this user has an unused referral discount
     const pendingReferral = await prisma.referral.findUnique({
