@@ -40,6 +40,7 @@
       <router-link v-if="!user" to="/login" class="btn">Login</router-link>
       <router-link v-if="!user" to="/register" class="btn">Register</router-link>
       <router-link v-if="user" to="/my-bookings" class="btn btn-my-bookings">My Bookings</router-link>
+      <router-link v-if="user" to="/my-referral" class="btn btn-referral">Referral</router-link>
       <router-link v-if="user?.role === 'ADMIN'" to="/admin" class="btn btn-admin">Admin</router-link>
       <button v-if="user" @click="logout" class="btn">Logout</button>
     </div>
@@ -289,6 +290,14 @@ nav a, p {
 
 .auth-buttons .btn-my-bookings:hover {
   background-color: #574fd6;
+}
+
+.auth-buttons .btn-referral {
+  background-color: #28a745;
+}
+
+.auth-buttons .btn-referral:hover {
+  background-color: #1e7e34;
 }
 
 .auth-buttons .btn-admin {
