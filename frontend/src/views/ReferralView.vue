@@ -47,20 +47,21 @@ import axios from '../axios.ts';
 const auth = useAuthStore();
 const copied = ref(false);
 const stats = ref({ totalReferrals: 0, usedReferrals: 0 });
+const fetchedReferralCode = ref(auth.user?.referralCode ?? '');
 
 const canRefer = computed(() => (auth.user?.completedBookingsCount ?? 0) >= 1);
 
 const referralLink = computed(() => {
-  const code = auth.user?.referralCode;
-  if (!code) return '';
-  return `${window.location.origin}/ref/${code}`;
+  if (!fetchedReferralCode.value) return '';
+  return `${window.location.origin}/ref/${fetchedReferralCode.value}`;
 });
 
 onMounted(async () => {
   if (canRefer.value) {
     try {
       const res = await axios.get('/api/referral/my-info');
-      stats.value = res.data;
+      fetchedReferralCode.value = res.data.referralCode ?? '';
+      stats.value = { totalReferrals: res.data.totalReferrals, usedReferrals: res.data.usedReferrals };
     } catch {
       // stats stay at defaults
     }
