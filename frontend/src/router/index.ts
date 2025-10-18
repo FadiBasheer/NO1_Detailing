@@ -60,6 +60,17 @@ const router = createRouter({
       component: () => import('../views/PromoLandingView.vue'),
     },
     {
+      path: '/ref/:code',
+      name: 'referral-landing',
+      component: () => import('../views/ReferralLandingView.vue'),
+    },
+    {
+      path: '/my-referral',
+      name: 'my-referral',
+      component: () => import('../views/ReferralView.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
       path: '/services/rv',
       name: 'service-rv',
       component: () => import('../views/RVDetailView.vue'),
