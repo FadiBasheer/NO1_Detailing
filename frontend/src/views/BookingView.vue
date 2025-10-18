@@ -541,6 +541,17 @@ export default {
   margin: 12px 0 4px;
 }
 
+.referral-banner {
+  background: #ecfdf5;
+  border: 1px solid #6ee7b7;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 0.85rem;
+  color: #065f46;
+  font-weight: 600;
+  margin: 12px 0 4px;
+}
+
 .cart-total {
   border-top: 2px solid #e5e7eb;
   margin-top: 12px;
