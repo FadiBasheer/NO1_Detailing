@@ -11,6 +11,8 @@
     </div>
 
     <template v-else>
+      <p v-if="loadError" style="color:red;margin-bottom:12px;">{{ loadError }}</p>
+
       <!-- Referral link card -->
       <div class="link-card">
         <h2>Your Referral Link</h2>
@@ -48,6 +50,7 @@ const auth = useAuthStore();
 const copied = ref(false);
 const stats = ref({ totalReferrals: 0, usedReferrals: 0 });
 const fetchedReferralCode = ref(auth.user?.referralCode ?? '');
+const loadError = ref('');
 
 const canRefer = computed(() => (auth.user?.completedBookingsCount ?? 0) >= 1);
 
@@ -62,8 +65,8 @@ onMounted(async () => {
       const res = await axios.get('/api/referral/my-info');
       fetchedReferralCode.value = res.data.referralCode ?? '';
       stats.value = { totalReferrals: res.data.totalReferrals, usedReferrals: res.data.usedReferrals };
-    } catch {
-      // stats stay at defaults
+    } catch (err: any) {
+      loadError.value = err?.response?.data?.message ?? 'Failed to load referral info.';
     }
   }
 });
