@@ -65,7 +65,7 @@ onMounted(async () => {
       const res = await axios.get('/api/referral/my-info');
       fetchedReferralCode.value = res.data.referralCode ?? '';
       stats.value = { totalReferrals: res.data.totalReferrals, usedReferrals: res.data.usedReferrals };
-    } catch (err: any) {
+    } catch (err) {
       loadError.value = err?.response?.data?.message ?? 'Failed to load referral info.';
     }
   }
