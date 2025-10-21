@@ -91,6 +91,11 @@ const router = createRouter({
       component: () => import('../views/ServiceDetailView.vue'),
     },
     {
+      path: '/business-contact',
+      name: 'business-contact',
+      component: () => import('../views/BusinessContactView.vue'),
+    },
+    {
       path: '/membership',
       name: 'membership',
       component: () => import('../views/MembershipView.vue'),
