@@ -96,6 +96,11 @@ const router = createRouter({
       component: () => import('../views/BusinessContactView.vue'),
     },
     {
+      path: '/business/:slug',
+      name: 'business-program',
+      component: () => import('../views/BusinessProgramView.vue'),
+    },
+    {
       path: '/membership',
       name: 'membership',
       component: () => import('../views/MembershipView.vue'),
