@@ -72,6 +72,14 @@
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 
+import fleetImg       from '@/assets/BusinessProgram/fleet_managment.jpg';
+import dealershipsImg from '@/assets/BusinessProgram/dealerships.jpg';
+import rideshareImg   from '@/assets/BusinessProgram/rideshare.jpg';
+import turoImg        from '@/assets/BusinessProgram/turo.jpg';
+import hotelsImg      from '@/assets/BusinessProgram/hotels.jpg';
+import restaurantsImg from '@/assets/BusinessProgram/restaurants.jpg';
+import barbershopsImg from '@/assets/BusinessProgram/barbershops.jpg';
+
 const route = useRoute();
 
 const programs = {
