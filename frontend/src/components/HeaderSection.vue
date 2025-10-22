@@ -19,13 +19,13 @@
         <li class="dropdown">
           <p class="dropdown-btn" @click="toggleDropdown('business')">Business Programs &#x2BC6;</p>
           <ul class="dropdown-menu" :class="{ 'open': activeDropdown === 'business' }">
-            <li><router-link to="/business-contact?type=Fleet+Management" @click="closeAll">Fleet Management</router-link></li>
-            <li><router-link to="/business-contact?type=Car+Dealerships" @click="closeAll">Car Dealerships</router-link></li>
-            <li><router-link to="/business-contact?type=Uber+%2F+Rideshare+Drivers" @click="closeAll">Uber / Rideshare Drivers</router-link></li>
-            <li><router-link to="/business-contact?type=Turo+Hosts" @click="closeAll">Turo Hosts</router-link></li>
-            <li><router-link to="/business-contact?type=Hotels+%26+Hospitality" @click="closeAll">Hotels &amp; Hospitality</router-link></li>
-            <li><router-link to="/business-contact?type=Restaurants+%26+Cafes" @click="closeAll">Restaurants &amp; Cafes</router-link></li>
-            <li><router-link to="/business-contact?type=Barbershops+%26+Salons" @click="closeAll">Barbershops &amp; Salons</router-link></li>
+            <li><router-link to="/business/fleet-management" @click="closeAll">Fleet Management</router-link></li>
+            <li><router-link to="/business/car-dealerships" @click="closeAll">Car Dealerships</router-link></li>
+            <li><router-link to="/business/rideshare" @click="closeAll">Uber / Rideshare Drivers</router-link></li>
+            <li><router-link to="/business/turo-hosts" @click="closeAll">Turo Hosts</router-link></li>
+            <li><router-link to="/business/hotels-hospitality" @click="closeAll">Hotels &amp; Hospitality</router-link></li>
+            <li><router-link to="/business/restaurants-cafes" @click="closeAll">Restaurants &amp; Cafes</router-link></li>
+            <li><router-link to="/business/barbershops-salons" @click="closeAll">Barbershops &amp; Salons</router-link></li>
           </ul>
         </li>
 
