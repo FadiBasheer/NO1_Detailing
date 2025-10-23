@@ -183,7 +183,8 @@ const programs = {
     title: 'Hotels & Hospitality',
     icon: '🏨',
     tagline: 'Offer guests premium vehicle care as a value-added amenity or concierge service.',
-    heroGradient: 'linear-gradient(135deg, #1e1b4b 0%, #3730a3 60%, #6366f1 100%)',
+    heroImage: hotelsImg,
+    heroGradient: 'linear-gradient(135deg, rgba(30,27,75,0.88) 0%, rgba(55,48,163,0.84) 60%, rgba(99,102,241,0.80) 100%)',
     accentGradient: 'linear-gradient(135deg, #4338ca, #818cf8)',
     overview: `Premium hotels and resorts are always looking for ways to exceed guest expectations and create memorable experiences. Offering in-stay vehicle detailing — whether as a complimentary amenity or a paid concierge service — is a unique differentiator that leaves a lasting impression. While your guests enjoy their stay, we take care of their vehicles in your parking area, returning them cleaner than they arrived.`,
     benefits: [
@@ -206,7 +207,8 @@ const programs = {
     title: 'Restaurants & Cafes',
     icon: '🍽️',
     tagline: 'Keep delivery vehicles and staff cars clean and professional on a regular schedule.',
-    heroGradient: 'linear-gradient(135deg, #7f1d1d 0%, #b91c1c 60%, #ef4444 100%)',
+    heroImage: restaurantsImg,
+    heroGradient: 'linear-gradient(135deg, rgba(127,29,29,0.88) 0%, rgba(185,28,28,0.84) 60%, rgba(239,68,68,0.80) 100%)',
     accentGradient: 'linear-gradient(135deg, #dc2626, #f87171)',
     overview: `Delivery vehicles are a moving advertisement for your restaurant brand. A clean, well-maintained delivery car signals professionalism and care — exactly what customers want to associate with the food they order. Whether you run a catering operation, a food truck, or a busy café with delivery staff, our scheduled mobile detailing service keeps your vehicles looking sharp without pulling your team away from the kitchen.`,
     benefits: [
