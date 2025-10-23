@@ -135,7 +135,8 @@ const programs = {
     title: 'Uber / Rideshare Drivers',
     icon: '🚕',
     tagline: 'Maintain a 5-star interior between shifts with flexible detailing that fits your schedule.',
-    heroGradient: 'linear-gradient(135deg, #064e3b 0%, #065f46 60%, #059669 100%)',
+    heroImage: rideshareImg,
+    heroGradient: 'linear-gradient(135deg, rgba(6,78,59,0.88) 0%, rgba(6,95,70,0.84) 60%, rgba(5,150,105,0.80) 100%)',
     accentGradient: 'linear-gradient(135deg, #065f46, #34d399)',
     overview: `Your rating is everything in rideshare. Passengers notice a clean, fresh-smelling car the moment they get in — and they leave better reviews because of it. Between long shifts and back-to-back rides, it's hard to find time for a proper clean. Our mobile detailing service comes to your home, your parking spot, or wherever your car is sitting between shifts, so you can maintain a 5-star interior without losing earning hours.`,
     benefits: [
@@ -158,7 +159,8 @@ const programs = {
     title: 'Turo Hosts',
     icon: '🔑',
     tagline: 'Maximize your ratings and bookings with reliable turnaround details between guest rentals.',
-    heroGradient: 'linear-gradient(135deg, #7c2d12 0%, #b45309 60%, #d97706 100%)',
+    heroImage: turoImg,
+    heroGradient: 'linear-gradient(135deg, rgba(124,45,18,0.88) 0%, rgba(180,83,9,0.84) 60%, rgba(217,119,6,0.80) 100%)',
     accentGradient: 'linear-gradient(135deg, #b45309, #f59e0b)',
     overview: `On Turo, photos and reviews sell your car. Guests consistently rate cleanliness as the top factor in their review, and a single low-star review can tank your search ranking. Our Turo host detailing program is built around your booking calendar — we coordinate turnaround cleans between guest drop-offs and pickups so your car is always guest-ready, every time, without you having to scramble.`,
     benefits: [
