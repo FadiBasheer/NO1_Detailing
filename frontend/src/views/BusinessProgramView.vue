@@ -231,7 +231,8 @@ const programs = {
     title: 'Barbershops & Salons',
     icon: '✂️',
     tagline: 'Offer clients a car detail while they wait — a unique loyalty perk that sets you apart.',
-    heroGradient: 'linear-gradient(135deg, #2d1b69 0%, #5b21b6 60%, #8b5cf6 100%)',
+    heroImage: barbershopsImg,
+    heroGradient: 'linear-gradient(135deg, rgba(45,27,105,0.88) 0%, rgba(91,33,182,0.84) 60%, rgba(139,92,246,0.80) 100%)',
     accentGradient: 'linear-gradient(135deg, #6d28d9, #a78bfa)',
     overview: `Your clients are already sitting in your chair for 30–90 minutes. What if they walked out to a freshly detailed car? Partnering with NO1 Detailing turns your wait time into a premium add-on experience that clients will talk about — and come back for. It's a simple, low-effort way to increase your average ticket, earn loyalty, and genuinely stand out from every other shop on the block.`,
     benefits: [
