@@ -8,10 +8,8 @@
       backgroundPosition: 'center, center'
     }">
       <div class="hero-inner">
-        <div class="hero-icon">{{ program.icon }}</div>
-        <h1>{{ program.title }}</h1>
         <p class="subtitle">{{ program.tagline }}</p>
-        <router-link :to="`/business-contact?type=${encodeURIComponent(program.title)}`" class="btn-hero">
+        <router-link :to="`/business-contact?type=${encodeURIComponent(slug)}`" class="btn-hero">
           Get a Free Quote
         </router-link>
       </div>
