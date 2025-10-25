@@ -2,7 +2,11 @@
   <div v-if="program" class="program-page">
 
     <!-- Hero -->
-    <section class="hero" :style="{ background: program.heroGradient }">
+    <section class="hero" :style="{
+      backgroundImage: `${program.heroGradient}, url(${program.heroImage})`,
+      backgroundSize: 'auto, cover',
+      backgroundPosition: 'center, center'
+    }">
       <div class="hero-inner">
         <div class="hero-icon">{{ program.icon }}</div>
         <h1>{{ program.title }}</h1>
@@ -266,6 +270,8 @@ const program = computed(() => programs[slug.value] ?? null);
   padding: 80px 24px 64px;
   text-align: center;
   color: white;
+  background-size: auto, cover;
+  background-position: center, center;
 }
 
 .hero-inner {
