@@ -18,7 +18,7 @@
     <!-- Overview -->
     <section class="overview">
       <div class="overview-inner">
-        <h2>Why {{ program.title }}?</h2>
+        <h2>Why Choose Us?</h2>
         <p>{{ program.overview }}</p>
       </div>
     </section>
@@ -56,7 +56,7 @@
       <div class="cta-inner">
         <h2>Ready to get started?</h2>
         <p>Contact us today and we'll build a custom detailing plan for your business.</p>
-        <router-link :to="`/business-contact?type=${encodeURIComponent(program.title)}`" class="btn-cta">
+        <router-link :to="`/business-contact?type=${encodeURIComponent(slug)}`" class="btn-cta">
           Contact Us
         </router-link>
       </div>
@@ -86,8 +86,6 @@ const route = useRoute();
 
 const programs = {
   'fleet-management': {
-    title: 'Fleet Management',
-    icon: '🚗',
     tagline: 'Keep your entire fleet spotless, on schedule, and on-site — no downtime required.',
     heroImage: fleetImg,
     heroGradient: 'linear-gradient(135deg, rgba(30,58,95,0.88) 0%, rgba(37,99,235,0.80) 100%)',
@@ -110,8 +108,6 @@ const programs = {
   },
 
   'car-dealerships': {
-    title: 'Car Dealerships',
-    icon: '🏢',
     tagline: 'Showroom-ready vehicles on demand — new arrivals, trade-ins, and display cars.',
     heroImage: dealershipsImg,
     heroGradient: 'linear-gradient(135deg, rgba(26,26,46,0.88) 0%, rgba(22,33,62,0.84) 60%, rgba(15,52,96,0.80) 100%)',
@@ -134,8 +130,6 @@ const programs = {
   },
 
   'rideshare': {
-    title: 'Uber / Rideshare Drivers',
-    icon: '🚕',
     tagline: 'Maintain a 5-star interior between shifts with flexible detailing that fits your schedule.',
     heroImage: rideshareImg,
     heroGradient: 'linear-gradient(135deg, rgba(6,78,59,0.88) 0%, rgba(6,95,70,0.84) 60%, rgba(5,150,105,0.80) 100%)',
@@ -158,8 +152,6 @@ const programs = {
   },
 
   'turo-hosts': {
-    title: 'Turo Hosts',
-    icon: '🔑',
     tagline: 'Maximize your ratings and bookings with reliable turnaround details between guest rentals.',
     heroImage: turoImg,
     heroGradient: 'linear-gradient(135deg, rgba(124,45,18,0.88) 0%, rgba(180,83,9,0.84) 60%, rgba(217,119,6,0.80) 100%)',
