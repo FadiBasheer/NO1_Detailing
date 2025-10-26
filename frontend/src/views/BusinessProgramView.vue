@@ -174,8 +174,6 @@ const programs = {
   },
 
   'hotels-hospitality': {
-    title: 'Hotels & Hospitality',
-    icon: '🏨',
     tagline: 'Offer guests premium vehicle care as a value-added amenity or concierge service.',
     heroImage: hotelsImg,
     heroGradient: 'linear-gradient(135deg, rgba(30,27,75,0.88) 0%, rgba(55,48,163,0.84) 60%, rgba(99,102,241,0.80) 100%)',
@@ -198,8 +196,6 @@ const programs = {
   },
 
   'restaurants-cafes': {
-    title: 'Restaurants & Cafes',
-    icon: '🍽️',
     tagline: 'Keep delivery vehicles and staff cars clean and professional on a regular schedule.',
     heroImage: restaurantsImg,
     heroGradient: 'linear-gradient(135deg, rgba(127,29,29,0.88) 0%, rgba(185,28,28,0.84) 60%, rgba(239,68,68,0.80) 100%)',
@@ -222,8 +218,6 @@ const programs = {
   },
 
   'barbershops-salons': {
-    title: 'Barbershops & Salons',
-    icon: '✂️',
     tagline: 'Offer clients a car detail while they wait — a unique loyalty perk that sets you apart.',
     heroImage: barbershopsImg,
     heroGradient: 'linear-gradient(135deg, rgba(45,27,105,0.88) 0%, rgba(91,33,182,0.84) 60%, rgba(139,92,246,0.80) 100%)',
