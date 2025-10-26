@@ -263,19 +263,6 @@ const program = computed(() => programs[slug.value] ?? null);
   margin: 0 auto;
 }
 
-.hero-icon {
-  font-size: 3.5rem;
-  margin-bottom: 20px;
-  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
-}
-
-.hero h1 {
-  font-size: 2.8rem;
-  font-weight: 900;
-  margin-bottom: 16px;
-  line-height: 1.15;
-}
-
 .subtitle {
   font-size: 1.15rem;
   opacity: 0.88;
