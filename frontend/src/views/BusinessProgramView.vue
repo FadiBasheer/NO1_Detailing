@@ -88,7 +88,7 @@ const programs = {
   'fleet-management': {
     tagline: 'Keep your entire fleet spotless, on schedule, and on-site — no downtime required.',
     heroImage: fleetImg,
-    heroGradient: 'linear-gradient(135deg, rgba(30,58,95,0.88) 0%, rgba(37,99,235,0.80) 100%)',
+
     accentGradient: 'linear-gradient(135deg, #1e40af, #3b82f6)',
     overview: `Managing a fleet means every vehicle is a direct reflection of your brand. Dirty or neglected vehicles signal poor attention to detail to your clients and employees. Our fleet detailing program keeps every vehicle in your inventory clean, professional, and road-ready — on a schedule that works around your operations, not against them. We come to your lot or depot, handle everything on-site, and report back on each vehicle's condition.`,
     benefits: [
