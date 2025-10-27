@@ -3,9 +3,9 @@
 
     <!-- Hero -->
     <section class="hero" :style="{
-      backgroundImage: `${program.heroGradient}, url(${program.heroImage})`,
-      backgroundSize: 'auto, cover',
-      backgroundPosition: 'center, center'
+      backgroundImage: `url(${program.heroImage})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center'
     }">
       <div class="hero-inner">
         <p class="subtitle">{{ program.tagline }}</p>
@@ -254,8 +254,6 @@ const program = computed(() => programs[slug.value] ?? null);
   padding: 80px 24px 64px;
   text-align: center;
   color: white;
-  background-size: auto, cover;
-  background-position: center, center;
 }
 
 .hero-inner {
