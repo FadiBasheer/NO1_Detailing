@@ -253,13 +253,17 @@ const program = computed(() => programs[slug.value] ?? null);
 .hero-inner {
   max-width: 680px;
   margin: 0 auto;
+  background: rgba(0,0,0,0.45);
+  border-radius: 16px;
+  padding: 40px 36px;
 }
 
 .subtitle {
   font-size: 1.15rem;
-  opacity: 0.88;
+  color: white;
   line-height: 1.7;
   margin-bottom: 36px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.7), 0 1px 3px rgba(0,0,0,0.9);
 }
 
 .btn-hero {
