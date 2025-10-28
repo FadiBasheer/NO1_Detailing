@@ -110,7 +110,6 @@ const programs = {
   'car-dealerships': {
     tagline: 'Showroom-ready vehicles on demand — new arrivals, trade-ins, and display cars.',
     heroImage: dealershipsImg,
-    heroGradient: 'linear-gradient(135deg, rgba(26,26,46,0.88) 0%, rgba(22,33,62,0.84) 60%, rgba(15,52,96,0.80) 100%)',
     accentGradient: 'linear-gradient(135deg, #0f3460, #533483)',
     overview: `Every vehicle on your lot is a sales opportunity, and presentation is everything. A clean, gleaming car closes deals faster and justifies higher price points. Our dealership detailing program gives your sales team a reliable partner to prep new arrivals, turn around trade-ins quickly, and keep display vehicles looking showroom-perfect every day — without pulling your staff away from selling.`,
     benefits: [
@@ -132,7 +131,6 @@ const programs = {
   'rideshare': {
     tagline: 'Maintain a 5-star interior between shifts with flexible detailing that fits your schedule.',
     heroImage: rideshareImg,
-    heroGradient: 'linear-gradient(135deg, rgba(6,78,59,0.88) 0%, rgba(6,95,70,0.84) 60%, rgba(5,150,105,0.80) 100%)',
     accentGradient: 'linear-gradient(135deg, #065f46, #34d399)',
     overview: `Your rating is everything in rideshare. Passengers notice a clean, fresh-smelling car the moment they get in — and they leave better reviews because of it. Between long shifts and back-to-back rides, it's hard to find time for a proper clean. Our mobile detailing service comes to your home, your parking spot, or wherever your car is sitting between shifts, so you can maintain a 5-star interior without losing earning hours.`,
     benefits: [
