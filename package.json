@@ -1,4 +1,5 @@
 {
+  "name": "Yumeeco",
   "dependencies": {
     "dotenv": "^17.2.3"
   }
