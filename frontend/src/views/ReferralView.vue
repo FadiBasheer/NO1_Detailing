@@ -16,7 +16,7 @@
       <!-- Referral link card -->
       <div class="link-card">
         <h2>Your Referral Link</h2>
-        <p class="link-desc">Share this link with friends. They get 10% off, you help them discover NO1 Detailing.</p>
+        <p class="link-desc">Share this link with friends. They get 10% off, you help them discover Yumeeco.</p>
         <div class="link-row">
           <input :value="referralLink" readonly class="link-input" />
           <button @click="copyLink" class="btn-copy">{{ copied ? 'Copied!' : 'Copy' }}</button>
@@ -82,7 +82,7 @@ const shareLink = () => {
   if (navigator.share) {
     navigator.share({
       title: 'Get 10% off your first car detail!',
-      text: "I've been using NO1 Detailing — mobile car detailing that comes to you. Use my link and get 10% off your first booking.",
+      text: "I've been using Yumeeco — mobile car detailing that comes to you. Use my link and get 10% off your first booking.",
       url: referralLink.value,
     });
   } else {

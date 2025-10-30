@@ -216,7 +216,7 @@ const programs = {
     tagline: 'Offer clients a car detail while they wait — a unique loyalty perk that sets you apart.',
     heroImage: barbershopsImg,
     accentGradient: 'linear-gradient(135deg, #6d28d9, #a78bfa)',
-    overview: `Your clients are already sitting in your chair for 30–90 minutes. What if they walked out to a freshly detailed car? Partnering with NO1 Detailing turns your wait time into a premium add-on experience that clients will talk about — and come back for. It's a simple, low-effort way to increase your average ticket, earn loyalty, and genuinely stand out from every other shop on the block.`,
+    overview: `Your clients are already sitting in your chair for 30–90 minutes. What if they walked out to a freshly detailed car? Partnering with Yumeeco turns your wait time into a premium add-on experience that clients will talk about — and come back for. It's a simple, low-effort way to increase your average ticket, earn loyalty, and genuinely stand out from every other shop on the block.`,
     benefits: [
       { icon: '💈', title: 'In-Appointment Details', desc: 'Clients drop their keys at check-in. We clean their car in your parking lot while they\'re in the chair.' },
       { icon: '💰', title: 'New Revenue Stream', desc: 'Add detailing as a paid upsell or loyalty reward. We handle the service — you keep a referral margin.' },

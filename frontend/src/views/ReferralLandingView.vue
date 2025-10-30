@@ -5,7 +5,7 @@
       <div class="hero-badge">Friend Referral</div>
       <h1>Your Friend Hooked You Up.</h1>
       <p class="hero-sub">
-        You've been invited to NO1 Detailing. Sign up and get
+        You've been invited to Yumeeco. Sign up and get
         <strong>10% off your first booking</strong> — applied automatically at checkout.
       </p>
       <button @click="claimOffer" class="btn-claim">Claim My 10% Discount</button>
@@ -13,7 +13,7 @@
     </section>
 
     <section class="what-you-get">
-      <h2>Why NO1 Detailing?</h2>
+      <h2>Why Yumeeco?</h2>
       <div class="included-grid">
         <div class="included-card">
           <span class="inc-icon">🚗</span>
