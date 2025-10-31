@@ -4,7 +4,7 @@ import { authMiddleware } from '../middleware/auth.middleware.js';
 
 const router = express.Router();
 
-const helcimToken = process.env.HELCIM_API_TEST;
+const helcimToken = process.env.HELCIM_API_TOKEN;
 
 // Reserve a slot temporarily (status: "PENDING")
 router.post('/reserve-slot', authMiddleware, async (req, res) => {
@@ -174,8 +174,7 @@ router.post('/payment-link', authMiddleware, async (req, res) => {
       });
     }
 
-    const helcimUrl = `${process.env.HELCIM_HOSTED_URL}?token=${helcimToken}`;
-
+    const helcimUrl = `https://yumeeco.myhelcim.com/hosted/?token=${helcimToken}`;
     res.json({
       action: helcimUrl,
       amount: totalAmount,
