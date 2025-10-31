@@ -669,13 +669,13 @@ const faqs = [
 ];
 
 // ── Membership state ───────────────────────────────────────────────────────
-const membership = ref(JSON.parse(localStorage.getItem('no1_membership') || 'null'));
+const membership = ref(JSON.parse(localStorage.getItem('yumeeco_membership') || 'null'));
 const isMember = computed(() =>
   membership.value && membership.value.status !== 'cancelled'
 );
 
 function saveMembership() {
-  localStorage.setItem('no1_membership', JSON.stringify(membership.value));
+  localStorage.setItem('yumeeco_membership', JSON.stringify(membership.value));
 }
 
 // ── Sign-up modal ──────────────────────────────────────────────────────────
@@ -684,7 +684,7 @@ const billingForm = reactive({ name: '', card: '', expiry: '', cvv: '' });
 
 function startSignup(planId, isRejoin = false) {
   if (!user.value) {
-    if (planId) sessionStorage.setItem('no1_pending_plan', planId);
+    if (planId) sessionStorage.setItem('yumeeco_pending_plan', planId);
     router.push('/login');
     return;
   }
@@ -845,9 +845,9 @@ function scrollToPlans() {
 
 // ── On mount: handle redirect-back after login ─────────────────────────────
 onMounted(() => {
-  const pending = sessionStorage.getItem('no1_pending_plan');
+  const pending = sessionStorage.getItem('yumeeco_pending_plan');
   if (pending && user.value) {
-    sessionStorage.removeItem('no1_pending_plan');
+    sessionStorage.removeItem('yumeeco_pending_plan');
     startSignup(pending);
   }
 });
