@@ -33,7 +33,13 @@ const handleLogin = async () => {
   error.value = '';
   try {
     await auth.login(credentials.value);
-    router.push('/');
+    const redirectTo = sessionStorage.getItem('redirectAfterLogin');
+    if (redirectTo) {
+      sessionStorage.removeItem('redirectAfterLogin');
+      window.location.href = redirectTo; // Use window.location to force reload
+    } else {
+      router.push('/');
+    }
   } catch (err) {
     error.value = 'Login failed';
   } finally {

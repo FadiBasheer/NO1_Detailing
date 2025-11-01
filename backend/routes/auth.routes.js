@@ -77,7 +77,43 @@ router.post('/register', registerLimiter, async (req, res) => {
       });
     }
 
-    res.status(201).json({ message: 'User created', user: { id: user.id, email: user.email, role: user.role } });
+    // Generate tokens for auto-login after registration
+    const accessToken = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
+
+    // Store refresh token in database
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + 7); // 7 days
+    await prisma.refreshToken.create({
+      data: {
+        token: refreshToken,
+        userId: user.id,
+        expiresAt
+      }
+    });
+
+    // Check if this user has an unused referral discount
+    const pendingReferral = await prisma.referral.findUnique({
+      where: { refereeId: user.id },
+      select: { discountUsed: true }
+    });
+    const referralDiscountPending = !!(pendingReferral && !pendingReferral.discountUsed);
+
+    res.status(201).json({ 
+      message: 'User created and logged in', 
+      accessToken, 
+      refreshToken, 
+      user: { 
+        id: user.id, 
+        email: user.email, 
+        role: user.role, 
+        promoCode: user.promoCode, 
+        promoUsed: user.promoUsed, 
+        completedBookingsCount: user.completedBookingsCount, 
+        referralCode: user.referralCode, 
+        referralDiscountPending 
+      } 
+    });
   } catch (error) {
     console.error('Registration error:', error);
     res.status(400).json({ message: 'Registration failed' });

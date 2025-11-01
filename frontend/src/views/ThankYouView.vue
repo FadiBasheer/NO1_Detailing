@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import axios from '../axios';
 
 // Helcim redirects back with transactionId in the query string
 const route = useRoute();
+const router = useRouter();
 
 type State = 'verifying' | 'confirmed' | 'failed';
 const state = ref<State>('verifying');
@@ -27,6 +28,13 @@ onMounted(async () => {
     localStorage.removeItem('pendingBookingId');
     state.value = 'confirmed';
   } catch (err: any) {
+    if (err.response?.status === 401) {
+      // Not authenticated, redirect to login
+      // Store the current URL to redirect back after login
+      sessionStorage.setItem('redirectAfterLogin', window.location.href);
+      router.push('/login');
+      return;
+    }
     state.value = 'failed';
     errorMsg.value = err.response?.data?.message || 'Payment verification failed.';
   }

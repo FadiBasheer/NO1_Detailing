@@ -36,7 +36,20 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async register(userData: Record<string, any>) {
-      await axios.post('/api/auth/register', userData);
+      const res = await axios.post('/api/auth/register', userData);
+      this.accessToken = res.data.accessToken;
+      this.refreshToken = res.data.refreshToken;
+      this.user = res.data.user;
+      
+      if (this.refreshToken) {
+        localStorage.setItem('refreshToken', this.refreshToken);
+      }
+      if (this.user) {
+        localStorage.setItem('user', JSON.stringify(this.user));
+      }
+      if (this.accessToken) {
+        localStorage.setItem('accessToken', this.accessToken);
+      }
     },
 
     async refreshAccessToken() {

@@ -53,7 +53,20 @@ const handleRegister = async () => {
     await auth.register(payload);
     sessionStorage.removeItem('promoCode');
     sessionStorage.removeItem('referralCode');
-    router.push('/login');
+    // Check for redirect after login
+    const redirectTo = sessionStorage.getItem('redirectAfterLogin');
+    if (redirectTo) {
+      sessionStorage.removeItem('redirectAfterLogin');
+      window.location.href = redirectTo;
+    } else {
+      // Check if there are vehicles in cart, redirect to booking
+      const vehicles = localStorage.getItem('vehicles');
+      if (vehicles && JSON.parse(vehicles).length > 0) {
+        router.push('/booking');
+      } else {
+        router.push('/');
+      }
+    }
   } catch (err) {
     error.value = 'Registration failed';
   } finally {

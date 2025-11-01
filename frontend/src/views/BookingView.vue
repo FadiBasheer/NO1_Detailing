@@ -332,6 +332,7 @@ export default {
           { name: "amount", value: amount },
           // Optional: include booking ID so you can match it later if Helcim redirects back
           { name: "bookingId", value: bookingId },
+          { name: "return_url", value: `${window.location.origin}/thank-you` },
         ];
 
         fields.forEach((f) => {

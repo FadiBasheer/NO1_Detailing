@@ -64,7 +64,8 @@ Edit `backend/.env` and update the `DATABASE_URL`:
 
 ```env
 DATABASE_URL=postgresql://postgres:your_password@localhost:5432/mobile_detailing
-HELCIM_API_TOKEN=e5c8f286d7dff51b29a1d4
+HELCIM_API_TOKEN=your_helcim_api_token_here
+HELCIM_API_BASE_URL=https://api.helcim.com/v2/
 PORT=5000
 JWT_SECRET=your-super-secret-jwt-key-here
 JWT_REFRESH_SECRET=your-super-secret-refresh-key-here
@@ -72,6 +73,7 @@ JWT_REFRESH_SECRET=your-super-secret-refresh-key-here
 
 Replace:
 - `your_password` with your PostgreSQL password
+- `your_helcim_api_token_here` with your actual Helcim API token (from your Helcim merchant dashboard)
 - Keep other values as-is (update secrets in production)
 
 ### 4. Run Prisma Migration
