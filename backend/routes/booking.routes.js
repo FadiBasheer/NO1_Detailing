@@ -176,7 +176,7 @@ router.post('/payment-link', authMiddleware, async (req, res) => {
       });
     }
 
-    const helcimUrl = `https://yumeeco.myhelcim.com/hosted/?token=${helcimToken}`;
+    const helcimUrl = `https://yumeeco.myhelcim.com/hosted/?token=${encodeURIComponent(helcimToken)}`;
     const amountHash = crypto.createHash('sha256').update(totalAmount.toFixed(2) + helcimSecret).digest('hex');
     const returnUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/thank-you`;
     const paymentUrl = `${helcimUrl}&amount=${totalAmount.toFixed(2)}&amountHash=${amountHash}&return_url=${encodeURIComponent(returnUrl)}&bookingId=${bookingId}`;
