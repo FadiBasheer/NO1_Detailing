@@ -5,8 +5,23 @@ import { authMiddleware } from '../middleware/auth.middleware.js';
 
 const router = express.Router();
 
-const apiToken = process.env.HELCIM_API_TOKEN;
-const paymentToken = process.env.HELCIM_PAYMENT_TOKEN;
+const isTest = process.env.NODE_ENV !== 'production';
+
+const apiToken = isTest
+  ? process.env.HELCIM_API_TOKEN_TEST
+  : process.env.HELCIM_API_TOKEN;
+
+const paymentToken = isTest
+  ? process.env.HELCIM_PAYMENT_TOKEN_TEST
+  : process.env.HELCIM_PAYMENT_TOKEN;
+
+const baseUrl = isTest
+  ? 'https://test-yumeeco.myhelcim.com/hosted/'
+  : 'https://yumeeco.myhelcim.com/hosted/';
+
+const helcimUrl = `${baseUrl}?token=${encodeURIComponent(paymentToken)}`;
+
+
 
 const SERVICE_PRICE_MAP = {
   Interior: { price: 100, durationMinutes: 60 },
@@ -228,8 +243,8 @@ router.post('/payment-link', authMiddleware, async (req, res) => {
       });
     }
 
-    const helcimUrl = `https://yumeeco.myhelcim.com/hosted/?token=${paymentToken}`;
-
+    const helcimUrl = `${baseUrl}?token=${encodeURIComponent(paymentToken)}`;
+    
     const paymentUrl = `${helcimUrl}&amount=${totalAmount.toFixed(2)}`;
     res.json({
       url: paymentUrl,
