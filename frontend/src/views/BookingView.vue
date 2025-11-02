@@ -313,41 +313,19 @@ export default {
 
         this.message = "Redirecting to secure payment...";
 
-        // 2️⃣ Get payment form data from your server (amount calculated server-side)
+        // 2️⃣ Get payment URL from your server
         const paymentRes = await axios.post(
           `/api/payment-link`,
           { bookingId }
         );
 
+        const { url } = paymentRes.data;
 
-        const { action, amount } = paymentRes.data;
-
-        // 3️⃣ Build Helcim payment form dynamically and auto-submit
-        const form = document.createElement("form");
-        form.method = "POST";
-        form.action = action;
-        form.target = "_self"; // same tab
-
-        const fields = [
-          { name: "amount", value: amount },
-          // Optional: include booking ID so you can match it later if Helcim redirects back
-          { name: "bookingId", value: bookingId },
-          { name: "return_url", value: `${window.location.origin}/thank-you` },
-        ];
-
-        fields.forEach((f) => {
-          const input = document.createElement("input");
-          input.type = "hidden";
-          input.name = f.name;
-          input.value = f.value;
-          form.appendChild(input);
-        });
-
+        // 3️⃣ Redirect to Helcim payment page
         // Store bookingId so ThankYouView can confirm it after Helcim redirects back
         localStorage.setItem('pendingBookingId', bookingId);
 
-        document.body.appendChild(form);
-        form.submit();
+        window.location.href = url;
 
       } catch (error) {
         console.error("Error starting payment:", error);

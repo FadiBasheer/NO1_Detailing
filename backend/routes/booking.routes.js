@@ -1,10 +1,12 @@
 import express from 'express';
+import crypto from 'crypto';
 import prisma from '../prisma/client.js';
 import { authMiddleware } from '../middleware/auth.middleware.js';
 
 const router = express.Router();
 
 const helcimToken = process.env.HELCIM_API_TOKEN;
+const helcimSecret = process.env.HELCIM_SECRET;
 
 // Reserve a slot temporarily (status: "PENDING")
 router.post('/reserve-slot', authMiddleware, async (req, res) => {
@@ -175,9 +177,11 @@ router.post('/payment-link', authMiddleware, async (req, res) => {
     }
 
     const helcimUrl = `https://yumeeco.myhelcim.com/hosted/?token=${helcimToken}`;
+    const amountHash = crypto.createHash('sha256').update(totalAmount.toFixed(2) + helcimSecret).digest('hex');
+    const returnUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/thank-you`;
+    const paymentUrl = `${helcimUrl}&amount=${totalAmount.toFixed(2)}&amountHash=${amountHash}&return_url=${encodeURIComponent(returnUrl)}&bookingId=${bookingId}`;
     res.json({
-      action: helcimUrl,
-      amount: totalAmount,
+      url: paymentUrl,
       discountApplied: discountAmount > 0,
       discountAmount
     });
