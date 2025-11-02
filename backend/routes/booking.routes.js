@@ -5,8 +5,8 @@ import { authMiddleware } from '../middleware/auth.middleware.js';
 
 const router = express.Router();
 
-const helcimToken = process.env.HELCIM_API_TOKEN;
-const helcimSecret = process.env.HELCIM_SECRET;
+const apiToken = process.env.HELCIM_API_TOKEN;
+const paymentToken = process.env.HELCIM_PAYMENT_TOKEN;
 
 const SERVICE_PRICE_MAP = {
   Interior: { price: 100, durationMinutes: 60 },
@@ -228,10 +228,9 @@ router.post('/payment-link', authMiddleware, async (req, res) => {
       });
     }
 
-    const helcimUrl = `https://yumeeco.myhelcim.com/hosted/?token=${encodeURIComponent(helcimToken)}`;
-    const amountHash = crypto.createHash('sha256').update(totalAmount.toFixed(2) + helcimSecret).digest('hex');
-    const returnUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/thank-you`;
-    const paymentUrl = `${helcimUrl}&amount=${totalAmount.toFixed(2)}&amountHash=${amountHash}&return_url=${encodeURIComponent(returnUrl)}&bookingId=${bookingId}`;
+    const helcimUrl = `https://yumeeco.myhelcim.com/hosted/?token=${paymentToken}`;
+
+    const paymentUrl = `${helcimUrl}&amount=${totalAmount.toFixed(2)}`;
     res.json({
       url: paymentUrl,
       discountApplied: discountAmount > 0,
@@ -262,7 +261,7 @@ router.post('/payment-success', authMiddleware, async (req, res) => {
         {
           method: 'GET',
           headers: {
-            'api-token': helcimToken,
+            'api-token': apiToken,
             'accept': 'application/json',
           },
         }
