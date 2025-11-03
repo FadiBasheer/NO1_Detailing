@@ -8,6 +8,18 @@ const router = express.Router();
 const helcimToken = process.env.HELCIM_API_TOKEN;
 const helcimSecret = process.env.HELCIM_SECRET;
 
+const SERVICE_PRICE_MAP = {
+  Interior: { price: 100, durationMinutes: 60 },
+  Exterior: { price: 80, durationMinutes: 45 },
+  Both: { price: 160, durationMinutes: 90 },
+};
+
+const ADDON_PRICE_MAP = {
+  'Engine Cleaning': { price: 40, durationMinutes: 30 },
+  Polishing: { price: 60, durationMinutes: 45 },
+  'Mold Cleaning': { price: 75, durationMinutes: 60 },
+};
+
 // Reserve a slot temporarily (status: "PENDING")
 router.post('/reserve-slot', authMiddleware, async (req, res) => {
   try {
@@ -69,8 +81,25 @@ router.post('/reserve-slot', authMiddleware, async (req, res) => {
       // Look up service by name, create if missing
       let service = await prisma.service.findFirst({ where: { name: v.service } });
       if (!service) {
+        const serviceData = SERVICE_PRICE_MAP[v.service];
+        if (!serviceData) {
+          return res.status(400).json({ message: `Unknown service: ${v.service}` });
+        }
         service = await prisma.service.create({
-          data: { name: v.service, price: 0, durationMinutes: 60 }
+          data: {
+            name: v.service,
+            price: serviceData.price,
+            durationMinutes: serviceData.durationMinutes,
+          }
+        });
+      } else if ((service.price === 0 || service.durationMinutes === 0) && SERVICE_PRICE_MAP[v.service]) {
+        const serviceData = SERVICE_PRICE_MAP[v.service];
+        service = await prisma.service.update({
+          where: { id: service.id },
+          data: {
+            price: serviceData.price,
+            durationMinutes: serviceData.durationMinutes,
+          }
         });
       }
 
@@ -79,8 +108,25 @@ router.post('/reserve-slot', authMiddleware, async (req, res) => {
       for (const addonName of (v.addons || [])) {
         let addon = await prisma.addon.findFirst({ where: { name: addonName } });
         if (!addon) {
+          const addonData = ADDON_PRICE_MAP[addonName];
+          if (!addonData) {
+            return res.status(400).json({ message: `Unknown addon: ${addonName}` });
+          }
           addon = await prisma.addon.create({
-            data: { name: addonName, price: 0, durationMinutes: 30 }
+            data: {
+              name: addonName,
+              price: addonData.price,
+              durationMinutes: addonData.durationMinutes,
+            }
+          });
+        } else if ((addon.price === 0 || addon.durationMinutes === 0) && ADDON_PRICE_MAP[addonName]) {
+          const addonData = ADDON_PRICE_MAP[addonName];
+          addon = await prisma.addon.update({
+            where: { id: addon.id },
+            data: {
+              price: addonData.price,
+              durationMinutes: addonData.durationMinutes,
+            }
           });
         }
         addonRecords.push(addon);
@@ -142,8 +188,14 @@ router.post('/payment-link', authMiddleware, async (req, res) => {
     }
 
     // Calculate total server-side from actual service/addon prices
-    const serviceTotal = booking.services.reduce((sum, bs) => sum + bs.service.price, 0);
-    const addonTotal = booking.addons.reduce((sum, ba) => sum + ba.addon.price, 0);
+    const serviceTotal = booking.services.reduce((sum, bs) => {
+      const mapped = SERVICE_PRICE_MAP[bs.service.name];
+      return sum + (bs.service.price > 0 ? bs.service.price : mapped?.price ?? 0);
+    }, 0);
+    const addonTotal = booking.addons.reduce((sum, ba) => {
+      const mapped = ADDON_PRICE_MAP[ba.addon.name];
+      return sum + (ba.addon.price > 0 ? ba.addon.price : mapped?.price ?? 0);
+    }, 0);
     let totalAmount = serviceTotal + addonTotal;
 
     const user = await prisma.user.findUnique({ where: { id: req.user.id } });
