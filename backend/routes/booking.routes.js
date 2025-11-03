@@ -19,9 +19,6 @@ const baseUrl = isTest
   ? 'https://test-yumeeco.myhelcim.com/hosted/'
   : 'https://yumeeco.myhelcim.com/hosted/';
 
-const helcimUrl = `${baseUrl}?token=${encodeURIComponent(paymentToken)}`;
-
-
 
 const SERVICE_PRICE_MAP = {
   Interior: { price: 100, durationMinutes: 60 },
@@ -244,7 +241,7 @@ router.post('/payment-link', authMiddleware, async (req, res) => {
     }
 
     const helcimUrl = `${baseUrl}?token=${encodeURIComponent(paymentToken)}`;
-    
+
     const paymentUrl = `${helcimUrl}&amount=${totalAmount.toFixed(2)}`;
     res.json({
       url: paymentUrl,
@@ -272,7 +269,7 @@ router.post('/payment-success', authMiddleware, async (req, res) => {
     let helcimTransaction;
     try {
       const helcimRes = await fetch(
-        `${process.env.HELCIM_API_BASE_URL}transactions/${encodeURIComponent(transactionId)}`,
+        `https://api.helcim.com/v2/transactions/${encodeURIComponent(transactionId)}`,
         {
           method: 'GET',
           headers: {
