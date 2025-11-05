@@ -325,7 +325,11 @@ export default {
         // Store bookingId so ThankYouView can confirm it after Helcim redirects back
         localStorage.setItem('pendingBookingId', bookingId);
 
-        window.location.href = url;
+        if (window.top) {
+          window.top.location.href = url;
+        } else {
+          window.location.href = url;
+        }
 
       } catch (error) {
         console.error("Error starting payment:", error);
