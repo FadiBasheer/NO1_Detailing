@@ -12,31 +12,48 @@ const state = ref<State>('verifying');
 const errorMsg = ref('');
 
 onMounted(async () => {
-  // transactionId comes from Helcim's redirect query params
   const transactionId = route.query.transactionId as string | undefined;
   const bookingId = localStorage.getItem('pendingBookingId');
 
-  if (!transactionId || !bookingId) {
-    // No transaction data — likely a direct page visit or Helcim declined before redirecting
+  // Prevent duplicate verification
+  const alreadyProcessed = sessionStorage.getItem('paymentVerified');
+  if (alreadyProcessed === transactionId) {
+    state.value = 'confirmed';
+    return;
+  }
+
+  if (!transactionId) {
     state.value = 'failed';
-    errorMsg.value = 'No payment data received.';
+    errorMsg.value = 'Payment was cancelled or not completed.';
+    localStorage.removeItem('pendingBookingId');
+    return;
+  }
+
+  if (!bookingId || bookingId.length < 10) {
+    state.value = 'failed';
+    errorMsg.value = 'Invalid booking reference.';
     return;
   }
 
   try {
     await axios.post('/api/payment-success', { bookingId, transactionId });
+
+    sessionStorage.setItem('paymentVerified', transactionId);
     localStorage.removeItem('pendingBookingId');
+
     state.value = 'confirmed';
   } catch (err: any) {
+    localStorage.removeItem('pendingBookingId');
+
     if (err.response?.status === 401) {
-      // Not authenticated, redirect to login
-      // Store the current URL to redirect back after login
       sessionStorage.setItem('redirectAfterLogin', window.location.href);
       router.push('/login');
       return;
     }
+
     state.value = 'failed';
-    errorMsg.value = err.response?.data?.message || 'Payment verification failed.';
+    errorMsg.value =
+      err.response?.data?.message || 'Payment verification failed.';
   }
 });
 </script>
