@@ -16,8 +16,13 @@ export default {
   components: {
     HeaderSection,
     FooterSection,
+  },
+  mounted() {
+    if (window.top !== window.self) {
+      window.top.location.href = window.location.href;
+    }
   }
-};
+}
 </script>
 
 <style>
