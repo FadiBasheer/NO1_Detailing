@@ -242,7 +242,9 @@ router.post('/payment-link', authMiddleware, async (req, res) => {
 
     const helcimUrl = `${baseUrl}?token=${encodeURIComponent(paymentToken)}`;
 
-    const paymentUrl = `${helcimUrl}&amount=${totalAmount.toFixed(2)}`;
+    const amountStr = totalAmount.toFixed(2);
+    const amountHash = crypto.createHmac('sha256', paymentToken).update(amountStr).digest('hex');
+    const paymentUrl = `${helcimUrl}&amount=${amountStr}&amountHash=${amountHash}`;
     res.json({
       url: paymentUrl,
       discountApplied: discountAmount > 0,
