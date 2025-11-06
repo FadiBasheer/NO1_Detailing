@@ -12,6 +12,13 @@ const state = ref<State>('verifying');
 const errorMsg = ref('');
 
 onMounted(async () => {
+  // HelcimPay.js flow: BookingView already verified the payment before navigating here
+  if (history.state?.transactionId) {
+    state.value = 'confirmed';
+    return;
+  }
+
+  // Legacy hosted-page redirect flow: verify the transaction here
   const transactionId = route.query.transactionId as string | undefined;
   const bookingId = localStorage.getItem('pendingBookingId');
 

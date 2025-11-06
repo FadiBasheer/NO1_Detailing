@@ -1,5 +1,4 @@
 import express from 'express';
-import crypto from 'crypto';
 import prisma from '../prisma/client.js';
 import { authMiddleware } from '../middleware/auth.middleware.js';
 
@@ -10,14 +9,6 @@ const isTest = process.env.NODE_ENV !== 'production';
 const apiToken = isTest
   ? process.env.HELCIM_API_TOKEN_TEST
   : process.env.HELCIM_API_TOKEN;
-
-const paymentToken = isTest
-  ? process.env.HELCIM_PAYMENT_TOKEN_TEST
-  : process.env.HELCIM_PAYMENT_TOKEN;
-
-const baseUrl = isTest
-  ? 'https://test-yumeeco.myhelcim.com/hosted/'
-  : 'https://yumeeco.myhelcim.com/hosted/';
 
 
 const SERVICE_PRICE_MAP = {
@@ -240,16 +231,48 @@ router.post('/payment-link', authMiddleware, async (req, res) => {
       });
     }
 
-    const helcimUrl = `${baseUrl}?token=${encodeURIComponent(paymentToken)}`;
-
-    const amountStr = totalAmount.toFixed(2);
-    const amountHash = crypto.createHmac('sha256', paymentToken).update(amountStr).digest('hex');
-    const paymentUrl = `${helcimUrl}&amount=${amountStr}&amountHash=${amountHash}`;
-    res.json({
-      url: paymentUrl,
-      discountApplied: discountAmount > 0,
-      discountAmount
+    const helcimRes = await fetch('https://api.helcim.com/v2/helcim-pay/initialize', {
+      method: 'POST',
+      headers: {
+        'accept': 'application/json',
+        'api-token': apiToken,
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        paymentType: 'purchase',
+        amount: parseFloat(totalAmount.toFixed(2)),
+        currency: 'CAD',
+        paymentMethod: 'cc-ach',
+      })
     });
+
+    const rawBody = await helcimRes.text();
+    console.log('[Helcim] initialize status:', helcimRes.status, 'body:', rawBody);
+
+    if (!helcimRes.ok) {
+      return res.status(502).json({ message: 'Could not initialize payment session.', detail: rawBody });
+    }
+
+    let parsedBody;
+    try { parsedBody = JSON.parse(rawBody); } catch {
+      return res.status(502).json({ message: 'Invalid response from payment provider.' });
+    }
+
+    const { checkoutToken, secretToken } = parsedBody;
+
+    if (!checkoutToken) {
+      console.error('[Helcim] No checkoutToken in response:', rawBody);
+      return res.status(502).json({ message: 'Payment provider did not return a checkout token.' });
+    }
+
+    if (secretToken) {
+      await prisma.booking.update({
+        where: { id: bookingId },
+        data: { helcimSecretToken: secretToken }
+      });
+    }
+
+    res.json({ checkoutToken, discountApplied: discountAmount > 0, discountAmount });
   } catch (error) {
     console.error('Error generating payment link:', error);
     res.status(500).json({ message: 'Error generating payment link.' });

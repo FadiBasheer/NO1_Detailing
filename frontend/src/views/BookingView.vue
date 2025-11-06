@@ -130,7 +130,25 @@ export default {
       vehicles: [],
       message: "",
       availableTimeSlots: [],
+      currentCheckoutToken: null,
     };
+  },
+
+  mounted() {
+    this._helcimReady = new Promise((resolve, reject) => {
+      const existing = document.querySelector('script[src*="helcim-pay"]');
+      if (existing) { resolve(); return; }
+      const s = document.createElement('script');
+      s.src = 'https://secure.helcim.app/helcim-pay/services/start.js';
+      s.onload = resolve;
+      s.onerror = () => reject(new Error('Failed to load HelcimPay.js'));
+      document.head.appendChild(s);
+    });
+    window.addEventListener('message', this.handleHelcimMessage);
+  },
+
+  beforeUnmount() {
+    window.removeEventListener('message', this.handleHelcimMessage);
   },
 
   created() {
@@ -289,6 +307,34 @@ export default {
       }
     },
 
+    async handleHelcimMessage(event) {
+      if (!this.currentCheckoutToken) return;
+      if (event.data?.eventName !== `helcim-pay-js-${this.currentCheckoutToken}`) return;
+
+      const status = event.data.eventStatus;
+
+      if (status === 'SUCCESS') {
+        const msg = typeof event.data.eventMessage === 'string'
+          ? JSON.parse(event.data.eventMessage)
+          : event.data.eventMessage;
+        const transactionId = msg?.data?.transactionId;
+        const bookingId = localStorage.getItem('pendingBookingId');
+        // eslint-disable-next-line no-undef
+        if (typeof removeHelcimPayIframe === 'function') removeHelcimPayIframe();
+        try {
+          await axios.post('/api/payment-success', { transactionId, bookingId });
+          localStorage.removeItem('pendingBookingId');
+          this.$router.push({ path: '/thank-you', state: { transactionId } });
+        } catch (err) {
+          this.message = err.response?.data?.message || 'Payment received but booking confirmation failed. Please contact support.';
+        }
+      } else if (status === 'ABORTED') {
+        // eslint-disable-next-line no-undef
+        if (typeof removeHelcimPayIframe === 'function') removeHelcimPayIframe();
+        this.message = 'Payment was cancelled. Please try again.';
+      }
+    },
+
     async submitBooking() {
       if (!this.date || !this.time) {
         alert("Please fill in date and time before proceeding.");
@@ -311,7 +357,7 @@ export default {
 
         const bookingId = reserveRes.data.bookingId;
 
-        this.message = "Redirecting to secure payment...";
+        this.message = "Opening secure payment...";
 
         // 2️⃣ Get payment URL from your server
         const paymentRes = await axios.post(
@@ -319,17 +365,20 @@ export default {
           { bookingId }
         );
 
-        const { url } = paymentRes.data;
+        const { checkoutToken } = paymentRes.data;
+        console.log('[HelcimPay] checkoutToken:', checkoutToken || 'MISSING');
 
-        // 3️⃣ Redirect to Helcim payment page
-        // Store bookingId so ThankYouView can confirm it after Helcim redirects back
-        localStorage.setItem('pendingBookingId', bookingId);
-
-        if (window.top) {
-          window.top.location.href = url;
-        } else {
-          window.location.href = url;
+        if (!checkoutToken) {
+          this.message = 'Payment session could not be created. Please try again.';
+          return;
         }
+
+        // 3️⃣ Open HelcimPay.js modal (stays on this page — no redirect)
+        localStorage.setItem('pendingBookingId', bookingId);
+        this.currentCheckoutToken = checkoutToken;
+        await this._helcimReady;
+        // eslint-disable-next-line no-undef
+        appendHelcimPayIframe(checkoutToken);
 
       } catch (error) {
         console.error("Error starting payment:", error);
