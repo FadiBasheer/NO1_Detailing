@@ -134,23 +134,6 @@ export default {
     };
   },
 
-  mounted() {
-    this._helcimReady = new Promise((resolve, reject) => {
-      const existing = document.querySelector('script[src*="helcim-pay"]');
-      if (existing) { resolve(); return; }
-      const s = document.createElement('script');
-      s.src = 'https://secure.helcim.app/helcim-pay/services/start.js';
-      s.onload = resolve;
-      s.onerror = () => reject(new Error('Failed to load HelcimPay.js'));
-      document.head.appendChild(s);
-    });
-    window.addEventListener('message', this.handleHelcimMessage);
-  },
-
-  beforeUnmount() {
-    window.removeEventListener('message', this.handleHelcimMessage);
-  },
-
   created() {
     const savedVehicles = JSON.parse(localStorage.getItem("vehicles")) || [];
 
