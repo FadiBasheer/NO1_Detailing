@@ -130,7 +130,6 @@ export default {
       vehicles: [],
       message: "",
       availableTimeSlots: [],
-      currentCheckoutToken: null,
     };
   },
 
