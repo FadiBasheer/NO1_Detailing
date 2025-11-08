@@ -289,34 +289,6 @@ export default {
       }
     },
 
-    async handleHelcimMessage(event) {
-      if (!this.currentCheckoutToken) return;
-      if (event.data?.eventName !== `helcim-pay-js-${this.currentCheckoutToken}`) return;
-
-      const status = event.data.eventStatus;
-
-      if (status === 'SUCCESS') {
-        const msg = typeof event.data.eventMessage === 'string'
-          ? JSON.parse(event.data.eventMessage)
-          : event.data.eventMessage;
-        const transactionId = msg?.data?.transactionId;
-        const bookingId = localStorage.getItem('pendingBookingId');
-        // eslint-disable-next-line no-undef
-        if (typeof removeHelcimPayIframe === 'function') removeHelcimPayIframe();
-        try {
-          await axios.post('/api/payment-success', { transactionId, bookingId });
-          localStorage.removeItem('pendingBookingId');
-          this.$router.push({ path: '/thank-you', state: { transactionId } });
-        } catch (err) {
-          this.message = err.response?.data?.message || 'Payment received but booking confirmation failed. Please contact support.';
-        }
-      } else if (status === 'ABORTED') {
-        // eslint-disable-next-line no-undef
-        if (typeof removeHelcimPayIframe === 'function') removeHelcimPayIframe();
-        this.message = 'Payment was cancelled. Please try again.';
-      }
-    },
-
     async submitBooking() {
       if (!this.date || !this.time) {
         alert("Please fill in date and time before proceeding.");
