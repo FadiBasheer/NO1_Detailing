@@ -320,19 +320,15 @@ export default {
         );
 
         const { checkoutToken } = paymentRes.data;
-        console.log('[HelcimPay] checkoutToken:', checkoutToken || 'MISSING');
 
         if (!checkoutToken) {
           this.message = 'Payment session could not be created. Please try again.';
           return;
         }
 
-        // 3️⃣ Open HelcimPay.js modal (stays on this page — no redirect)
+        // 3️⃣ Redirect to Helcim-hosted payment page
         localStorage.setItem('pendingBookingId', bookingId);
-        this.currentCheckoutToken = checkoutToken;
-        await this._helcimReady;
-        // eslint-disable-next-line no-undef
-        appendHelcimPayIframe(checkoutToken);
+        window.location.href = `https://secure.helcim.app/helcim-pay/${checkoutToken}`;
 
       } catch (error) {
         console.error("Error starting payment:", error);
