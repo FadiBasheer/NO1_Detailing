@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useAuthStore } from './stores/auth.ts';
 
 const instance = axios.create({
-  baseURL: 'http://localhost:5000',  // Your backend URL
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000',
   timeout: 10000,  // Optional: set a timeout for requests
 });
 
