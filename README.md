@@ -7,7 +7,7 @@
 
 ## Add the deployment steps
 # ssh ubuntu@server-ip
-# cd /var/www && ./deploy.sh
+# cd /var/www && sudo ./deploy.sh
 
 
 yumeeco.ca wants to 
