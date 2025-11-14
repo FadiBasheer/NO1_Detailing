@@ -130,7 +130,14 @@ export default {
       vehicles: [],
       message: "",
       availableTimeSlots: [],
+      helcimMessageHandler: null,
     };
+  },
+
+  beforeUnmount() {
+    if (this.helcimMessageHandler) {
+      window.removeEventListener('message', this.helcimMessageHandler);
+    }
   },
 
   created() {
