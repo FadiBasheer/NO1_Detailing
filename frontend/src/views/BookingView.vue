@@ -333,14 +333,45 @@ export default {
           return;
         }
 
-        // 3️⃣ Redirect to Helcim-hosted payment page
+        // 3️⃣ Launch HelcimPay.js modal (communicates via postMessage)
         localStorage.setItem('pendingBookingId', bookingId);
-        window.location.href = `https://secure.helcim.app/helcim-pay/${checkoutToken}`;
+        this.message = '';
+        this.launchHelcimPay(checkoutToken);
 
       } catch (error) {
         console.error("Error starting payment:", error);
         this.message = error.response?.data?.message || "Error starting payment. Please try again.";
       }
+    },
+
+    launchHelcimPay(checkoutToken) {
+      const openModal = () => window.appendHelcimPayIframe(checkoutToken);
+
+      if (!document.querySelector('script[src="https://secure.helcim.app/helcim-pay/services/start.js"]')) {
+        const script = document.createElement('script');
+        script.src = 'https://secure.helcim.app/helcim-pay/services/start.js';
+        script.onload = openModal;
+        document.head.appendChild(script);
+      } else {
+        openModal();
+      }
+
+      this.helcimMessageHandler = (event) => {
+        if (event.data?.eventStatus === 'SUCCESS') {
+          window.removeEventListener('message', this.helcimMessageHandler);
+          this.helcimMessageHandler = null;
+          const transactionId = event.data.eventMessage?.data?.transactionId;
+          if (transactionId) {
+            this.$router.push(`/thank-you?transactionId=${transactionId}`);
+          }
+        } else if (event.data?.eventStatus === 'ABORTED') {
+          window.removeEventListener('message', this.helcimMessageHandler);
+          this.helcimMessageHandler = null;
+          localStorage.removeItem('pendingBookingId');
+          this.message = 'Payment was cancelled. Please try again.';
+        }
+      };
+      window.addEventListener('message', this.helcimMessageHandler);
     },
   },
 };
