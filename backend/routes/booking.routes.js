@@ -243,6 +243,7 @@ router.post('/payment-link', authMiddleware, async (req, res) => {
         amount: parseFloat(totalAmount.toFixed(2)),
         currency: 'CAD',
         paymentMethod: 'cc-ach',
+        returnUrl: `${process.env.FRONTEND_URL}/thank-you`,
       })
     });
 
