@@ -131,6 +131,7 @@ export default {
       message: "",
       availableTimeSlots: [],
       helcimMessageHandler: null,
+      activeCheckoutToken: null,
     };
   },
 
