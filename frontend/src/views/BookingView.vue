@@ -346,6 +346,8 @@ export default {
     },
 
     launchHelcimPay(checkoutToken) {
+      this.activeCheckoutToken = checkoutToken;
+
       const openModal = () => window.appendHelcimPayIframe(checkoutToken);
 
       if (!document.querySelector('script[src="https://secure.helcim.app/helcim-pay/services/start.js"]')) {
@@ -358,14 +360,30 @@ export default {
       }
 
       this.helcimMessageHandler = (event) => {
-        if (event.data?.eventStatus === 'SUCCESS') {
+        const data = event.data;
+        // Ignore non-object messages and messages not from this Helcim session
+        if (!data || typeof data !== 'object') return;
+        if (data.eventName !== `helcim-pay-js-${checkoutToken}`) return;
+
+        console.log('[HelcimPay] event received:', data.eventStatus, data);
+
+        if (data.eventStatus === 'SUCCESS') {
           window.removeEventListener('message', this.helcimMessageHandler);
           this.helcimMessageHandler = null;
-          const transactionId = event.data.eventMessage?.data?.transactionId;
+          let transactionId;
+          try {
+            // eventMessage is a JSON string per Helcim docs
+            const msg = typeof data.eventMessage === 'string'
+              ? JSON.parse(data.eventMessage)
+              : data.eventMessage;
+            transactionId = msg?.data?.transactionId;
+          } catch (e) {
+            console.error('[HelcimPay] failed to parse eventMessage', e);
+          }
           if (transactionId) {
             this.$router.push(`/thank-you?transactionId=${transactionId}`);
           }
-        } else if (event.data?.eventStatus === 'ABORTED') {
+        } else if (data.eventStatus === 'ABORTED') {
           window.removeEventListener('message', this.helcimMessageHandler);
           this.helcimMessageHandler = null;
           localStorage.removeItem('pendingBookingId');
