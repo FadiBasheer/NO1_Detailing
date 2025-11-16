@@ -372,16 +372,21 @@ export default {
           this.helcimMessageHandler = null;
           let transactionId;
           try {
-            // eventMessage is a JSON string per Helcim docs
             const msg = typeof data.eventMessage === 'string'
               ? JSON.parse(data.eventMessage)
               : data.eventMessage;
-            transactionId = msg?.data?.transactionId;
+            console.log('[HelcimPay] parsed eventMessage:', JSON.stringify(msg));
+            // Helcim nests the id differently depending on payment method
+            transactionId = msg?.data?.transactionId
+              ?? msg?.data?.data?.transactionId
+              ?? msg?.transactionId;
           } catch (e) {
             console.error('[HelcimPay] failed to parse eventMessage', e);
           }
           if (transactionId) {
             this.$router.push(`/thank-you?transactionId=${transactionId}`);
+          } else {
+            this.message = 'Payment received but could not retrieve transaction ID. Please contact support.';
           }
         } else if (data.eventStatus === 'ABORTED') {
           window.removeEventListener('message', this.helcimMessageHandler);
