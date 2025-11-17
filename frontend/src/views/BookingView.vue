@@ -359,7 +359,7 @@ export default {
         openModal();
       }
 
-      this.helcimMessageHandler = (event) => {
+      this.helcimMessageHandler = async (event) => {
         const data = event.data;
         // Ignore non-object messages and messages not from this Helcim session
         if (!data || typeof data !== 'object') return;
