@@ -1,4 +1,5 @@
 import express from 'express';
+import crypto from 'crypto';
 import prisma from '../prisma/client.js';
 import { authMiddleware } from '../middleware/auth.middleware.js';
 
@@ -285,48 +286,66 @@ router.post('/payment-link', authMiddleware, async (req, res) => {
 // We verify the transaction directly with Helcim's API — never trust the client's status claim.
 router.post('/payment-success', authMiddleware, async (req, res) => {
   try {
-    const { bookingId, transactionId } = req.body;
+    const { bookingId, transactionId, helcimPayEventMessage } = req.body;
 
     if (!bookingId || !transactionId) {
       return res.status(400).json({ message: 'Missing required fields: bookingId, transactionId' });
     }
 
-    // Verify the transaction with Helcim's API
-    let helcimTransaction;
-    try {
-      const helcimRes = await fetch(
-        `https://api.helcim.com/v2/transactions/${encodeURIComponent(transactionId)}`,
-        {
-          method: 'GET',
-          headers: {
-            'api-token': apiToken,
-            'accept': 'application/json',
-          },
-        }
-      );
-
-      if (!helcimRes.ok) {
-        console.error(`Helcim verification failed — HTTP ${helcimRes.status}`);
-        return res.status(402).json({ message: 'Payment could not be verified with Helcim.' });
-      }
-
-      helcimTransaction = await helcimRes.json();
-    } catch (fetchError) {
-      console.error('Error contacting Helcim API:', fetchError);
-      return res.status(502).json({ message: 'Unable to reach payment provider. Please contact support.' });
-    }
-
-    // Helcim returns status as 'APPROVED' for successful transactions
-    if (helcimTransaction.status?.toUpperCase() !== 'APPROVED') {
-      console.warn(`Transaction ${transactionId} not approved — status: ${helcimTransaction.status}`);
-      return res.status(402).json({ message: 'Payment was not approved.' });
-    }
-
-    // Fetch the booking and make sure it belongs to the authenticated user
+    // Fetch the booking early — needed for helcimSecretToken and ownership check
     const booking = await prisma.booking.findUnique({ where: { id: bookingId } });
 
     if (!booking) {
       return res.status(404).json({ message: 'Booking not found.' });
+    }
+
+    // HelcimPay.js flow: verify using SHA256 hash (secretToken stored at booking creation)
+    if (helcimPayEventMessage) {
+      try {
+        const msg = JSON.parse(helcimPayEventMessage);
+        const receivedHash = msg?.data?.hash;
+        const transactionData = msg?.data?.data;
+        const secretToken = booking.helcimSecretToken;
+
+        if (!receivedHash || !transactionData || !secretToken) {
+          return res.status(402).json({ message: 'Payment could not be verified: missing hash data.' });
+        }
+
+        const computedHash = crypto.createHash('sha256')
+          .update(JSON.stringify(transactionData) + secretToken)
+          .digest('hex');
+
+        if (computedHash !== receivedHash) {
+          console.error(`[payment-success] Hash mismatch for booking ${bookingId}`);
+          return res.status(402).json({ message: 'Payment signature invalid.' });
+        }
+
+        if (transactionData.status?.toUpperCase() !== 'APPROVED') {
+          return res.status(402).json({ message: 'Payment was not approved.' });
+        }
+      } catch (parseError) {
+        console.error('[payment-success] Failed to parse helcimPayEventMessage:', parseError);
+        return res.status(402).json({ message: 'Payment could not be verified.' });
+      }
+    } else {
+      // Legacy fallback: verify via Helcim API
+      try {
+        const helcimRes = await fetch(
+          `https://api.helcim.com/v2/transactions/${encodeURIComponent(transactionId)}`,
+          { method: 'GET', headers: { 'api-token': apiToken, 'accept': 'application/json' } }
+        );
+        if (!helcimRes.ok) {
+          console.error(`Helcim verification failed — HTTP ${helcimRes.status}`);
+          return res.status(402).json({ message: 'Payment could not be verified with Helcim.' });
+        }
+        const helcimTransaction = await helcimRes.json();
+        if (helcimTransaction.status?.toUpperCase() !== 'APPROVED') {
+          return res.status(402).json({ message: 'Payment was not approved.' });
+        }
+      } catch (fetchError) {
+        console.error('Error contacting Helcim API:', fetchError);
+        return res.status(502).json({ message: 'Unable to reach payment provider. Please contact support.' });
+      }
     }
 
     if (booking.customerId !== req.user.id) {

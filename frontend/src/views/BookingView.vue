@@ -370,23 +370,32 @@ export default {
         if (data.eventStatus === 'SUCCESS') {
           window.removeEventListener('message', this.helcimMessageHandler);
           this.helcimMessageHandler = null;
+
           let transactionId;
           try {
-            const msg = typeof data.eventMessage === 'string'
-              ? JSON.parse(data.eventMessage)
-              : data.eventMessage;
-            console.log('[HelcimPay] parsed eventMessage:', JSON.stringify(msg));
-            // Helcim nests the id differently depending on payment method
-            transactionId = msg?.data?.transactionId
-              ?? msg?.data?.data?.transactionId
-              ?? msg?.transactionId;
+            const msg = JSON.parse(data.eventMessage);
+            transactionId = msg?.data?.data?.transactionId;
           } catch (e) {
             console.error('[HelcimPay] failed to parse eventMessage', e);
           }
-          if (transactionId) {
-            this.$router.push(`/thank-you?transactionId=${transactionId}`);
-          } else {
+
+          if (!transactionId) {
             this.message = 'Payment received but could not retrieve transaction ID. Please contact support.';
+            return;
+          }
+
+          const bookingId = localStorage.getItem('pendingBookingId');
+          try {
+            await axios.post('/api/payment-success', {
+              bookingId,
+              transactionId,
+              helcimPayEventMessage: data.eventMessage,
+            });
+            sessionStorage.setItem('paymentVerified', transactionId);
+            localStorage.removeItem('pendingBookingId');
+            this.$router.push(`/thank-you?transactionId=${transactionId}`);
+          } catch (err) {
+            this.message = err.response?.data?.message || 'Payment verification failed. Please contact support.';
           }
         } else if (data.eventStatus === 'ABORTED') {
           window.removeEventListener('message', this.helcimMessageHandler);
