@@ -139,6 +139,7 @@ export default {
     if (this.helcimMessageHandler) {
       window.removeEventListener('message', this.helcimMessageHandler);
     }
+    this.removeHelcimIframe();
   },
 
   created() {
