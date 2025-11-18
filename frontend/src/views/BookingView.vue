@@ -346,6 +346,12 @@ export default {
       }
     },
 
+    removeHelcimIframe() {
+      document.querySelectorAll('iframe[src*="helcim"]').forEach(el => el.remove());
+      const wrapper = document.getElementById('helcimPayIframe');
+      if (wrapper) wrapper.remove();
+    },
+
     launchHelcimPay(checkoutToken) {
       this.activeCheckoutToken = checkoutToken;
 
