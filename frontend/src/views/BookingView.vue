@@ -400,6 +400,7 @@ export default {
             });
             sessionStorage.setItem('paymentVerified', transactionId);
             localStorage.removeItem('pendingBookingId');
+            this.removeHelcimIframe();
             this.$router.push(`/thank-you?transactionId=${transactionId}`);
           } catch (err) {
             this.message = err.response?.data?.message || 'Payment verification failed. Please contact support.';
