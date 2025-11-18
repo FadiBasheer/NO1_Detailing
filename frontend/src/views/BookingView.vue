@@ -409,6 +409,7 @@ export default {
           window.removeEventListener('message', this.helcimMessageHandler);
           this.helcimMessageHandler = null;
           localStorage.removeItem('pendingBookingId');
+          this.removeHelcimIframe();
           this.message = 'Payment was cancelled. Please try again.';
         }
       };
