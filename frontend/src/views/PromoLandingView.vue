@@ -236,7 +236,7 @@ const claimOffer = () => {
   border-radius: 14px;
   padding: 28px 24px;
   text-align: center;
-  max-width: 220px;
+  max-width: 190px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
