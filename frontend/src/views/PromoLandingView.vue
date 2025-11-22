@@ -3,19 +3,19 @@
 
     <!-- Hero -->
     <section class="hero">
-      <div class="hero-badge">Limited Time Offer</div>
-      <h1>Your First Detail,<br>On Us.</h1>
+      <div class="hero-badge">New Customer Offer</div>
+      <h1>Book a Full Detail.<br>Earn a Free Wash.</h1>
       <p class="hero-sub">
-        Sign up today and get a <strong>free exterior wash</strong> — a $80 value —
-        automatically applied to your very first booking.
+        Book and complete your first <strong>Full Detail</strong> and we'll send you a
+        <strong>free exterior wash</strong> — a $80 value — to use on your next visit.
       </p>
-      <button @click="claimOffer" class="btn-claim">Claim My Free Wash</button>
-      <p class="fine-print">New customers only · One-time offer · No credit card to sign up</p>
+      <button @click="claimOffer" class="btn-claim">Claim This Offer</button>
+      <p class="fine-print">New customers only · Free wash credited after your first Full Detail is completed · No credit card to sign up</p>
     </section>
 
-    <!-- What You Get -->
+    <!-- What You Earn -->
     <section class="what-you-get">
-      <h2>What's Included</h2>
+      <h2>What You'll Earn</h2>
       <div class="included-grid">
         <div class="included-card">
           <span class="inc-icon">🪣</span>
@@ -35,7 +35,7 @@
         <div class="included-card">
           <span class="inc-icon">💰</span>
           <h3>$80 Value — Free</h3>
-          <p>Applied automatically at checkout on your first booking. No coupon code needed.</p>
+          <p>Credited to your account automatically once your first Full Detail is marked complete.</p>
         </div>
       </div>
     </section>
@@ -47,19 +47,25 @@
         <div class="step">
           <div class="step-number">1</div>
           <h3>Create Your Account</h3>
-          <p>Click the button above and register — takes less than a minute.</p>
+          <p>Sign up in under a minute — no credit card required.</p>
         </div>
         <div class="step-arrow">→</div>
         <div class="step">
           <div class="step-number">2</div>
-          <h3>Book Your Detail</h3>
-          <p>Pick your vehicle, date, and time. The free wash discount applies automatically.</p>
+          <h3>Book a Full Detail</h3>
+          <p>Choose your vehicle, date, and time. A trained technician comes to you.</p>
         </div>
         <div class="step-arrow">→</div>
         <div class="step">
           <div class="step-number">3</div>
-          <h3>We Come to You</h3>
-          <p>A trained technician arrives at your location and gets to work.</p>
+          <h3>Complete Your Detail</h3>
+          <p>Once your first Full Detail is finished, your free exterior wash is credited automatically.</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+          <div class="step-number">4</div>
+          <h3>Enjoy Your Free Wash</h3>
+          <p>Book your free exterior wash anytime — no coupon code needed, it's waiting in your account.</p>
         </div>
       </div>
     </section>
@@ -67,8 +73,8 @@
     <!-- CTA Bottom -->
     <section class="cta-bottom">
       <h2>Ready for a spotless car?</h2>
-      <p>Join hundreds of happy customers — start with a free wash on us.</p>
-      <button @click="claimOffer" class="btn-claim">Get My Free Exterior Wash</button>
+      <p>Book your first Full Detail today and earn a free exterior wash on your next visit.</p>
+      <button @click="claimOffer" class="btn-claim">Claim This Offer</button>
     </section>
 
   </div>
