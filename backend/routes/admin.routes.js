@@ -122,6 +122,23 @@ router.patch('/bookings/:id/status', async (req, res) => {
         : [])
     ]);
 
+    // Grant promo wash reward when a promo customer completes their first "Both" (Full Interior & Exterior) detail
+    if (!wasCompleted && willBeCompleted) {
+      const hasBothService = updatedBooking.services.some(bs => bs.service.name === 'Both');
+      if (hasBothService) {
+        const customer = await prisma.user.findUnique({
+          where: { id: existingBooking.customerId },
+          select: { promoCode: true, promoWashEarned: true }
+        });
+        if (customer?.promoCode && !customer.promoWashEarned) {
+          await prisma.user.update({
+            where: { id: existingBooking.customerId },
+            data: { promoWashEarned: true }
+          });
+        }
+      }
+    }
+
     // Format response similar to GET /api/bookings
     const formattedBooking = {
       id: updatedBooking.id,
