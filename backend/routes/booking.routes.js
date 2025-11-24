@@ -366,8 +366,8 @@ router.post('/payment-success', authMiddleware, async (req, res) => {
 
     // Mark promo/referral as used if a discount was applied on this booking
     if (updatedBooking.discountAmount > 0) {
-      const user = await prisma.user.findUnique({ where: { id: req.user.id }, select: { promoCode: true, promoUsed: true } });
-      if (user.promoCode && !user.promoUsed) {
+      const user = await prisma.user.findUnique({ where: { id: req.user.id }, select: { promoCode: true, promoWashEarned: true, promoUsed: true } });
+      if (user.promoCode && user.promoWashEarned && !user.promoUsed) {
         await prisma.user.update({ where: { id: req.user.id }, data: { promoUsed: true } });
       } else {
         // Mark referral discount as used
