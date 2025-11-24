@@ -205,9 +205,9 @@ router.post('/payment-link', authMiddleware, async (req, res) => {
     const user = await prisma.user.findUnique({ where: { id: req.user.id } });
     let discountAmount = 0;
 
-    // Apply promo discount — free exterior wash ($80) on first booking
+    // Apply promo discount — free exterior wash ($80) earned after completing first Full Detail
     const PROMO_DISCOUNT = 80;
-    if (user.promoCode && !user.promoUsed) {
+    if (user.promoCode && user.promoWashEarned && !user.promoUsed) {
       discountAmount = Math.min(PROMO_DISCOUNT, totalAmount);
       totalAmount = Math.max(0, totalAmount - PROMO_DISCOUNT);
     }
