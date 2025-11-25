@@ -107,11 +107,12 @@ router.post('/register', registerLimiter, async (req, res) => {
         id: user.id, 
         email: user.email, 
         role: user.role, 
-        promoCode: user.promoCode, 
-        promoUsed: user.promoUsed, 
-        completedBookingsCount: user.completedBookingsCount, 
-        referralCode: user.referralCode, 
-        referralDiscountPending 
+        promoCode: user.promoCode,
+        promoWashEarned: user.promoWashEarned,
+        promoUsed: user.promoUsed,
+        completedBookingsCount: user.completedBookingsCount,
+        referralCode: user.referralCode,
+        referralDiscountPending
       } 
     });
   } catch (error) {
