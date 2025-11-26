@@ -167,7 +167,7 @@ router.post('/login', loginLimiter, async (req, res) => {
     });
     const referralDiscountPending = !!(pendingReferral && !pendingReferral.discountUsed);
 
-    res.json({ accessToken, refreshToken, user: { id: user.id, email: user.email, role: user.role, promoCode: user.promoCode, promoUsed: user.promoUsed, completedBookingsCount: user.completedBookingsCount, referralCode: user.referralCode, referralDiscountPending } });
+    res.json({ accessToken, refreshToken, user: { id: user.id, email: user.email, role: user.role, promoCode: user.promoCode, promoWashEarned: user.promoWashEarned, promoUsed: user.promoUsed, completedBookingsCount: user.completedBookingsCount, referralCode: user.referralCode, referralDiscountPending } });
   } catch (error) {
     console.error('Login error:', error);
     res.status(400).json({ message: 'Login failed' });
