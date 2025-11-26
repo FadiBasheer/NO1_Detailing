@@ -210,7 +210,7 @@ export default {
 
     hasActivePromo() {
       const auth = useAuthStore();
-      return !!(auth.user?.promoCode && !auth.user?.promoUsed);
+      return !!(auth.user?.promoCode && auth.user?.promoWashEarned && !auth.user?.promoUsed);
     },
 
     hasReferralDiscount() {
