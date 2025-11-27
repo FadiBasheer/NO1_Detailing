@@ -2,7 +2,7 @@
   <div class="register-container">
     <h2>Register</h2>
     <div v-if="promoCode" class="promo-notice">
-      🎉 Your free exterior wash is reserved — it will be applied automatically on your first booking.
+      🎉 Offer claimed — book and complete your first Full Detail to earn a free exterior wash on your next visit.
     </div>
     <div v-if="referralCode" class="referral-notice">
       🎁 10% off your first booking will be applied automatically at checkout.
