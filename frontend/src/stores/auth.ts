@@ -87,8 +87,11 @@ export const useAuthStore = defineStore('auth', {
       if (user) this.user = JSON.parse(user);
       if (accessToken) this.accessToken = accessToken;
 
-      if (this.refreshToken) {
-        this.refreshAccessToken();
+      // Don't call refreshAccessToken() here — the axios interceptor handles
+      // token refresh automatically when a 401 is returned by any API call.
+      // Calling it here risks wiping the session if the network is slow or
+      // the refresh endpoint hiccups on load.
+      if (this.user) {
         this.startInactivityTimer();
       }
     },
