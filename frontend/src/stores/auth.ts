@@ -1,38 +1,35 @@
 import { defineStore } from 'pinia';
 import axios from '../axios.ts';
 
-// 1. Define what your Auth State looks like
+const INACTIVITY_TIMEOUT = 10 * 60 * 1000; // 10 minutes
+
 interface AuthState {
-  user: any | null; // Replace 'any' with your User interface if you have one
+  user: any | null;
   accessToken: string | null;
   refreshToken: string | null;
+  _inactivityTimer: ReturnType<typeof setTimeout> | null;
 }
 
 export const useAuthStore = defineStore('auth', {
-  // 2. Explicitly type the state
   state: (): AuthState => ({
     user: null,
     accessToken: null,
-    refreshToken: null
+    refreshToken: null,
+    _inactivityTimer: null,
   }),
 
   actions: {
-    // 3. Add types to arguments (credentials is usually an object)
     async login(credentials: Record<string, any>) {
       const res = await axios.post('/api/auth/login', credentials);
       this.accessToken = res.data.accessToken;
       this.refreshToken = res.data.refreshToken;
       this.user = res.data.user;
-      
-      if (this.refreshToken) {
-        localStorage.setItem('refreshToken', this.refreshToken);
-      }
-      if (this.user) {
-        localStorage.setItem('user', JSON.stringify(this.user));
-      }
-      if (this.accessToken) {
-        localStorage.setItem('accessToken', this.accessToken);
-      }
+
+      sessionStorage.setItem('refreshToken', this.refreshToken!);
+      sessionStorage.setItem('user', JSON.stringify(this.user));
+      sessionStorage.setItem('accessToken', this.accessToken!);
+
+      this.startInactivityTimer();
     },
 
     async register(userData: Record<string, any>) {
@@ -40,60 +37,80 @@ export const useAuthStore = defineStore('auth', {
       this.accessToken = res.data.accessToken;
       this.refreshToken = res.data.refreshToken;
       this.user = res.data.user;
-      
-      if (this.refreshToken) {
-        localStorage.setItem('refreshToken', this.refreshToken);
-      }
-      if (this.user) {
-        localStorage.setItem('user', JSON.stringify(this.user));
-      }
-      if (this.accessToken) {
-        localStorage.setItem('accessToken', this.accessToken);
-      }
+
+      sessionStorage.setItem('refreshToken', this.refreshToken!);
+      sessionStorage.setItem('user', JSON.stringify(this.user));
+      sessionStorage.setItem('accessToken', this.accessToken!);
+
+      this.startInactivityTimer();
     },
 
     async refreshAccessToken() {
       try {
-        const res = await axios.post('/api/auth/refresh', { 
-          refreshToken: this.refreshToken 
+        const res = await axios.post('/api/auth/refresh', {
+          refreshToken: this.refreshToken
         });
         this.accessToken = res.data.accessToken;
+        sessionStorage.setItem('accessToken', this.accessToken!);
       } catch (error) {
         this.logout();
       }
     },
 
     logout() {
+      this.clearInactivityTimer();
+
       if (this.refreshToken) {
-        // We don't necessarily need to 'await' this if we're clearing local state anyway
         axios.post('/api/auth/logout', { refreshToken: this.refreshToken });
       }
-      
+
       this.user = null;
       this.accessToken = null;
       this.refreshToken = null;
 
-      // Clear local storage
-      localStorage.removeItem("vehicles");
-      localStorage.removeItem("user");
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
+      sessionStorage.removeItem('user');
+      sessionStorage.removeItem('accessToken');
+      sessionStorage.removeItem('refreshToken');
+      sessionStorage.removeItem('vehicles');
+      localStorage.removeItem('vehicles');
+      localStorage.removeItem('user');
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
     },
 
     initializeAuth() {
-      const refreshToken = localStorage.getItem('refreshToken');
-      if (refreshToken) {
-        this.refreshToken = refreshToken;
+      const refreshToken = sessionStorage.getItem('refreshToken');
+      const user = sessionStorage.getItem('user');
+      const accessToken = sessionStorage.getItem('accessToken');
+
+      if (refreshToken) this.refreshToken = refreshToken;
+      if (user) this.user = JSON.parse(user);
+      if (accessToken) this.accessToken = accessToken;
+
+      if (this.refreshToken) {
         this.refreshAccessToken();
+        this.startInactivityTimer();
       }
-      const user = localStorage.getItem('user');
-      if (user) {
-        this.user = JSON.parse(user);
+    },
+
+    startInactivityTimer() {
+      this.clearInactivityTimer();
+      this._inactivityTimer = setTimeout(() => {
+        this.logout();
+      }, INACTIVITY_TIMEOUT);
+    },
+
+    clearInactivityTimer() {
+      if (this._inactivityTimer) {
+        clearTimeout(this._inactivityTimer);
+        this._inactivityTimer = null;
       }
-      const accessToken = localStorage.getItem('accessToken');
-      if (accessToken) {
-        this.accessToken = accessToken;
+    },
+
+    resetInactivityTimer() {
+      if (this.user) {
+        this.startInactivityTimer();
       }
-    }
+    },
   }
 });
