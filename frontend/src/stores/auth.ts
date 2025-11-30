@@ -79,13 +79,27 @@ export const useAuthStore = defineStore('auth', {
     },
 
     initializeAuth() {
-      const refreshToken = sessionStorage.getItem('refreshToken');
-      const user = sessionStorage.getItem('user');
-      const accessToken = sessionStorage.getItem('accessToken');
+      // Read from sessionStorage first; fall back to localStorage so existing
+      // sessions (saved before this change) are not immediately logged out.
+      const refreshToken = sessionStorage.getItem('refreshToken') ?? localStorage.getItem('refreshToken');
+      const user = sessionStorage.getItem('user') ?? localStorage.getItem('user');
+      const accessToken = sessionStorage.getItem('accessToken') ?? localStorage.getItem('accessToken');
 
-      if (refreshToken) this.refreshToken = refreshToken;
-      if (user) this.user = JSON.parse(user);
-      if (accessToken) this.accessToken = accessToken;
+      if (refreshToken) {
+        this.refreshToken = refreshToken;
+        sessionStorage.setItem('refreshToken', refreshToken);
+        localStorage.removeItem('refreshToken');
+      }
+      if (user) {
+        this.user = JSON.parse(user);
+        sessionStorage.setItem('user', user);
+        localStorage.removeItem('user');
+      }
+      if (accessToken) {
+        this.accessToken = accessToken;
+        sessionStorage.setItem('accessToken', accessToken);
+        localStorage.removeItem('accessToken');
+      }
 
       // Don't call refreshAccessToken() here — the axios interceptor handles
       // token refresh automatically when a 401 is returned by any API call.
