@@ -79,32 +79,14 @@ export const useAuthStore = defineStore('auth', {
     },
 
     initializeAuth() {
-      // Read from sessionStorage first; fall back to localStorage so existing
-      // sessions (saved before this change) are not immediately logged out.
-      const refreshToken = sessionStorage.getItem('refreshToken') ?? localStorage.getItem('refreshToken');
-      const user = sessionStorage.getItem('user') ?? localStorage.getItem('user');
-      const accessToken = sessionStorage.getItem('accessToken') ?? localStorage.getItem('accessToken');
+      const refreshToken = sessionStorage.getItem('refreshToken');
+      const user = sessionStorage.getItem('user');
+      const accessToken = sessionStorage.getItem('accessToken');
 
-      if (refreshToken) {
-        this.refreshToken = refreshToken;
-        sessionStorage.setItem('refreshToken', refreshToken);
-        localStorage.removeItem('refreshToken');
-      }
-      if (user) {
-        this.user = JSON.parse(user);
-        sessionStorage.setItem('user', user);
-        localStorage.removeItem('user');
-      }
-      if (accessToken) {
-        this.accessToken = accessToken;
-        sessionStorage.setItem('accessToken', accessToken);
-        localStorage.removeItem('accessToken');
-      }
+      if (refreshToken) this.refreshToken = refreshToken;
+      if (user) this.user = JSON.parse(user);
+      if (accessToken) this.accessToken = accessToken;
 
-      // Don't call refreshAccessToken() here — the axios interceptor handles
-      // token refresh automatically when a 401 is returned by any API call.
-      // Calling it here risks wiping the session if the network is slow or
-      // the refresh endpoint hiccups on load.
       if (this.user) {
         this.startInactivityTimer();
       }
