@@ -71,11 +71,7 @@ export const useAuthStore = defineStore('auth', {
       sessionStorage.removeItem('user');
       sessionStorage.removeItem('accessToken');
       sessionStorage.removeItem('refreshToken');
-      sessionStorage.removeItem('vehicles');
       localStorage.removeItem('vehicles');
-      localStorage.removeItem('user');
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
     },
 
     initializeAuth() {
