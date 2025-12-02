@@ -78,7 +78,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useAuthStore } from '../stores/auth.ts';
 import { useRouter } from 'vue-router';
 
@@ -86,24 +86,35 @@ const auth = useAuthStore();
 const user = computed(() => auth.user);
 
 const isMenuOpen = ref(false);
-const activeDropdown = ref(null); // 'services' | 'business' | 'membership' | null
+const activeDropdown = ref(null);
+const userMenuOpen = ref(false);
+const userMenuRef = ref(null);
 
-const toggleMenu = () => {
-  isMenuOpen.value = !isMenuOpen.value;
+const userInitial = computed(() => user.value?.email?.[0]?.toUpperCase() ?? '?');
+const userShortEmail = computed(() => {
+  const email = user.value?.email ?? '';
+  return email.length > 18 ? email.slice(0, 16) + '…' : email;
+});
+
+const toggleMenu = () => { isMenuOpen.value = !isMenuOpen.value; };
+const toggleDropdown = (name) => { activeDropdown.value = activeDropdown.value === name ? null : name; };
+const closeAll = () => { activeDropdown.value = null; isMenuOpen.value = false; };
+const toggleUserMenu = () => { userMenuOpen.value = !userMenuOpen.value; };
+const closeUserMenu = () => { userMenuOpen.value = false; closeAll(); };
+
+const handleOutsideClick = (e) => {
+  if (userMenuRef.value && !userMenuRef.value.contains(e.target)) {
+    userMenuOpen.value = false;
+  }
 };
 
-const toggleDropdown = (name) => {
-  activeDropdown.value = activeDropdown.value === name ? null : name;
-};
-
-const closeAll = () => {
-  activeDropdown.value = null;
-  isMenuOpen.value = false;
-};
+onMounted(() => document.addEventListener('click', handleOutsideClick));
+onUnmounted(() => document.removeEventListener('click', handleOutsideClick));
 
 const router = useRouter();
 
 const logout = () => {
+  closeUserMenu();
   auth.logout();
   router.push('/');
 };
