@@ -37,12 +37,37 @@
       </ul>
     </nav>
     <div class="auth-buttons">
-      <router-link v-if="!user" to="/login" class="btn">Login</router-link>
-      <router-link v-if="!user" to="/register" class="btn">Register</router-link>
-      <router-link v-if="user" to="/my-bookings" class="btn btn-my-bookings">My Bookings</router-link>
-      <router-link v-if="user" to="/my-referral" class="btn btn-referral">Referral</router-link>
-      <router-link v-if="user?.role === 'ADMIN'" to="/admin" class="btn btn-admin">Admin</router-link>
-      <button v-if="user" @click="logout" class="btn">Logout</button>
+      <template v-if="!user">
+        <router-link to="/login" class="btn btn-ghost">Login</router-link>
+        <router-link to="/register" class="btn btn-primary">Get Started</router-link>
+      </template>
+
+      <div v-else class="user-menu" @click.stop="toggleUserMenu" ref="userMenuRef">
+        <div class="user-avatar">{{ userInitial }}</div>
+        <span class="user-email">{{ userShortEmail }}</span>
+        <span class="chevron" :class="{ 'chevron-up': userMenuOpen }">&#x2BC6;</span>
+
+        <div class="user-dropdown" v-show="userMenuOpen" @click.stop>
+          <div class="dropdown-header">
+            <div class="dropdown-avatar">{{ userInitial }}</div>
+            <span>{{ user.email }}</span>
+          </div>
+          <div class="dropdown-divider"></div>
+          <router-link to="/my-bookings" class="dropdown-item" @click="closeUserMenu">
+            <span class="item-icon">📋</span> My Bookings
+          </router-link>
+          <router-link to="/my-referral" class="dropdown-item" @click="closeUserMenu">
+            <span class="item-icon">🎁</span> Referral Program
+          </router-link>
+          <router-link v-if="user.role === 'ADMIN'" to="/admin" class="dropdown-item admin-item" @click="closeUserMenu">
+            <span class="item-icon">⚙️</span> Admin Panel
+          </router-link>
+          <div class="dropdown-divider"></div>
+          <button class="dropdown-item logout-item" @click="logout">
+            <span class="item-icon">🚪</span> Log Out
+          </button>
+        </div>
+      </div>
     </div>
     <button class="hamburger" @click="toggleMenu" :class="{ 'open': isMenuOpen }">
       <span></span>
