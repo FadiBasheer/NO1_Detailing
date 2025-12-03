@@ -302,45 +302,187 @@ nav a, p {
   align-items: center;
 }
 
-.auth-buttons .btn {
+.btn-ghost {
   padding: 8px 16px;
-  background-color: #007BFF;
+  background: transparent;
+  color: #374151;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background 0.15s;
+}
+
+.btn-ghost:hover {
+  background: #f3f4f6;
+}
+
+.btn-primary {
+  padding: 8px 18px;
+  background: #2563eb;
   color: white;
   text-decoration: none;
-  border-radius: 4px;
-  font-weight: bold;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background 0.15s;
 }
 
-.auth-buttons .btn:hover {
-  background-color: #0056b3;
+.btn-primary:hover {
+  background: #1d4ed8;
 }
 
-.auth-buttons button {
-  border: none;
+/* User menu trigger */
+.user-menu {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
   cursor: pointer;
+  background: white;
+  transition: box-shadow 0.15s, border-color 0.15s;
+  user-select: none;
 }
 
-.auth-buttons .btn-my-bookings {
-  background-color: #6c63ff;
+.user-menu:hover {
+  border-color: #d1d5db;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
-.auth-buttons .btn-my-bookings:hover {
-  background-color: #574fd6;
+.user-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #2563eb;
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
-.auth-buttons .btn-referral {
-  background-color: #28a745;
+.user-email {
+  font-size: 0.85rem;
+  color: #374151;
+  font-weight: 500;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.auth-buttons .btn-referral:hover {
-  background-color: #1e7e34;
+.chevron {
+  font-size: 0.65rem;
+  color: #9ca3af;
+  transition: transform 0.2s;
+  display: inline-block;
 }
 
-.auth-buttons .btn-admin {
-  background-color: #1a1a2e;
+.chevron-up {
+  transform: rotate(180deg);
 }
 
-.auth-buttons .btn-admin:hover {
-  background-color: #2d2d4e;
+/* Dropdown */
+.user-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 220px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  z-index: 1001;
+  overflow: hidden;
+}
+
+.dropdown-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  background: #f9fafb;
+}
+
+.dropdown-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #2563eb;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.dropdown-header span {
+  font-size: 0.82rem;
+  color: #6b7280;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: #f3f4f6;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 16px;
+  font-size: 0.9rem;
+  color: #374151;
+  text-decoration: none;
+  font-weight: 500;
+  background: white;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.dropdown-item:hover {
+  background: #f3f4f6;
+}
+
+.item-icon {
+  font-size: 1rem;
+  width: 20px;
+  text-align: center;
+}
+
+.admin-item {
+  color: #6d28d9;
+}
+
+.admin-item:hover {
+  background: #f5f3ff;
+}
+
+.logout-item {
+  color: #dc2626;
+}
+
+.logout-item:hover {
+  background: #fef2f2;
+}
+
+/* Hide email on smaller screens */
+@media (max-width: 900px) {
+  .user-email {
+    display: none;
+  }
 }
 </style>
