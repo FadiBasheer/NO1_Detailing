@@ -335,6 +335,28 @@ nav a, p {
   background: #1d4ed8;
 }
 
+/* Referral CTA button */
+.btn-referral-cta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #16a34a, #15803d);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.88rem;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(22, 163, 74, 0.35);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.btn-referral-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(22, 163, 74, 0.45);
+}
+
 /* User menu trigger */
 .user-menu {
   position: relative;
