@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import brands from "@/data/vehicles.ts"; // ✅ import your brand/model list
+import vehicleData from "@/data/vehicles.ts";
 
 import sedan from "@/assets/sedan.jpg";
 import smallSUV from "@/assets/small-suv.jpg";
@@ -58,33 +58,42 @@ export default {
   data() {
     return {
       vehicles: [
-        { name: "Sedan/Coupe", image: sedan },
-        { name: "Small SUV", image: smallSUV },
-        { name: "Mid-size SUV", image: midSuv },
-        { name: "SUV 7 seats", image: suv7 },
-        { name: "Mini Van", image: minivan },
-        { name: "Small Truck", image: smallTruck },
-        { name: "Big Truck", image: bigTruck },
-        { name: "Commercial Van", image: commercialVan },
-        { name: "Motorcycle", image: motorcycle },
-        { name: "RV/Trailer", image: rvTrailer },
-        { name: "Boats", image: boats }
+        { name: "Sedan/Coupe",   image: sedan },
+        { name: "Small SUV",     image: smallSUV },
+        { name: "Mid-size SUV",  image: midSuv },
+        { name: "SUV 7 seats",   image: suv7 },
+        { name: "Mini Van",      image: minivan },
+        { name: "Small Truck",   image: smallTruck },
+        { name: "Big Truck",     image: bigTruck },
+        { name: "Commercial Van",image: commercialVan },
+        { name: "Motorcycle",    image: motorcycle },
+        { name: "RV/Trailer",    image: rvTrailer },
+        { name: "Boats",         image: boats },
       ],
-
       selectedVehicle: null,
       brand: "",
       model: "",
-      brands // ✅ imported car brands/models
+      vehicleData,
     };
   },
   computed: {
+    availableBrands() {
+      if (!this.selectedVehicle) return {};
+      return this.vehicleData[this.selectedVehicle] || {};
+    },
+    availableModels() {
+      if (!this.brand) return [];
+      return this.availableBrands[this.brand] || [];
+    },
     canProceed() {
       return this.selectedVehicle && this.brand && this.model;
-    }
+    },
   },
   methods: {
     selectVehicle(name) {
       this.selectedVehicle = name;
+      this.brand = "";
+      this.model = "";
     },
     resetModel() {
       this.model = "";
@@ -92,16 +101,16 @@ export default {
     goToServiceSelection() {
       if (this.canProceed) {
         this.$router.push({
-          name: "ChoosingServiceView", // must exist in your router
+          name: "ChoosingServiceView",
           query: {
             vehicle: this.selectedVehicle,
             brand: this.brand,
-            model: this.model
-          }
+            model: this.model,
+          },
         });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
