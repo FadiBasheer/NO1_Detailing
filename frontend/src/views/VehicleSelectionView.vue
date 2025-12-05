@@ -18,18 +18,18 @@
 
     <!-- Brand + Model dropdowns -->
     <div class="form-section">
-      <label for="brand">Car Brand:</label>
-      <select id="brand" v-model="brand" @change="resetModel">
-        <option disabled value="">Choose a brand</option>
-        <option v-for="(models, brandName) in brands" :key="brandName" :value="brandName">
+      <label for="brand">Brand:</label>
+      <select id="brand" v-model="brand" @change="resetModel" :disabled="!selectedVehicle">
+        <option disabled value="">{{ selectedVehicle ? 'Choose a brand' : 'Select a vehicle type first' }}</option>
+        <option v-for="(_, brandName) in availableBrands" :key="brandName" :value="brandName">
           {{ brandName }}
         </option>
       </select>
 
-      <label for="model">Car Model:</label>
+      <label for="model">Model:</label>
       <select id="model" v-model="model" :disabled="!brand">
-        <option disabled value="">Choose a model</option>
-        <option v-for="m in brands[brand] || []" :key="m" :value="m">
+        <option disabled value="">{{ brand ? 'Choose a model' : 'Select a brand first' }}</option>
+        <option v-for="m in availableModels" :key="m" :value="m">
           {{ m }}
         </option>
       </select>
