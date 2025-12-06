@@ -131,6 +131,7 @@ const vehicleData: Record<string, Record<string, string[]>> = {
     Toyota:    ["Tacoma"],
     Nissan:    ["Frontier"],
     Honda:     ["Ridgeline"],
+    Hyundai:   ["Santa Cruz"],
     Jeep:      ["Gladiator"],
     Mitsubishi:["L200 / Triton"],
   },
