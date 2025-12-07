@@ -9,19 +9,19 @@ import moldCleaningImg from "@/assets/services/mold-cleaning.jpg";
 
 
 export const services = {
-  Interior: {
-    name: "Interior",
-    duration: 60,
-    price: 100,
-    description: "Deep cleaning of the car’s interior, including seats, carpets, and dashboard.",
-    image: interiorImg
-  },
   Exterior: {
     name: "Exterior",
     duration: 45,
     price: 80,
     description: "Complete exterior wash, wax, and tire shine.",
     image: exteriorImg
+  },
+  Interior: {
+    name: "Interior",
+    duration: 60,
+    price: 100,
+    description: "Deep cleaning of the car’s interior, including seats, carpets, and dashboard.",
+    image: interiorImg
   },
   Both: {
     name: "Both",
