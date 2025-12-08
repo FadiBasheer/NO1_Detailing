@@ -13,9 +13,24 @@ const apiToken = isTest
 
 
 const SERVICE_PRICE_MAP = {
-  Interior: { price: 100, durationMinutes: 60 },
-  Exterior: { price: 80, durationMinutes: 45 },
-  Both: { price: 160, durationMinutes: 90 },
+  Interior: { durationMinutes: 60 },
+  Exterior: { durationMinutes: 45 },
+  Both:     { durationMinutes: 90 },
+};
+
+// Prices per vehicle category — keep in sync with frontend/src/data/services.ts
+const SERVICE_PRICE_BY_CATEGORY = {
+  "Sedan/Coupe":    { Exterior: 50,  Interior: 50,  Both: 90  },
+  "Small SUV":      { Exterior: 55,  Interior: 55,  Both: 100 },
+  "Mid-size SUV":   { Exterior: 55,  Interior: 55,  Both: 100 },
+  "SUV 7 seats":    { Exterior: 60,  Interior: 60,  Both: 110 },
+  "Mini Van":       { Exterior: 60,  Interior: 60,  Both: 110 },
+  "Small Truck":    { Exterior: 60,  Interior: 55,  Both: 105 },
+  "Big Truck":      { Exterior: 70,  Interior: 65,  Both: 125 },
+  "Commercial Van": { Exterior: 75,  Interior: 75,  Both: 140 },
+  "Motorcycle":     { Exterior: 40,  Interior: 35,  Both: 70  },
+  "RV/Trailer":     { Exterior: 120, Interior: 120, Both: 220 },
+  "Boats":          { Exterior: 100, Interior: 100, Both: 185 },
 };
 
 const ADDON_PRICE_MAP = {
