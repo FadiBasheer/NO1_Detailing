@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { services, addons } from "@/data/services.ts";
+import { services, addons, servicePricing } from "@/data/services.ts";
 
 export default {
   name: "ChoosingServiceView",
@@ -49,13 +49,16 @@ export default {
       selectedService: null,
       selectedAddons: [],
       services,
-      addons
+      addons,
     };
   },
   methods: {
+    priceFor(serviceKey) {
+      return servicePricing[this.vehicleType]?.[serviceKey] ?? "—";
+    },
     selectService(serviceKey) {
       this.selectedService = serviceKey;
-      this.selectedAddons = []; // reset addons
+      this.selectedAddons = [];
     },
     goToBooking() {
       this.$router.push({
@@ -63,11 +66,11 @@ export default {
         query: {
           vehicle: this.vehicleType,
           service: this.selectedService,
-          addons: this.selectedAddons.join(",") // send as comma-separated string (if we have more than one addons)
-        }
+          addons: this.selectedAddons.join(","),
+        },
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
