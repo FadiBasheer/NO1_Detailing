@@ -15,7 +15,7 @@
         <h3>{{ service.name }}</h3>
         <p>{{ service.description }}</p>
         <p><strong>Duration:</strong> {{ service.duration }} mins</p>
-        <p><strong>Price:</strong> ${{ service.price }}</p>
+        <p><strong>Price:</strong> ${{ priceFor(key) }}</p>
       </div>
     </div>
 
