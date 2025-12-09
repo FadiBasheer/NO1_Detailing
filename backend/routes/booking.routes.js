@@ -193,6 +193,7 @@ router.post('/payment-link', authMiddleware, async (req, res) => {
     const booking = await prisma.booking.findUnique({
       where: { id: bookingId },
       include: {
+        vehicle: true,
         services: { include: { service: true } },
         addons: { include: { addon: true } }
       }
