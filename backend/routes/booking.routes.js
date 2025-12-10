@@ -207,10 +207,12 @@ router.post('/payment-link', authMiddleware, async (req, res) => {
       return res.status(403).json({ message: 'This booking does not belong to you.' });
     }
 
-    // Calculate total server-side from actual service/addon prices
+    // Calculate total server-side using per-category pricing
+    const vehicleCategory = booking.vehicle?.type ?? "";
+    const categoryPrices = SERVICE_PRICE_BY_CATEGORY[vehicleCategory] ?? {};
     const serviceTotal = booking.services.reduce((sum, bs) => {
-      const mapped = SERVICE_PRICE_MAP[bs.service.name];
-      return sum + (bs.service.price > 0 ? bs.service.price : mapped?.price ?? 0);
+      const price = categoryPrices[bs.service.name] ?? bs.service.price;
+      return sum + price;
     }, 0);
     const addonTotal = booking.addons.reduce((sum, ba) => {
       const mapped = ADDON_PRICE_MAP[ba.addon.name];
