@@ -8,9 +8,11 @@
         v-for="vehicle in vehicles"
         :key="vehicle.name"
         class="vehicle-button"
-        :class="{ selected: selectedVehicle === vehicle.name }"
-        @click="selectVehicle(vehicle.name)"
+        :class="{ selected: selectedVehicle === vehicle.name, 'coming-soon': vehicle.comingSoon }"
+        :disabled="vehicle.comingSoon"
+        @click="!vehicle.comingSoon && selectVehicle(vehicle.name)"
       >
+        <span v-if="vehicle.comingSoon" class="coming-soon-badge">Coming Soon</span>
         <img :src="vehicle.image" :alt="vehicle.name" />
         <span>{{ vehicle.name }}</span>
       </button>
