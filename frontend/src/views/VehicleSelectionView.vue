@@ -141,6 +141,7 @@ export default {
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  position: relative;
 }
 
 .vehicle-button.selected {
