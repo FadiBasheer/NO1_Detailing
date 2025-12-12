@@ -68,9 +68,9 @@ export default {
         { name: "Small Truck",   image: smallTruck },
         { name: "Big Truck",     image: bigTruck },
         { name: "Commercial Van",image: commercialVan },
-        { name: "Motorcycle",    image: motorcycle },
-        { name: "RV/Trailer",    image: rvTrailer },
-        { name: "Boats",         image: boats },
+        { name: "Motorcycle",    image: motorcycle,  comingSoon: true },
+        { name: "RV/Trailer",    image: rvTrailer,   comingSoon: true },
+        { name: "Boats",         image: boats,       comingSoon: true },
       ],
       selectedVehicle: null,
       brand: "",
@@ -146,6 +146,31 @@ export default {
 .vehicle-button.selected {
   border-color: #007bff;
   background-color: #eef5ff;
+}
+
+.vehicle-button.coming-soon {
+  opacity: 0.5;
+  cursor: not-allowed;
+  position: relative;
+}
+
+.vehicle-button.coming-soon:hover {
+  transform: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.coming-soon-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #374151;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 999px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
 }
 
 .vehicle-button img {
