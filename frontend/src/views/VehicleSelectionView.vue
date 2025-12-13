@@ -150,7 +150,7 @@ export default {
 }
 
 .vehicle-button.coming-soon {
-  opacity: 0.7;
+  opacity: 0.8;
   cursor: not-allowed;
   position: relative;
 }
