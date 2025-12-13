@@ -150,7 +150,7 @@ export default {
 }
 
 .vehicle-button.coming-soon {
-  opacity: 0.5;
+  opacity: 0.6;
   cursor: not-allowed;
   position: relative;
 }
@@ -164,8 +164,8 @@ export default {
   position: absolute;
   top: 8px;
   right: 8px;
-  background: #374151;
-  color: white;
+  background: #f98603;
+  color: rgb(255, 254, 254);
   font-size: 0.7rem;
   font-weight: 700;
   padding: 3px 8px;
