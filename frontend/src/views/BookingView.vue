@@ -54,7 +54,7 @@
       >
         <div class="vehicle-header">
           <strong>{{ vehicle.vehicleType }} - {{ getServiceName(vehicle.service) }}</strong>
-          <span class="item-price">${{ getServicePrice(vehicle.service) }}</span>
+          <span class="item-price">${{ getServicePrice(vehicle.service, vehicle.vehicleType) }}</span>
         </div>
         <button @click="removeVehicle(vIndex)" class="remove-btn">X</button>
 
