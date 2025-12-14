@@ -238,8 +238,8 @@ export default {
       return services[key]?.name || "Unknown Service";
     },
 
-    getServicePrice(key) {
-      return services[key]?.price ?? 0;
+    getServicePrice(key, vehicleType) {
+      return servicePricing[vehicleType]?.[key] ?? 0;
     },
 
     getAddonName(key) {
