@@ -23,23 +23,39 @@ export const servicePricing: Record<string, { Exterior: number; Interior: number
 
 export const services = {
   Exterior: {
-    name: "Exterior",
+    name: "Exterior Wash",
     duration: 45,
-    description: "Complete exterior wash, wax, and tire shine.",
-    image: exteriorImg
+    image: exteriorImg,
+    features: [
+      "Hand wash of all exterior panels",
+      "Wheel & rim cleaning",
+      "Window & glass cleaning",
+      "Tire shine & dressing",
+      "Door jamb wipe-down",
+    ],
   },
   Interior: {
-    name: "Interior",
+    name: "Interior Detail",
     duration: 60,
-    description: "Deep cleaning of the car’s interior, including seats, carpets, and dashboard.",
-    image: interiorImg
+    image: interiorImg,
+    features: [
+      "Full vacuum (seats, carpets, trunk)",
+      "Dashboard & console wipe-down",
+      "Door panels & cup holders cleaned",
+      "Interior windows cleaned",
+      "Odor treatment",
+    ],
   },
   Both: {
-    name: "Both",
+    name: "Full Detail (Interior & Exterior)",
     duration: 90,
-    description: "Full interior and exterior detailing.",
-    image: bothImg
-  }
+    image: bothImg,
+    features: [
+      "Everything in Exterior Wash",
+      "Everything in Interior Detail",
+      "Streak-free finish guaranteed",
+    ],
+  },
 };
 
 export const addons = {
