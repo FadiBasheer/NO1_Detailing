@@ -198,8 +198,8 @@ export default {
 
     subtotal() {
       return this.vehicles.reduce((total, vehicle) => {
-        const service = services[vehicle.service];
-        if (service) total += service.price;
+        const servicePrice = servicePricing[vehicle.vehicleType]?.[vehicle.service] ?? 0;
+        total += servicePrice;
         vehicle.addons.forEach((addonKey) => {
           const addon = addons[addonKey];
           if (addon) total += addon.price;
