@@ -13,9 +13,13 @@
       >
         <img :src="service.image" :alt="service.name" class="service-image" />
         <h3>{{ service.name }}</h3>
-        <p>{{ service.description }}</p>
-        <p><strong>Duration:</strong> {{ service.duration }} mins</p>
-        <p><strong>Price:</strong> ${{ priceFor(key) }}</p>
+        <ul class="service-features">
+          <li v-for="feature in service.features" :key="feature">{{ feature }}</li>
+        </ul>
+        <div class="service-meta">
+          <span class="meta-duration">⏱ {{ service.duration }} min</span>
+          <span class="meta-price">${{ priceFor(key) }}</span>
+        </div>
       </div>
     </div>
 
