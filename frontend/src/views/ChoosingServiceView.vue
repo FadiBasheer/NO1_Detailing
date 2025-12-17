@@ -141,6 +141,49 @@ button {
   background: #f0fff0;
 }
 
+.service-features {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0;
+  text-align: left;
+}
+
+.service-features li {
+  font-size: 0.88rem;
+  color: #444;
+  padding: 4px 0;
+  padding-left: 18px;
+  position: relative;
+}
+
+.service-features li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #16a34a;
+  font-weight: 700;
+}
+
+.service-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #eee;
+}
+
+.meta-duration {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.meta-price {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #1e40af;
+}
+
 /* Mobile responsiveness */
 @media (max-width: 768px) {
   .choose-service {
