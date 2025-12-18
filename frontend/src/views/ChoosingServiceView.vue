@@ -165,23 +165,23 @@ button {
 }
 
 .service-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   margin-top: 14px;
   padding-top: 12px;
   border-top: 1px solid #eee;
+  text-align: left;
 }
 
 .meta-duration {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: #6b7280;
+  margin: 0 0 4px 0;
 }
 
 .meta-price {
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 800;
   color: #1e40af;
+  margin: 0;
 }
 
 /* Mobile responsiveness */
