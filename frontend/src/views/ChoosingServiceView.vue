@@ -17,8 +17,8 @@
           <li v-for="feature in service.features" :key="feature">{{ feature }}</li>
         </ul>
         <div class="service-meta">
-          <span class="meta-duration">⏱ {{ service.duration }} min</span>
-          <span class="meta-price">${{ priceFor(key) }}</span>
+          <p class="meta-duration">Duration: {{ service.duration }} min</p>
+          <p class="meta-price">Price: ${{ priceFor(key) }}</p>
         </div>
       </div>
     </div>
