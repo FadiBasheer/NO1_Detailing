@@ -121,6 +121,8 @@ button {
   transition: 0.3s;
   background: #fff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
 }
 
 .service-card:hover {
