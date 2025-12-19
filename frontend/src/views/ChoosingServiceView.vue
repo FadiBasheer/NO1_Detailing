@@ -50,6 +50,8 @@ export default {
   data() {
     return {
       vehicleType: this.$route.query.vehicle || "",
+      brand: this.$route.query.brand || "",
+      model: this.$route.query.model || "",
       selectedService: null,
       selectedAddons: [],
       services,
@@ -66,9 +68,11 @@ export default {
     },
     goToBooking() {
       this.$router.push({
-        name: "BookingView",
+        name: "AddressSelectionView",
         query: {
           vehicle: this.vehicleType,
+          brand: this.brand,
+          model: this.model,
           service: this.selectedService,
           addons: this.selectedAddons.join(","),
         },
