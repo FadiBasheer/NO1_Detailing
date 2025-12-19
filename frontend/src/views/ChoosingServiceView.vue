@@ -167,7 +167,7 @@ button {
 }
 
 .service-meta {
-  margin-top: 14px;
+  margin-top: auto;
   padding-top: 12px;
   border-top: 1px solid #eee;
   text-align: left;
