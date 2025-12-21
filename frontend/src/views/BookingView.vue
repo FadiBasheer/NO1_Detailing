@@ -5,6 +5,17 @@
     <div class="booking-form">
       <h2>Book Your Appointment</h2>
 
+      <!-- Address -->
+      <div class="form-group">
+        <label>Service Address:</label>
+        <div class="address-display">{{ address || 'No address provided' }}</div>
+        <router-link
+          v-if="vehicles.length > 0"
+          :to="{ name: 'AddressSelectionView', query: { vehicle: vehicles[0].vehicleType, brand: vehicles[0].brand, model: vehicles[0].model, service: vehicles[0].service, addons: vehicles[0].addons.join(',') } }"
+          class="change-address-link"
+        >Change address</router-link>
+      </div>
+
       <!-- Date -->
       <div class="form-group">
         <label>Select Date:</label>
