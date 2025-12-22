@@ -154,6 +154,14 @@ export default {
   },
 
   created() {
+    // Restore address from query param (first arrival) or localStorage (subsequent visits)
+    if (this.$route.query.address) {
+      this.address = this.$route.query.address;
+      localStorage.setItem("bookingAddress", this.address);
+    } else {
+      this.address = localStorage.getItem("bookingAddress") || "";
+    }
+
     const savedVehicles = JSON.parse(localStorage.getItem("vehicles")) || [];
 
     if (this.$route.query.vehicle) {
@@ -161,7 +169,7 @@ export default {
         vehicleType: this.$route.query.vehicle || "",
         service: this.$route.query.service || "",
         addons: this.$route.query.addons
-          ? this.$route.query.addons.split(",")
+          ? this.$route.query.addons.split(",").filter(Boolean)
           : [],
         brand: this.$route.query.brand || "",
         model: this.$route.query.model || "",
