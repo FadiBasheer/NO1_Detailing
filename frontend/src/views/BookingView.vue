@@ -525,6 +525,25 @@ export default {
   background: white;
 }
 
+.address-display {
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #111827;
+  background: #f9fafb;
+  min-height: 40px;
+}
+
+.change-address-link {
+  display: inline-block;
+  margin-top: 5px;
+  font-size: 0.82rem;
+  color: #1e40af;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .submit-btn {
   background-color: #1e40af;
   color: white;
