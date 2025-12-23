@@ -286,7 +286,9 @@ export default {
 
     clearLocalStorage() {
       localStorage.removeItem("vehicles");
+      localStorage.removeItem("bookingAddress");
       this.vehicles = [];
+      this.address = "";
     },
 
     addAnotherVehicle() {
@@ -329,6 +331,7 @@ export default {
           vehicles: this.vehicles,
           date: this.date,
           time: this.time,
+          address: this.address || "Not provided",
         };
 
         // 1️⃣ Reserve the slot temporarily (pending)
