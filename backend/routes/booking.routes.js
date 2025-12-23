@@ -42,7 +42,7 @@ const ADDON_PRICE_MAP = {
 // Reserve a slot temporarily (status: "PENDING")
 router.post('/reserve-slot', authMiddleware, async (req, res) => {
   try {
-    const { vehicles, date, time } = req.body;
+    const { vehicles, date, time, address } = req.body;
 
     // Validate input
     if (!date || !time || !vehicles || !Array.isArray(vehicles) || vehicles.length === 0) {
