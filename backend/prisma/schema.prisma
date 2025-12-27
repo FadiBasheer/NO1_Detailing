@@ -134,6 +134,7 @@ model Booking {
   endTime      DateTime
 
   address        String
+  notes          String?
   status            BookingStatus @default(PENDING)
   discountAmount    Float         @default(0)
   helcimSecretToken String?
