@@ -7,6 +7,7 @@ import authRoutes from './routes/auth.routes.js';
 import bookingRoutes from './routes/booking.routes.js';
 import adminRoutes from './routes/admin.routes.js';
 import referralRoutes from './routes/referral.routes.js';
+import profileRoutes from './routes/profile.routes.js';
 import { startBookingCleanupJob } from './jobs/bookingCleanup.job.js';
 import { startTokenCleanupJob } from './jobs/tokenCleanup.job.js';
 import { setupGracefulShutdown } from './jobs/shutdown.js';
