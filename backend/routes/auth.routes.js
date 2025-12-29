@@ -99,21 +99,24 @@ router.post('/register', registerLimiter, async (req, res) => {
     });
     const referralDiscountPending = !!(pendingReferral && !pendingReferral.discountUsed);
 
-    res.status(201).json({ 
-      message: 'User created and logged in', 
-      accessToken, 
-      refreshToken, 
-      user: { 
-        id: user.id, 
-        email: user.email, 
-        role: user.role, 
+    res.status(201).json({
+      message: 'User created and logged in',
+      accessToken,
+      refreshToken,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        phone: user.phone,
+        defaultAddress: user.defaultAddress,
+        role: user.role,
         promoCode: user.promoCode,
         promoWashEarned: user.promoWashEarned,
         promoUsed: user.promoUsed,
         completedBookingsCount: user.completedBookingsCount,
         referralCode: user.referralCode,
         referralDiscountPending
-      } 
+      }
     });
   } catch (error) {
     console.error('Registration error:', error);
