@@ -107,5 +107,10 @@ export const useAuthStore = defineStore('auth', {
         this.startInactivityTimer();
       }
     },
+
+    updateUser(fields: Partial<Record<string, any>>) {
+      this.user = { ...this.user, ...fields };
+      sessionStorage.setItem('user', JSON.stringify(this.user));
+    },
   }
 });
