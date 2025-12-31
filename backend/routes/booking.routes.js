@@ -162,6 +162,7 @@ router.post('/reserve-slot', authMiddleware, async (req, res) => {
           date: currentStart,
           endTime: endTime,
           address: address || 'Not provided',
+          notes: notes || null,
           status: 'PENDING',
           services: { create: [{ serviceId: service.id }] },
           addons: { create: addonRecords.map(a => ({ addonId: a.id })) }
