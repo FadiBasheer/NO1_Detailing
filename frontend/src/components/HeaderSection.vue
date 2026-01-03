@@ -58,6 +58,9 @@
               <span>{{ user.email }}</span>
             </div>
             <div class="dropdown-divider"></div>
+            <router-link to="/account" class="dropdown-item" @click="closeUserMenu">
+              <span class="item-icon">👤</span> My Account
+            </router-link>
             <router-link to="/my-bookings" class="dropdown-item" @click="closeUserMenu">
               <span class="item-icon">📋</span> My Bookings
             </router-link>
