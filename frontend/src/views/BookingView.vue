@@ -42,6 +42,17 @@
         </select>
       </div>
 
+      <!-- Notes -->
+      <div class="form-group">
+        <label>Special Instructions <span class="optional">(optional)</span></label>
+        <textarea
+          v-model="notes"
+          placeholder="e.g. Gate code is 1234, park on the left side, leave the trunk unlocked…"
+          class="notes-textarea"
+          rows="3"
+        ></textarea>
+      </div>
+
       <!-- Submit -->
       <div class="form-group">
         <button @click="submitBooking" class="submit-btn">Pay to Book</button>
