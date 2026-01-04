@@ -149,6 +149,7 @@ export default {
       date: "",
       time: "",
       address: "",
+      notes: "",
       vehicles: [],
       message: "",
       availableTimeSlots: [],
