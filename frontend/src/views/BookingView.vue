@@ -344,6 +344,7 @@ export default {
           date: this.date,
           time: this.time,
           address: this.address || "Not provided",
+          notes: this.notes.trim() || null,
         };
 
         // 1️⃣ Reserve the slot temporarily (pending)
