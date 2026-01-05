@@ -538,6 +538,32 @@ export default {
   background: white;
 }
 
+.optional {
+  font-weight: 400;
+  color: #9ca3af;
+  font-size: 0.82rem;
+}
+
+.notes-textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #111827;
+  background: #f9fafb;
+  box-sizing: border-box;
+  resize: vertical;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.notes-textarea:focus {
+  outline: none;
+  border-color: #1e40af;
+  background: white;
+}
+
 .address-display {
   padding: 10px 12px;
   border: 1px solid #d1d5db;
