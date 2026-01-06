@@ -42,6 +42,7 @@
 
 <script>
 import { services } from "@/data/services.ts";
+import { useAuthStore } from "@/stores/auth.ts";
 
 export default {
   name: "AddressSelectionView",
