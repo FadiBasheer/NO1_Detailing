@@ -67,11 +67,11 @@ export default {
   },
   mounted() {
     const savedAddress = localStorage.getItem("bookingAddress");
-    const auth = useAuthStore();
+    const defaultAddress = useAuthStore().user?.defaultAddress;
     if (savedAddress) {
       this.address = savedAddress;
-    } else if (auth.user?.defaultAddress) {
-      this.address = auth.user.defaultAddress;
+    } else if (defaultAddress) {
+      this.address = defaultAddress;
     }
 
     const interval = setInterval(() => {
