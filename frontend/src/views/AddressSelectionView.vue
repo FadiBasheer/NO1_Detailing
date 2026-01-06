@@ -67,7 +67,12 @@ export default {
   },
   mounted() {
     const savedAddress = localStorage.getItem("bookingAddress");
-    if (savedAddress) this.address = savedAddress;
+    const auth = useAuthStore();
+    if (savedAddress) {
+      this.address = savedAddress;
+    } else if (auth.user?.defaultAddress) {
+      this.address = auth.user.defaultAddress;
+    }
 
     const interval = setInterval(() => {
       if (window.google && window.google.maps && window.google.maps.places) {
