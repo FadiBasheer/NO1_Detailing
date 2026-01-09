@@ -8,6 +8,7 @@ interface AuthState {
   accessToken: string | null;
   refreshToken: string | null;
   _inactivityTimer: ReturnType<typeof setTimeout> | null;
+  currentBookingAddress: string | null;
 }
 
 export const useAuthStore = defineStore('auth', {
