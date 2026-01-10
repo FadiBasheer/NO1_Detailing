@@ -17,6 +17,7 @@ export const useAuthStore = defineStore('auth', {
     accessToken: null,
     refreshToken: null,
     _inactivityTimer: null,
+    currentBookingAddress: null,
   }),
 
   actions: {
