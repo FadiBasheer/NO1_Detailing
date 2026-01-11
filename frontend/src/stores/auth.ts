@@ -69,6 +69,7 @@ export const useAuthStore = defineStore('auth', {
       this.user = null;
       this.accessToken = null;
       this.refreshToken = null;
+      this.currentBookingAddress = null;
 
       sessionStorage.removeItem('user');
       sessionStorage.removeItem('accessToken');
