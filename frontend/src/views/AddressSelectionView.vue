@@ -34,8 +34,14 @@
       <p class="field-hint">We service the Calgary area. Please confirm the address is correct before continuing.</p>
     </div>
 
-    <button class="continue-btn" @click="goToBooking" :disabled="!address.trim()">
-      Continue to Booking
+    <!-- Save as default checkbox -->
+    <label class="save-default-label">
+      <input type="checkbox" v-model="saveAsDefault" />
+      Save as my default address
+    </label>
+
+    <button class="continue-btn" @click="goToBooking" :disabled="!address.trim() || saving">
+      {{ saving ? 'Saving…' : 'Continue to Booking' }}
     </button>
   </div>
 </template>
@@ -43,6 +49,7 @@
 <script>
 import { services } from "@/data/services.ts";
 import { useAuthStore } from "@/stores/auth.ts";
+import axios from "@/axios.ts";
 
 export default {
   name: "AddressSelectionView",
@@ -54,6 +61,8 @@ export default {
       service: this.$route.query.service || "",
       addons: this.$route.query.addons || "",
       address: "",
+      saveAsDefault: false,
+      saving: false,
       autocomplete: null,
     };
   },
@@ -66,22 +75,22 @@ export default {
     },
   },
   mounted() {
-    const savedAddress = localStorage.getItem("bookingAddress");
-    const defaultAddress = useAuthStore().user?.defaultAddress;
-    if (savedAddress) {
-      this.address = savedAddress;
-    } else if (defaultAddress) {
-      this.address = defaultAddress;
+    const auth = useAuthStore();
+
+    // Priority: current booking session address → user's saved default → empty
+    if (auth.currentBookingAddress) {
+      this.address = auth.currentBookingAddress;
+    } else if (auth.user?.defaultAddress) {
+      this.address = auth.user.defaultAddress;
     }
 
     const interval = setInterval(() => {
       if (window.google && window.google.maps && window.google.maps.places) {
         clearInterval(interval);
-        const input = this.$refs.autocompleteInput;
-        this.autocomplete = new google.maps.places.Autocomplete(input, {
-          componentRestrictions: { country: "ca" },
-          fields: ["formatted_address"],
-        });
+        this.autocomplete = new google.maps.places.Autocomplete(
+          this.$refs.autocompleteInput,
+          { componentRestrictions: { country: "ca" }, fields: ["formatted_address"] }
+        );
         this.autocomplete.addListener("place_changed", () => {
           const place = this.autocomplete.getPlace();
           if (place?.formatted_address) {
@@ -92,12 +101,27 @@ export default {
     }, 100);
   },
   methods: {
-    goToBooking() {
+    async goToBooking() {
       if (!this.address.trim()) {
         alert("Please enter a valid address.");
         return;
       }
-      localStorage.setItem("bookingAddress", this.address);
+
+      const auth = useAuthStore();
+      auth.setBookingAddress(this.address);
+
+      if (this.saveAsDefault) {
+        this.saving = true;
+        try {
+          const res = await axios.patch("/api/profile", { defaultAddress: this.address });
+          auth.updateUser(res.data.user);
+        } catch {
+          // Non-critical — continue to booking even if save fails
+        } finally {
+          this.saving = false;
+        }
+      }
+
       this.$router.push({
         name: "BookingView",
         query: {
@@ -106,7 +130,6 @@ export default {
           model: this.model,
           service: this.service,
           addons: this.addons,
-          address: this.address,
         },
       });
     },
@@ -174,7 +197,7 @@ h1 {
 
 .address-field {
   width: 100%;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 .address-field label {
@@ -206,6 +229,23 @@ h1 {
   font-size: 0.8rem;
   color: #9ca3af;
   margin: 6px 0 0;
+}
+
+.save-default-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  font-size: 0.88rem;
+  color: #374151;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.save-default-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
 }
 
 .continue-btn {
