@@ -115,5 +115,13 @@ export const useAuthStore = defineStore('auth', {
       this.user = { ...this.user, ...fields };
       sessionStorage.setItem('user', JSON.stringify(this.user));
     },
+
+    setBookingAddress(address: string) {
+      this.currentBookingAddress = address;
+    },
+
+    clearBookingAddress() {
+      this.currentBookingAddress = null;
+    },
   }
 });
