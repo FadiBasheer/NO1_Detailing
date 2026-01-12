@@ -166,13 +166,9 @@ export default {
   },
 
   created() {
-    // Restore address from query param (first arrival) or localStorage (subsequent visits)
-    if (this.$route.query.address) {
-      this.address = this.$route.query.address;
-      localStorage.setItem("bookingAddress", this.address);
-    } else {
-      this.address = localStorage.getItem("bookingAddress") || "";
-    }
+    // Read address from the auth store (set by AddressSelectionView)
+    const auth = useAuthStore();
+    this.address = auth.currentBookingAddress || "";
 
     const savedVehicles = JSON.parse(localStorage.getItem("vehicles")) || [];
 
