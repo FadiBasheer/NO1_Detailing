@@ -294,9 +294,9 @@ export default {
 
     clearLocalStorage() {
       localStorage.removeItem("vehicles");
-      localStorage.removeItem("bookingAddress");
       this.vehicles = [];
       this.address = "";
+      useAuthStore().clearBookingAddress();
     },
 
     addAnotherVehicle() {
