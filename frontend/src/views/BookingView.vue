@@ -431,6 +431,8 @@ export default {
             });
             sessionStorage.setItem('paymentVerified', transactionId);
             localStorage.removeItem('pendingBookingId');
+            localStorage.removeItem('vehicles');
+            useAuthStore().clearBookingAddress();
             this.removeHelcimIframe();
             this.$router.push(`/thank-you?transactionId=${transactionId}`);
           } catch (err) {
