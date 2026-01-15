@@ -126,7 +126,6 @@ export default {
           defaultAddress: this.form.defaultAddress,
         });
         this.auth.updateUser(res.data.user);
-        localStorage.removeItem('bookingAddress');
         this.message = 'Profile saved successfully.';
         this.messageType = 'success';
       } catch {
