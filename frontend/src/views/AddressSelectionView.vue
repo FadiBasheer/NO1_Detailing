@@ -31,7 +31,7 @@
         class="address-input"
         autocomplete="off"
       />
-      <p class="field-hint">We service the Calgary area. Please confirm the address is correct before continuing.</p>
+      <p class="field-hint">We service the Lower Mainland, BC. Please confirm the address is correct before continuing.</p>
     </div>
 
     <!-- Save as default checkbox -->
