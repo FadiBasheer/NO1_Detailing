@@ -89,7 +89,15 @@ export default {
         clearInterval(interval);
         this.autocomplete = new google.maps.places.Autocomplete(
           this.$refs.autocompleteInput,
-          { componentRestrictions: { country: "ca" }, fields: ["formatted_address"] }
+          {
+            componentRestrictions: { country: "ca" },
+            fields: ["formatted_address"],
+            bounds: new google.maps.LatLngBounds(
+              new google.maps.LatLng(49.0, -123.3),
+              new google.maps.LatLng(49.5, -122.2)
+            ),
+            strictBounds: false,
+          }
         );
         this.autocomplete.addListener("place_changed", () => {
           const place = this.autocomplete.getPlace();
