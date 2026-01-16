@@ -33,7 +33,7 @@
         </div>
 
         <div class="section-title" style="margin-top: 28px;">Default Service Address</div>
-        <p class="section-hint">This will be pre-filled every time you book, so you don't have to type it again.</p>
+        <p class="section-hint">This will be pre-filled every time you book. We service the Lower Mainland, BC.</p>
 
         <div class="form-group">
           <label for="address-input">Address</label>
