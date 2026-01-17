@@ -352,6 +352,10 @@ export default {
 
         const bookingId = reserveRes.data.bookingId;
 
+        // Clear the cart — booking is now recorded as PENDING regardless of payment outcome
+        localStorage.removeItem("vehicles");
+        this.vehicles = [];
+
         this.message = "Opening secure payment...";
 
         // 2️⃣ Get payment URL from your server
