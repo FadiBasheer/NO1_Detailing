@@ -28,9 +28,13 @@ export default {
     const auth = useAuthStore();
     this._resetTimer = () => auth.resetInactivityTimer();
     ACTIVITY_EVENTS.forEach(e => window.addEventListener(e, this._resetTimer, { passive: true }));
+
+    this._onTabClose = () => localStorage.removeItem('vehicles');
+    window.addEventListener('beforeunload', this._onTabClose);
   },
   beforeUnmount() {
     ACTIVITY_EVENTS.forEach(e => window.removeEventListener(e, this._resetTimer));
+    window.removeEventListener('beforeunload', this._onTabClose);
   }
 }
 </script>
