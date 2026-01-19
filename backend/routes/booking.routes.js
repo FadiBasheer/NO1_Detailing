@@ -455,6 +455,67 @@ router.get('/bookings/my', authMiddleware, async (req, res) => {
   }
 });
 
+// Edit a booking (customer-initiated) — date/time, address, notes
+router.patch('/bookings/:id', authMiddleware, async (req, res) => {
+  try {
+    const { date, time, address, notes } = req.body;
+
+    const booking = await prisma.booking.findUnique({
+      where: { id: req.params.id },
+      include: {
+        services: { include: { service: true } },
+        addons:   { include: { addon: true } },
+      },
+    });
+
+    if (!booking) return res.status(404).json({ message: 'Booking not found.' });
+    if (booking.customerId !== req.user.id) return res.status(403).json({ message: 'Not your booking.' });
+    if (booking.status === 'COMPLETED' || booking.status === 'CANCELLED') {
+      return res.status(409).json({ message: 'Cannot edit a completed or cancelled booking.' });
+    }
+
+    const updates = {};
+
+    if (date && time) {
+      const newStart = new Date(`${date}T${time}:00`);
+      if (isNaN(newStart.getTime())) return res.status(400).json({ message: 'Invalid date or time.' });
+
+      const totalDuration =
+        booking.services.reduce((s, bs) => s + bs.service.durationMinutes, 0) +
+        booking.addons.reduce((s, ba) => s + ba.addon.durationMinutes, 0);
+
+      const newEnd = new Date(newStart.getTime() + totalDuration * 60000);
+
+      // Check for conflicts with other confirmed bookings (exclude this one)
+      const conflict = await prisma.booking.findFirst({
+        where: {
+          id: { not: booking.id },
+          status: 'CONFIRMED',
+          OR: [{ date: { lte: newStart }, endTime: { gte: newStart } }],
+        },
+      });
+      if (conflict) return res.status(409).json({ message: 'This time slot conflicts with an existing booking.' });
+
+      updates.date    = newStart;
+      updates.endTime = newEnd;
+    }
+
+    if (address !== undefined) updates.address = address.trim() || booking.address;
+    if (notes   !== undefined) updates.notes   = notes.trim() || null;
+
+    const updated = await prisma.booking.update({
+      where: { id: req.params.id },
+      data: updates,
+      select: { id: true, date: true, endTime: true, address: true, notes: true, status: true },
+    });
+
+    res.json({ message: 'Booking updated.', booking: updated });
+  } catch (error) {
+    console.error('Error editing booking:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 // Cancel a booking (customer-initiated)
 router.patch('/bookings/:id/cancel', authMiddleware, async (req, res) => {
   try {
