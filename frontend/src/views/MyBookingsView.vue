@@ -76,6 +76,8 @@
             <textarea v-model="editForm.notes" rows="3" placeholder="Any notes for the detailer…"></textarea>
           </div>
 
+          <p class="rebook-hint">Need to change your service or add a vehicle? Please cancel this booking and start over.</p>
+
           <p v-if="editError" class="edit-error">{{ editError }}</p>
         </div>
 
