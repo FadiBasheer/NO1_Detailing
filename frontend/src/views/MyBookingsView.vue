@@ -507,6 +507,16 @@ async function saveEdit() {
 .field-hint { font-size: 0.78rem; color: #9ca3af; margin: 0; }
 .error-hint { color: #dc2626; }
 
+.rebook-hint {
+  font-size: 0.83rem;
+  color: #92400e;
+  background: #fef3c7;
+  border: 1px solid #fcd34d;
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin: 0;
+}
+
 .edit-error {
   color: #dc2626;
   font-size: 0.85rem;
