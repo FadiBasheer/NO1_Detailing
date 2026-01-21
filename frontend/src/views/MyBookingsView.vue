@@ -271,8 +271,9 @@ async function openEdit(b: Booking) {
 
   // Set up Google Maps autocomplete after the modal renders
   await nextTick();
-  if (window.google?.maps?.places && editAddressInput.value) {
-    autocomplete = new (window as any).google.maps.places.Autocomplete(editAddressInput.value, {
+  const win = window as any;
+  if (win.google?.maps?.places && editAddressInput.value) {
+    autocomplete = new win.google.maps.places.Autocomplete(editAddressInput.value, {
       componentRestrictions: { country: 'ca' },
       fields: ['formatted_address'],
     });
