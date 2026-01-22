@@ -141,7 +141,7 @@ const BookingCard = defineComponent({
 
     return () => {
       const b = props.booking;
-      const canCancel = !!props.cancelFn && (b.status === 'CONFIRMED' || b.status === 'PENDING');
+      const canCancel = !!props.cancelFn && b.status === 'PENDING';
       const canEdit   = !!props.editFn   && (b.status === 'CONFIRMED' || b.status === 'PENDING');
 
       return h('div', { class: 'card-inner' }, [
