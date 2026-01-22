@@ -221,9 +221,14 @@ onMounted(async () => {
 async function cancelBooking(id: string) {
   if (!confirm('Are you sure you want to cancel this booking?')) return;
   try {
+    const booking = bookings.value.find(b => b.id === id);
     await axios.patch(`/api/bookings/${id}/cancel`);
-    const idx = bookings.value.findIndex(b => b.id === id);
-    if (idx !== -1) bookings.value[idx] = { ...bookings.value[idx], status: 'CANCELLED' };
+    if (booking?.status === 'PENDING') {
+      bookings.value = bookings.value.filter(b => b.id !== id);
+    } else {
+      const idx = bookings.value.findIndex(b => b.id === id);
+      if (idx !== -1) bookings.value[idx] = { ...bookings.value[idx], status: 'CANCELLED' };
+    }
   } catch (err: any) {
     alert(err.response?.data?.message ?? 'Could not cancel booking. Please try again.');
   }
