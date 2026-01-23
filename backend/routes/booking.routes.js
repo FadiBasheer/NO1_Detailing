@@ -521,29 +521,16 @@ router.patch('/bookings/:id/cancel', authMiddleware, async (req, res) => {
   try {
     const booking = await prisma.booking.findUnique({ where: { id: req.params.id } });
 
-    if (!booking) {
-      return res.status(404).json({ message: 'Booking not found.' });
-    }
+    if (!booking) return res.status(404).json({ message: 'Booking not found.' });
+    if (booking.customerId !== req.user.id) return res.status(403).json({ message: 'This booking does not belong to you.' });
+    if (booking.status === 'COMPLETED') return res.status(409).json({ message: 'Completed bookings cannot be cancelled.' });
+    if (booking.status === 'CANCELLED') return res.status(409).json({ message: 'Booking is already cancelled.' });
+    if (booking.status === 'CONFIRMED') return res.status(403).json({ message: 'Paid bookings cannot be cancelled online. Please contact us directly.' });
 
-    if (booking.customerId !== req.user.id) {
-      return res.status(403).json({ message: 'This booking does not belong to you.' });
-    }
+    // PENDING → hard delete
+    await prisma.booking.delete({ where: { id: req.params.id } });
 
-    if (booking.status === 'CANCELLED') {
-      return res.status(409).json({ message: 'Booking is already cancelled.' });
-    }
-
-    if (booking.status === 'COMPLETED') {
-      return res.status(409).json({ message: 'Completed bookings cannot be cancelled.' });
-    }
-
-    const updated = await prisma.booking.update({
-      where: { id: req.params.id },
-      data: { status: 'CANCELLED' },
-      select: { id: true, status: true }
-    });
-
-    res.json({ message: 'Booking cancelled.', booking: updated });
+    res.json({ message: 'Booking cancelled and removed.' });
   } catch (error) {
     console.error('Error cancelling booking:', error);
     res.status(500).json({ message: 'Internal server error' });
