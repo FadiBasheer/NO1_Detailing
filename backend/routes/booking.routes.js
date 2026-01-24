@@ -426,27 +426,31 @@ router.get('/bookings/my', authMiddleware, async (req, res) => {
       }
     });
 
-    const formatted = bookings.map(b => ({
-      id: b.id,
-      date: b.date,
-      endTime: b.endTime,
-      address: b.address,
-      status: b.status,
-      createdAt: b.createdAt,
-      vehicle: b.vehicle,
-      services: b.services.map(bs => ({
-        serviceId: bs.service.id,
-        name: bs.service.name,
-        price: bs.service.price,
-        durationMinutes: bs.service.durationMinutes,
-      })),
-      addons: b.addons.map(ba => ({
-        addonId: ba.addon.id,
-        name: ba.addon.name,
-        price: ba.addon.price,
-        durationMinutes: ba.addon.durationMinutes,
-      })),
-    }));
+    const formatted = bookings.map(b => {
+      const categoryPrices = SERVICE_PRICE_BY_CATEGORY[b.vehicle?.type ?? ''] ?? {};
+      return {
+        id: b.id,
+        date: b.date,
+        endTime: b.endTime,
+        address: b.address,
+        notes: b.notes,
+        status: b.status,
+        createdAt: b.createdAt,
+        vehicle: b.vehicle,
+        services: b.services.map(bs => ({
+          serviceId: bs.service.id,
+          name: bs.service.name,
+          price: categoryPrices[bs.service.name] ?? bs.service.price,
+          durationMinutes: bs.service.durationMinutes,
+        })),
+        addons: b.addons.map(ba => ({
+          addonId: ba.addon.id,
+          name: ba.addon.name,
+          price: ba.addon.price,
+          durationMinutes: ba.addon.durationMinutes,
+        })),
+      };
+    });
 
     res.json(formatted);
   } catch (error) {
