@@ -560,7 +560,7 @@ router.get('/available-times', async (req, res) => {
     }
 
     // Define business hours
-    const openTime = 8 * 60; // 8:00 AM in minutes
+    const openTime = 17 * 60; // 5:00 PM in minutes
     const closeTime = 20 * 60; // 8:00 PM in minutes
     const interval = 30; // 30-minute slot intervals
 
