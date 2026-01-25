@@ -121,12 +121,12 @@ const BookingCard = defineComponent({
   setup(props) {
     function formatDate(iso: string) {
       return new Date(iso).toLocaleDateString('en-CA', {
-        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+        timeZone: 'UTC', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
       });
     }
     function formatTime(iso: string) {
       return new Date(iso).toLocaleTimeString('en-CA', {
-        hour: '2-digit', minute: '2-digit', hour12: true,
+        timeZone: 'UTC', hour: '2-digit', minute: '2-digit', hour12: true,
       });
     }
     function total(b: Booking) {
