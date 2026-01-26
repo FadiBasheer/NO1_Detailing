@@ -246,6 +246,7 @@ let   autocomplete: any = null;
 const editForm = ref({ date: '', time: '', address: '', notes: '' });
 
 function formatTime(t: string) {
+  // t is "HH:MM" — format as 12-hour without timezone conversion
   const [h, m] = t.split(':');
   let hour = parseInt(h);
   const period = hour < 12 ? 'AM' : 'PM';
