@@ -134,7 +134,7 @@ const logout = () => {
   padding: 15px 30px;
   background-color: white;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-
+  position: relative;
   width: 100%;
   box-sizing: border-box;
 }
