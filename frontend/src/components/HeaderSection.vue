@@ -238,7 +238,8 @@ nav a, p {
 /* Mobile styles */
 @media (max-width: 768px) {
   .header {
-    padding: 15px 20px;
+    padding: 12px 16px;
+    flex-wrap: nowrap;
   }
 
   nav {
@@ -246,10 +247,13 @@ nav a, p {
     position: absolute;
     top: 100%;
     left: 0;
+    right: 0;
     width: 100%;
     background: white;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    z-index: 1100;
+    max-height: calc(100vh - 60px);
+    overflow-y: auto;
   }
 
   nav.nav-open {
@@ -260,6 +264,7 @@ nav a, p {
     flex-direction: column;
     gap: 0;
     padding: 0;
+    margin: 0;
   }
 
   nav li {
@@ -267,10 +272,12 @@ nav a, p {
     text-align: left;
   }
 
-  nav a, nav p {
+  nav > ul > li > a,
+  nav > ul > li > p {
     display: block;
     padding: 15px 20px;
     border-bottom: 1px solid #eee;
+    margin: 0;
   }
 
   .dropdown-menu {
@@ -278,14 +285,19 @@ nav a, p {
     display: none;
     box-shadow: none;
     border: none;
+    border-top: none;
     border-radius: 0;
     padding: 0;
+    min-width: unset;
+    width: 100%;
+    background: #f9fafb;
   }
 
   .dropdown-menu li a {
     padding: 12px 20px 12px 36px;
     font-weight: normal;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid #ebebeb;
+    white-space: normal;
   }
 
   .dropdown:hover .dropdown-menu {
@@ -298,6 +310,17 @@ nav a, p {
 
   .hamburger {
     display: flex;
+    flex-shrink: 0;
+    margin-left: 8px;
+  }
+
+  .auth-buttons {
+    gap: 6px;
+  }
+
+  .btn-referral-cta {
+    font-size: 0.78rem;
+    padding: 6px 10px;
   }
 }
 
