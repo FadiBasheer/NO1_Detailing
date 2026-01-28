@@ -536,4 +536,10 @@ nav a, p {
     display: none;
   }
 }
+
+@media (max-width: 480px) {
+  .btn-referral-cta {
+    display: none;
+  }
+}
 </style>
