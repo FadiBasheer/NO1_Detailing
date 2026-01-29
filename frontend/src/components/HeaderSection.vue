@@ -29,10 +29,10 @@
           </ul>
         </li>
 
-        <li><router-link to="/membership">Membership</router-link></li>
+        <li><router-link to="/membership" @click="closeAll">Membership</router-link></li>
 
-        <li><router-link to="/gift-cards">Gift Cards</router-link></li>
-        <li><router-link to="/FAQs">FAQ</router-link></li>
+        <li><router-link to="/gift-cards" @click="closeAll">Gift Cards</router-link></li>
+        <li><router-link to="/FAQs" @click="closeAll">FAQ</router-link></li>
 
       </ul>
     </nav>
