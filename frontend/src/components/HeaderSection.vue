@@ -6,7 +6,7 @@
 
         <!-- Services dropdown -->
         <li class="dropdown">
-          <p class="dropdown-btn" @click="toggleDropdown('services')">Services &#x2BC6;</p>
+          <p class="dropdown-btn" @click="toggleDropdown('services')">Services</p>
           <ul class="dropdown-menu" :class="{ 'open': activeDropdown === 'services' }">
             <li><router-link to="/services/car" @click="closeAll">Car Detailing</router-link></li>
             <li><router-link to="/services/rv" @click="closeAll">RV Detailing</router-link></li>
