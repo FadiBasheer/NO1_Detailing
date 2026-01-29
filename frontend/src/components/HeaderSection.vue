@@ -304,7 +304,7 @@ nav a, p {
     display: none;
   }
 
-  .dropdown-menu.open {
+  .dropdown > .dropdown-menu.open {
     display: block;
   }
 
