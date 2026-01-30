@@ -165,6 +165,21 @@ nav a, p {
 .dropdown-btn {
   cursor: pointer;
   user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dropdown-btn::after {
+  content: '';
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid #333;
+  transition: transform 0.2s;
+  flex-shrink: 0;
 }
 
 .dropdown-menu {
