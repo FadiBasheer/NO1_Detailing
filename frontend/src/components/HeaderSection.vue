@@ -17,7 +17,7 @@
 
         <!-- Business Programs dropdown -->
         <li class="dropdown">
-          <p class="dropdown-btn" @click="toggleDropdown('business')">Business Programs</p>
+          <p :class="['dropdown-btn', { 'dropdown-btn-open': activeDropdown === 'business' }]" @click="toggleDropdown('business')">Business Programs</p>
           <ul class="dropdown-menu" :class="{ 'open': activeDropdown === 'business' }">
             <li><router-link to="/business/fleet-management" @click="closeAll">Fleet Management</router-link></li>
             <li><router-link to="/business/car-dealerships" @click="closeAll">Car Dealerships</router-link></li>
