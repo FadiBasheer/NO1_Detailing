@@ -182,6 +182,10 @@ nav a, p {
   flex-shrink: 0;
 }
 
+.dropdown-btn-open::after {
+  transform: rotate(180deg);
+}
+
 .dropdown-menu {
   display: none;
   position: absolute;
