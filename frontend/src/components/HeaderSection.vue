@@ -560,9 +560,4 @@ nav a, p {
   }
 }
 
-@media (max-width: 480px) {
-  .btn-referral-cta {
-    display: none;
-  }
-}
 </style>
