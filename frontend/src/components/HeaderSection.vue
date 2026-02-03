@@ -224,6 +224,10 @@ nav a, p {
   display: block;
 }
 
+.dropdown:hover .dropdown-btn::after {
+  transform: rotate(180deg);
+}
+
 /* Hamburger menu */
 .hamburger {
   display: none;
