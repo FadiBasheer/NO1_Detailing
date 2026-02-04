@@ -44,7 +44,7 @@
 
       <template v-else>
         <router-link to="/my-referral" class="btn-referral-cta">
-          🎁 Refer &amp; Earn
+          🎁 <span class="referral-label">Refer &amp; Earn</span>
         </router-link>
 
         <div class="user-menu" @click.stop="toggleUserMenu" ref="userMenuRef">
