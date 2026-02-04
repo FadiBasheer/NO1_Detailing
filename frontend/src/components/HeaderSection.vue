@@ -345,6 +345,10 @@ nav a, p {
     font-size: 0.78rem;
     padding: 6px 10px;
   }
+
+  .btn-referral-cta .referral-label {
+    display: none;
+  }
 }
 
 /* Auth buttons */
