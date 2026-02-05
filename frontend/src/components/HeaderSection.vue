@@ -50,7 +50,7 @@
         <div class="user-menu" @click.stop="toggleUserMenu" ref="userMenuRef">
           <div class="user-avatar">{{ userInitial }}</div>
           <span class="user-email">{{ userShortEmail }}</span>
-          <span class="chevron" :class="{ 'chevron-up': userMenuOpen }">&#x2BC6;</span>
+          <span class="chevron" :class="{ 'chevron-up': userMenuOpen }"></span>
 
           <div class="user-dropdown" v-show="userMenuOpen" @click.stop>
             <div class="dropdown-header">
