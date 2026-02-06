@@ -455,10 +455,14 @@ nav a, p {
 }
 
 .chevron {
-  font-size: 0.65rem;
-  color: #9ca3af;
-  transition: transform 0.2s;
   display: inline-block;
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid #9ca3af;
+  transition: transform 0.2s;
+  flex-shrink: 0;
 }
 
 .chevron-up {
