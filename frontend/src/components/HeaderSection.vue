@@ -339,6 +339,7 @@ nav a, p {
 
   .auth-buttons {
     gap: 6px;
+    margin-left: auto;
   }
 
   .btn-referral-cta {
