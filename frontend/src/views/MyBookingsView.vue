@@ -115,9 +115,11 @@ interface Booking {
 // ── Inline BookingCard component ───────────────────────────────────────────────
 const BookingCard = defineComponent({
   props: {
-    booking:  { type: Object as () => Booking, required: true },
-    cancelFn: { type: Function as PropType<(id: string) => void>, default: undefined },
-    editFn:   { type: Function as PropType<(b: Booking) => void>, default: undefined },
+    booking:   { type: Object as () => Booking, required: true },
+    cancelFn:  { type: Function as PropType<(id: string) => void>, default: undefined },
+    editFn:    { type: Function as PropType<(b: Booking) => void>, default: undefined },
+    payFn:     { type: Function as PropType<(b: Booking) => void>, default: undefined },
+    payingId:  { type: String as PropType<string | null>, default: null },
   },
   setup(props) {
     function formatDate(iso: string) {
