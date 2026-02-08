@@ -93,7 +93,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, nextTick, defineComponent, h, type PropType } from 'vue';
+import { ref, computed, onMounted, onUnmounted, nextTick, defineComponent, h, type PropType } from 'vue';
+import { useRouter } from 'vue-router';
 import axios from '../axios';
 
 interface Service { serviceId: string; name: string; price: number; durationMinutes: number }
