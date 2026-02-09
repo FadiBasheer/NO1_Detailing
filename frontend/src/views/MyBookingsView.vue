@@ -181,8 +181,10 @@ const BookingCard = defineComponent({
             h('span', { class: 'total' }, `$${total(b)}`),
           ]),
         ]),
-        (canEdit || canCancel)
+        (canPay || canEdit || canCancel)
           ? h('div', { class: 'card-footer' }, [
+              canPay    ? h('button', { class: 'btn-pay',    onClick: () => props.payFn!(b), disabled: props.payingId === b.id },
+                            props.payingId === b.id ? 'Opening payment…' : 'Complete Payment') : null,
               canEdit   ? h('button', { class: 'btn-edit',   onClick: () => props.editFn!(b) },   'Edit Booking')   : null,
               canCancel ? h('button', { class: 'btn-cancel', onClick: () => props.cancelFn!(b.id) }, 'Cancel Booking') : null,
             ])
