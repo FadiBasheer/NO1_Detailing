@@ -16,7 +16,7 @@
       <section v-if="upcoming.length">
         <h2 class="section-title">Upcoming</h2>
         <div class="card" v-for="b in upcoming" :key="b.id">
-          <BookingCard :booking="b" :cancel-fn="cancelBooking" :edit-fn="openEdit" />
+          <BookingCard :booking="b" :cancel-fn="cancelBooking" :edit-fn="openEdit" :pay-fn="payBooking" :paying-id="paying" />
         </div>
       </section>
 
