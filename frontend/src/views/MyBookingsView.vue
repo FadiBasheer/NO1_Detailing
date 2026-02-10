@@ -240,6 +240,90 @@ async function cancelBooking(id: string) {
   }
 }
 
+// ── Payment ────────────────────────────────────────────────────────────────────
+const router  = useRouter();
+const paying  = ref<string | null>(null);
+let helcimHandler: ((e: MessageEvent) => void) | null = null;
+
+function removeHelcimIframe() {
+  document.querySelectorAll('iframe[src*="helcim"]').forEach(el => el.remove());
+  const wrapper = document.getElementById('helcimPayIframe');
+  if (wrapper) wrapper.remove();
+}
+
+async function payBooking(b: Booking) {
+  if (paying.value) return;
+  paying.value = b.id;
+  try {
+    const res = await axios.post('/api/payment-link', { bookingId: b.id });
+    const { checkoutToken } = res.data;
+    if (!checkoutToken) {
+      alert('Could not create payment session. Please try again.');
+      paying.value = null;
+      return;
+    }
+
+    localStorage.setItem('pendingBookingId', b.id);
+
+    const openModal = () => (window as any).appendHelcimPayIframe(checkoutToken);
+    if (!document.querySelector('script[src="https://secure.helcim.app/helcim-pay/services/start.js"]')) {
+      const script = document.createElement('script');
+      script.src = 'https://secure.helcim.app/helcim-pay/services/start.js';
+      script.onload = openModal;
+      document.head.appendChild(script);
+    } else {
+      openModal();
+    }
+
+    helcimHandler = async (event: MessageEvent) => {
+      const data = event.data;
+      if (!data || typeof data !== 'object') return;
+      if (data.eventName !== `helcim-pay-js-${checkoutToken}`) return;
+
+      if (data.eventStatus === 'SUCCESS') {
+        window.removeEventListener('message', helcimHandler!);
+        helcimHandler = null;
+        let transactionId: string | undefined;
+        try { transactionId = JSON.parse(data.eventMessage)?.data?.data?.transactionId; } catch {}
+        if (!transactionId) {
+          alert('Payment received but could not retrieve transaction ID. Please contact support.');
+          paying.value = null;
+          removeHelcimIframe();
+          return;
+        }
+        try {
+          await axios.post('/api/payment-success', { bookingId: b.id, transactionId, helcimPayEventMessage: data.eventMessage });
+          const idx = bookings.value.findIndex(x => x.id === b.id);
+          if (idx !== -1) bookings.value[idx] = { ...bookings.value[idx], status: 'CONFIRMED' };
+          localStorage.removeItem('pendingBookingId');
+          sessionStorage.setItem('paymentVerified', transactionId);
+          removeHelcimIframe();
+          router.push(`/thank-you?transactionId=${transactionId}`);
+        } catch (err: any) {
+          alert(err.response?.data?.message || 'Payment verification failed. Please contact support.');
+        } finally {
+          paying.value = null;
+        }
+      } else if (data.eventStatus === 'ABORTED') {
+        window.removeEventListener('message', helcimHandler!);
+        helcimHandler = null;
+        localStorage.removeItem('pendingBookingId');
+        removeHelcimIframe();
+        paying.value = null;
+      }
+    };
+    window.addEventListener('message', helcimHandler);
+  } catch (err: any) {
+    alert(err.response?.data?.message || 'Could not start payment. Please try again.');
+    paying.value = null;
+  }
+}
+
+onUnmounted(() => {
+  if (helcimHandler) window.removeEventListener('message', helcimHandler);
+  removeHelcimIframe();
+});
+
 // ── Edit modal ─────────────────────────────────────────────────────────────────
 const editingBooking  = ref<Booking | null>(null);
 const editAddressInput = ref<HTMLInputElement | null>(null);
