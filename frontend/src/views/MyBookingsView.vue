@@ -502,6 +502,19 @@ async function saveEdit() {
   gap: 0.75rem;
 }
 
+:deep(.btn-pay) {
+  background: #16a34a;
+  border: none;
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+:deep(.btn-pay:hover:not(:disabled)) { background: #15803d; }
+:deep(.btn-pay:disabled) { background: #86efac; cursor: not-allowed; }
+
 :deep(.btn-edit) {
   background: none;
   border: 1px solid #93c5fd;
