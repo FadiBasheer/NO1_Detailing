@@ -5,7 +5,7 @@ import cron from 'node-cron';
 export function startBookingCleanupJob() {
   cron.schedule('* * * * *', async () => {
     try {
-      const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
+      const tenMinutesAgo = new Date(Date.now() - 60 * 60 * 1000);
       const deletedBookings = await prisma.booking.deleteMany({
         where: {
           status: 'PENDING',
