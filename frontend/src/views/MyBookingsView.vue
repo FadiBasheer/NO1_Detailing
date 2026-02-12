@@ -215,11 +215,14 @@ const error    = ref('');
 
 const now = new Date();
 
+const unpaid = computed(() =>
+  bookings.value.filter(b => b.status === 'PENDING')
+);
 const upcoming = computed(() =>
-  bookings.value.filter(b => new Date(b.date) >= now && b.status !== 'CANCELLED')
+  bookings.value.filter(b => b.status !== 'PENDING' && new Date(b.date) >= now && b.status !== 'CANCELLED')
 );
 const past = computed(() =>
-  bookings.value.filter(b => new Date(b.date) < now || b.status === 'CANCELLED')
+  bookings.value.filter(b => b.status !== 'PENDING' && (new Date(b.date) < now || b.status === 'CANCELLED'))
 );
 
 const todayDate = computed(() => {
