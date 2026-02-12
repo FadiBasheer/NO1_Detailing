@@ -12,7 +12,21 @@
     </div>
 
     <div v-else class="bookings-list">
-      <!-- Upcoming -->
+      <!-- Unpaid / action required -->
+      <section v-if="unpaid.length">
+        <div class="unpaid-banner">
+          <span class="unpaid-icon">⚠️</span>
+          <div>
+            <strong>Payment Required</strong>
+            <p>You have {{ unpaid.length }} unpaid booking{{ unpaid.length > 1 ? 's' : '' }}. Your time slot is held for 1 hour — complete payment to confirm.</p>
+          </div>
+        </div>
+        <div class="card unpaid-card" v-for="b in unpaid" :key="b.id">
+          <BookingCard :booking="b" :cancel-fn="cancelBooking" :edit-fn="openEdit" :pay-fn="payBooking" :paying-id="paying" />
+        </div>
+      </section>
+
+      <!-- Upcoming (paid/confirmed) -->
       <section v-if="upcoming.length">
         <h2 class="section-title">Upcoming</h2>
         <div class="card" v-for="b in upcoming" :key="b.id">
@@ -24,7 +38,7 @@
       <section v-if="past.length">
         <h2 class="section-title past-title">Past</h2>
         <div class="card past" v-for="b in past" :key="b.id">
-          <BookingCard :booking="b" />
+          <BookingCard :booking="b" :pay-fn="b.status === 'PENDING' ? payBooking : undefined" :paying-id="paying" />
         </div>
       </section>
     </div>
