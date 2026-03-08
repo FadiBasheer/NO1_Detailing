@@ -473,6 +473,24 @@ async function saveEdit() {
 .page-header { margin-bottom: 1.75rem; }
 .page-header h1 { font-size: 1.6rem; font-weight: 700; margin: 0; }
 
+.unpaid-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background: #fefce8;
+  border: 1px solid #fcd34d;
+  border-radius: 10px;
+  padding: 0.9rem 1.1rem;
+  margin-bottom: 0.75rem;
+}
+.unpaid-icon { font-size: 1.3rem; flex-shrink: 0; }
+.unpaid-banner strong { display: block; color: #92400e; font-size: 0.9rem; margin-bottom: 2px; }
+.unpaid-banner p { margin: 0; color: #78350f; font-size: 0.82rem; line-height: 1.4; }
+
+.card.unpaid-card {
+  border: 1.5px solid #fcd34d;
+}
+
 .section-title {
   font-size: 0.8rem;
   font-weight: 700;
