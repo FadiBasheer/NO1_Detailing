@@ -26,6 +26,7 @@
           :min="todayDate"
           @change="onDateChange"
         />
+        <p v-if="closedDayMessage" class="closed-day-error">{{ closedDayMessage }}</p>
       </div>
 
       <!-- Time -->
