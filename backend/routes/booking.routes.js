@@ -12,6 +12,19 @@ const apiToken = isTest
   : process.env.HELCIM_API_TOKEN;
 
 
+// ── Business schedule ──────────────────────────────────────────────────────────
+// Keys: 0 = Sunday … 6 = Saturday
+// null = closed all day; open/close in 24-hour integers
+const SCHEDULE = {
+  0: null,                   // Sunday   — closed
+  1: { open: 17, close: 20 }, // Monday   — 5:00 PM – 8:00 PM
+  2: { open: 17, close: 20 }, // Tuesday  — 5:00 PM – 8:00 PM
+  3: { open: 17, close: 20 }, // Wednesday — 5:00 PM – 8:00 PM
+  4: { open: 17, close: 20 }, // Thursday — 5:00 PM – 8:00 PM
+  5: { open: 17, close: 20 }, // Friday   — 5:00 PM – 8:00 PM
+  6: { open: 8,  close: 20 }, // Saturday — 8:00 AM – 8:00 PM
+};
+
 const SERVICE_PRICE_MAP = {
   Interior: { durationMinutes: 60 },
   Exterior: { durationMinutes: 45 },
