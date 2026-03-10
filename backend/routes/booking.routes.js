@@ -576,15 +576,16 @@ router.get('/available-times', async (req, res) => {
       return res.status(400).json({ message: 'Invalid date format. Use ISO format (YYYY-MM-DD)' });
     }
 
-    // Closed on Sundays (0 = Sunday in UTC)
-    if (selectedDate.getUTCDay() === 0) {
-      return res.json({ date, duration: parseInt(duration), availableSlots: [], totalAvailable: 0, closedReason: 'Closed on Sundays' });
+    // Check schedule for this day
+    const dayHours = SCHEDULE[selectedDate.getUTCDay()];
+    if (dayHours === null) {
+      return res.json({ date, duration: parseInt(duration), availableSlots: [], totalAvailable: 0, closedReason: 'Closed' });
     }
 
-    // Define business hours
-    const openTime = 17 * 60; // 5:00 PM in minutes
-    const closeTime = 20 * 60; // 8:00 PM in minutes
-    const interval = 30; // 30-minute slot intervals
+    // Business hours from schedule
+    const openTime  = dayHours.open  * 60; // minutes from midnight
+    const closeTime = dayHours.close * 60;
+    const interval  = 30; // slot interval in minutes
 
     // Get the next day for the date range query
     const dayStart = new Date(`${date}T00:00:00Z`);
