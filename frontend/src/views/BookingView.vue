@@ -144,6 +144,7 @@
 import axios from "../axios.ts";
 import { services, addons, servicePricing } from "@/data/services.ts";
 import { useAuthStore } from "@/stores/auth.ts";
+import { getClosedMessage } from "@/data/schedule.ts";
 
 export default {
   data() {
