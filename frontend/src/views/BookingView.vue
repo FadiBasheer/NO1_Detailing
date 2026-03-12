@@ -155,6 +155,7 @@ export default {
       notes: "",
       vehicles: [],
       message: "",
+      closedDayMessage: "",
       availableTimeSlots: [],
       helcimMessageHandler: null,
       activeCheckoutToken: null,
