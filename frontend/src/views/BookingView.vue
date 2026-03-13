@@ -582,6 +582,16 @@ export default {
   min-height: 40px;
 }
 
+.closed-day-error {
+  margin-top: 6px;
+  color: #dc2626;
+  font-size: 0.85rem;
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  border-radius: 6px;
+  padding: 7px 10px;
+}
+
 .change-address-link {
   display: inline-block;
   margin-top: 5px;
