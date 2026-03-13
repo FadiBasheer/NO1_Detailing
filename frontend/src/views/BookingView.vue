@@ -293,7 +293,9 @@ export default {
 
     onDateChange() {
       this.time = "";
-      this.fetchBookedTimes();
+      this.availableTimeSlots = [];
+      this.closedDayMessage = getClosedMessage(this.date) || "";
+      if (!this.closedDayMessage) this.fetchBookedTimes();
     },
 
     clearLocalStorage() {
