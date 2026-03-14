@@ -110,6 +110,7 @@
 import { ref, computed, onMounted, onUnmounted, nextTick, defineComponent, h, type PropType } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from '../axios';
+import { getClosedMessage } from '../data/schedule';
 
 interface Service { serviceId: string; name: string; price: number; durationMinutes: number }
 interface Addon   { addonId: string;   name: string; price: number; durationMinutes: number }
