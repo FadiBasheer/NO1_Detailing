@@ -56,6 +56,9 @@
           <div class="form-group">
             <label>Date</label>
             <input type="date" v-model="editForm.date" :min="todayDate" @change="onEditDateChange" />
+            <p v-if="editForm.date && getClosedMessage(editForm.date)" class="error-hint field-hint">
+              {{ getClosedMessage(editForm.date) }}
+            </p>
           </div>
 
           <!-- Time -->
