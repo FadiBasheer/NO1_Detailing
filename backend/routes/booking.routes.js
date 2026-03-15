@@ -221,6 +221,22 @@ router.post('/payment-link', authMiddleware, async (req, res) => {
       return res.status(403).json({ message: 'This booking does not belong to you.' });
     }
 
+    // Check that the reserved slot is still available (another customer may have confirmed it)
+    const slotConflict = await prisma.booking.findFirst({
+      where: {
+        id: { not: bookingId },
+        status: 'CONFIRMED',
+        date:    { lte: booking.endTime },
+        endTime: { gte: booking.date },
+      }
+    });
+    if (slotConflict) {
+      return res.status(409).json({
+        message: 'Sorry, this time slot was just taken by another customer. Please go back and choose a new date and time.',
+        slotUnavailable: true,
+      });
+    }
+
     // Calculate total server-side using per-category pricing
     const vehicleCategory = booking.vehicle?.type ?? "";
     const categoryPrices = SERVICE_PRICE_BY_CATEGORY[vehicleCategory] ?? {};
