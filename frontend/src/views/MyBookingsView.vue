@@ -335,7 +335,14 @@ async function payBooking(b: Booking) {
     };
     window.addEventListener('message', helcimHandler);
   } catch (err: any) {
-    alert(err.response?.data?.message || 'Could not start payment. Please try again.');
+    const data = err.response?.data;
+    if (data?.slotUnavailable) {
+      // Delete the stale pending booking from the local list so it disappears
+      bookings.value = bookings.value.filter(x => x.id !== b.id);
+      alert(data.message);
+    } else {
+      alert(data?.message || 'Could not start payment. Please try again.');
+    }
     paying.value = null;
   }
 }
