@@ -18,7 +18,7 @@
           <span class="unpaid-icon">⚠️</span>
           <div>
             <strong>Payment Required</strong>
-            <p>You have {{ unpaid.length }} unpaid booking{{ unpaid.length > 1 ? 's' : '' }}. Complete payment within 7 days to confirm your booking.</p>
+            <p>You have {{ unpaid.length }} unpaid booking{{ unpaid.length > 1 ? 's' : '' }}. Complete payment at least 1 hour before your appointment — unpaid bookings are automatically removed at that point.</p>
           </div>
         </div>
         <div class="card unpaid-card" v-for="b in unpaid" :key="b.id">
