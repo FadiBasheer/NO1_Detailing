@@ -37,6 +37,7 @@ app.use('/api', bookingRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/referral', referralRoutes);
 app.use('/api/profile', profileRoutes);
+app.use('/api/membership', membershipRoutes);
 
 // Start the booking cleanup job
 startBookingCleanupJob();
