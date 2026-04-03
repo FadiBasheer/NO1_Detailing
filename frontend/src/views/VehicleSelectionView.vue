@@ -101,7 +101,17 @@ export default {
       this.model = "";
     },
     goToServiceSelection() {
-      if (this.canProceed) {
+      if (!this.canProceed) return;
+      if (this.$route.query.next === 'membership') {
+        this.$router.push({
+          name: 'membership',
+          query: {
+            vehicle: this.selectedVehicle,
+            brand: this.brand,
+            model: this.model,
+          },
+        });
+      } else {
         this.$router.push({
           name: "ChoosingServiceView",
           query: {
