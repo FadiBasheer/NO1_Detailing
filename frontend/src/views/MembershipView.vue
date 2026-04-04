@@ -386,8 +386,6 @@ const auth = useAuthStore();
 
 // ── Route params (from vehicle selection) ─────────────────────────────────
 const vehicleType = computed(() => route.query.vehicle || null);
-const vehicleBrand = computed(() => route.query.brand || null);
-const vehicleModel = computed(() => route.query.model || null);
 
 // ── State ─────────────────────────────────────────────────────────────────
 const loading = ref(true);
