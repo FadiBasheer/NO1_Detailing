@@ -522,27 +522,17 @@ async function proceedToPayment() {
   signupModal.loading = true;
   signupModal.error = '';
   try {
-    const res = await fetch('/api/membership/checkout-token', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${auth.accessToken}`,
-      },
-      body: JSON.stringify({ vehicleType: vehicleType.value, tier: signupModal.tier }),
+    const res = await api.post('/api/membership/checkout-token', {
+      vehicleType: vehicleType.value,
+      tier: signupModal.tier,
     });
-    const data = await res.json();
-    if (!res.ok) {
-      signupModal.error = data.message || 'Failed to start payment.';
-      signupModal.loading = false;
-      return;
-    }
     signupModal.step = 2;
     signupModal.loading = false;
     loadHelcimScript(() => {
-      appendHelcimPayIframe(data.checkoutToken);
+      appendHelcimPayIframe(res.data.checkoutToken);
     });
-  } catch (err) {
-    signupModal.error = 'Network error. Please try again.';
+  } catch (err: any) {
+    signupModal.error = err.response?.data?.message || 'Failed to start payment.';
     signupModal.loading = false;
   }
 }
