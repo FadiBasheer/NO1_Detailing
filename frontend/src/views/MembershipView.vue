@@ -464,11 +464,8 @@ onMounted(async () => {
   // Fetch current membership if logged in
   if (auth.accessToken) {
     try {
-      const res = await fetch('/api/membership/me', {
-        headers: { Authorization: `Bearer ${auth.accessToken}` },
-      });
-      const data = await res.json();
-      membership.value = data.membership;
+      const res = await api.get('/api/membership/me');
+      membership.value = res.data.membership;
     } catch (err) {
       console.error('Failed to load membership:', err);
     }
@@ -477,9 +474,8 @@ onMounted(async () => {
   // Fetch pricing if vehicle type is in URL
   if (vehicleType.value) {
     try {
-      const res = await fetch(`/api/membership/pricing?vehicleType=${encodeURIComponent(vehicleType.value)}`);
-      const data = await res.json();
-      if (data.pricing) pricing.value = data.pricing;
+      const res = await api.get('/api/membership/pricing', { params: { vehicleType: vehicleType.value } });
+      if (res.data.pricing) pricing.value = res.data.pricing;
     } catch (err) {
       console.error('Failed to load pricing:', err);
     }
