@@ -531,7 +531,7 @@ async function proceedToPayment() {
     loadHelcimScript(() => {
       appendHelcimPayIframe(res.data.checkoutToken);
     });
-  } catch (err: any) {
+  } catch (err) {
     signupModal.error = err.response?.data?.message || 'Failed to start payment.';
     signupModal.loading = false;
   }
@@ -568,7 +568,7 @@ async function onHelcimMessage(event) {
       });
       membership.value = res.data.membership;
       signupModal.step = 3;
-    } catch (err: any) {
+    } catch (err) {
       signupModal.step = 1;
       signupModal.error = err.response?.data?.message || 'Activation failed. Contact support.';
     }
