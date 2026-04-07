@@ -559,31 +559,18 @@ async function onHelcimMessage(event) {
   if (event.data.eventStatus === 'SUCCESS') {
     const tx = event.data.data?.transactions?.[0] || event.data.data || {};
     try {
-      const res = await fetch('/api/membership/activate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${auth.accessToken}`,
-        },
-        body: JSON.stringify({
-          vehicleType: vehicleType.value,
-          tier: signupModal.tier,
-          transactionId: tx.transactionId,
-          cardToken: tx.cardToken || null,
-          customerCode: tx.customerCode || null,
-        }),
+      const res = await api.post('/api/membership/activate', {
+        vehicleType: vehicleType.value,
+        tier: signupModal.tier,
+        transactionId: tx.transactionId,
+        cardToken: tx.cardToken || null,
+        customerCode: tx.customerCode || null,
       });
-      const data = await res.json();
-      if (res.ok) {
-        membership.value = data.membership;
-        signupModal.step = 3;
-      } else {
-        signupModal.step = 1;
-        signupModal.error = data.message || 'Activation failed. Contact support.';
-      }
-    } catch (err) {
+      membership.value = res.data.membership;
+      signupModal.step = 3;
+    } catch (err: any) {
       signupModal.step = 1;
-      signupModal.error = 'Network error activating membership. Contact support.';
+      signupModal.error = err.response?.data?.message || 'Activation failed. Contact support.';
     }
   }
 }
