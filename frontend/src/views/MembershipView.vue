@@ -382,7 +382,7 @@ import api from '../axios.ts';
 
 declare global {
   interface Window {
-    appendHelcimPayIframe: (token: string) => void;
+    appendHelcimPayIframe?: (token: string) => void;
   }
 }
 
