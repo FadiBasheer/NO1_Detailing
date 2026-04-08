@@ -380,17 +380,37 @@ import { useRouter, useRoute } from 'vue-router';
 import { useAuthStore } from '../stores/auth.ts';
 import api from '../axios.ts';
 
+declare global {
+  interface Window {
+    appendHelcimPayIframe: (token: string) => void;
+  }
+}
+
+interface MembershipRecord {
+  id: string;
+  userId: string;
+  vehicleType: string;
+  tier: string;
+  status: string;
+  monthlyPrice: number;
+  startDate: string;
+  nextBillingDate: string;
+  helcimSubscriptionId: string | null;
+  detailCreditUsed: boolean;
+  washCreditUsed: boolean;
+}
+
 const router = useRouter();
 const route = useRoute();
 const auth = useAuthStore();
 
 // ── Route params (from vehicle selection) ─────────────────────────────────
-const vehicleType = computed(() => route.query.vehicle || null);
+const vehicleType = computed(() => (route.query.vehicle as string) || null);
 
 // ── State ─────────────────────────────────────────────────────────────────
 const loading = ref(true);
-const membership = ref(null);
-const pricing = ref({ TIER1: null, TIER2: null, TIER3: null });
+const membership = ref<MembershipRecord | null>(null);
+const pricing = ref<Record<string, number>>({});
 
 // ── Plan definitions ──────────────────────────────────────────────────────
 const plans = [
@@ -437,31 +457,30 @@ const plans = [
 ];
 
 // ── Helpers ───────────────────────────────────────────────────────────────
-function tierLabel(tier) {
+function tierLabel(tier: string): string {
   return plans.find(p => p.tier === tier)?.label ?? tier;
 }
-function tierEmoji(tier) {
+function tierEmoji(tier: string): string {
   return plans.find(p => p.tier === tier)?.emoji ?? '';
 }
-function tierFeatures(tier) {
+function tierFeatures(tier: string): string[] {
   return plans.find(p => p.tier === tier)?.features ?? [];
 }
-function tierIncluded(tier) {
-  const map = {
+function tierIncluded(tier: string): string {
+  const map: Record<string, string> = {
     TIER1: '1 exterior wash/mo',
     TIER2: '1 full detail/mo',
     TIER3: '1 full detail + 1 exterior wash/mo',
   };
   return map[tier] ?? '';
 }
-function formatDate(iso) {
+function formatDate(iso: string | null | undefined): string {
   if (!iso) return '';
   return new Date(iso).toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
 // ── Fetch membership + pricing on mount ───────────────────────────────────
 onMounted(async () => {
-  // Fetch current membership if logged in
   if (auth.accessToken) {
     try {
       const res = await api.get('/api/membership/me');
@@ -471,7 +490,6 @@ onMounted(async () => {
     }
   }
 
-  // Fetch pricing if vehicle type is in URL
   if (vehicleType.value) {
     try {
       const res = await api.get('/api/membership/pricing', { params: { vehicleType: vehicleType.value } });
@@ -482,8 +500,6 @@ onMounted(async () => {
   }
 
   loading.value = false;
-
-  // Helcim Pay.js message listener
   window.addEventListener('message', onHelcimMessage);
 });
 
@@ -493,9 +509,11 @@ onUnmounted(() => {
 });
 
 // ── Sign-up flow ──────────────────────────────────────────────────────────
-const signupModal = reactive({ open: false, step: 1, tier: null, loading: false, error: '' });
+const signupModal = reactive<{ open: boolean; step: number; tier: string | null; loading: boolean; error: string }>({
+  open: false, step: 1, tier: null, loading: false, error: '',
+});
 
-function startSignup(tier) {
+function startSignup(tier: string) {
   if (!auth.accessToken) {
     sessionStorage.setItem('yumeeco_pending_plan', JSON.stringify({ tier, vehicle: vehicleType.value }));
     router.push('/login');
@@ -513,7 +531,7 @@ function startSignup(tier) {
 }
 
 function closeSignup() {
-  if (signupModal.step === 2) return; // Don't close during payment
+  if (signupModal.step === 2) return;
   removeHelcimIframe();
   signupModal.open = false;
 }
@@ -529,15 +547,15 @@ async function proceedToPayment() {
     signupModal.step = 2;
     signupModal.loading = false;
     loadHelcimScript(() => {
-      appendHelcimPayIframe(res.data.checkoutToken);
+      window.appendHelcimPayIframe(res.data.checkoutToken);
     });
-  } catch (err) {
+  } catch (err: any) {
     signupModal.error = err.response?.data?.message || 'Failed to start payment.';
     signupModal.loading = false;
   }
 }
 
-function loadHelcimScript(cb) {
+function loadHelcimScript(cb: () => void) {
   if (window.appendHelcimPayIframe) { cb(); return; }
   const s = document.createElement('script');
   s.src = 'https://secure.helcim.app/helcim-pay/services/start.js';
@@ -545,7 +563,7 @@ function loadHelcimScript(cb) {
   document.head.appendChild(s);
 }
 
-async function onHelcimMessage(event) {
+async function onHelcimMessage(event: MessageEvent) {
   if (event.data?.eventType !== 'HELCIM_PAY_JS_WITH_RESULT') return;
 
   removeHelcimIframe();
@@ -568,7 +586,7 @@ async function onHelcimMessage(event) {
       });
       membership.value = res.data.membership;
       signupModal.step = 3;
-    } catch (err) {
+    } catch (err: any) {
       signupModal.step = 1;
       signupModal.error = err.response?.data?.message || 'Activation failed. Contact support.';
     }
