@@ -594,19 +594,11 @@ async function confirmCancel() {
   cancelLoading.value = true;
   cancelError.value = '';
   try {
-    const res = await fetch('/api/membership/cancel', {
-      method: 'DELETE',
-      headers: { Authorization: `Bearer ${auth.accessToken}` },
-    });
-    const data = await res.json();
-    if (res.ok) {
-      membership.value = data.membership;
-      cancelDone.value = true;
-    } else {
-      cancelError.value = data.message || 'Failed to cancel.';
-    }
-  } catch (err) {
-    cancelError.value = 'Network error. Please try again.';
+    const res = await api.delete('/api/membership/cancel');
+    membership.value = res.data.membership;
+    cancelDone.value = true;
+  } catch (err: any) {
+    cancelError.value = err.response?.data?.message || 'Network error. Please try again.';
   } finally {
     cancelLoading.value = false;
   }
