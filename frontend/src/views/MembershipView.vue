@@ -270,7 +270,7 @@
           <div v-if="signupModal.step === 1" class="modal-step">
             <h2>Confirm Your Plan</h2>
             <p class="modal-sub">
-              <strong>{{ tierLabel(signupModal.tier) }}</strong> for your
+              <strong>{{ tierLabel(signupModal.tier ?? '') }}</strong> for your
               <strong>{{ vehicleType }}</strong>
             </p>
             <div class="confirm-summary">
