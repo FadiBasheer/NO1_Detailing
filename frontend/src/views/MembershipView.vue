@@ -547,7 +547,7 @@ async function proceedToPayment() {
     signupModal.step = 2;
     signupModal.loading = false;
     loadHelcimScript(() => {
-      window.appendHelcimPayIframe(res.data.checkoutToken);
+      window.appendHelcimPayIframe?.(res.data.checkoutToken);
     });
   } catch (err: any) {
     signupModal.error = err.response?.data?.message || 'Failed to start payment.';
