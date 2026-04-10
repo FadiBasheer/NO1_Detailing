@@ -556,7 +556,7 @@ async function proceedToPayment() {
 }
 
 function loadHelcimScript(cb: () => void) {
-  if (window.appendHelcimPayIframe) { cb(); return; }
+  if (typeof window.appendHelcimPayIframe === 'function') { cb(); return; }
   const s = document.createElement('script');
   s.src = 'https://secure.helcim.app/helcim-pay/services/start.js';
   s.onload = cb;
