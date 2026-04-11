@@ -276,11 +276,11 @@
             <div class="confirm-summary">
               <div class="confirm-row">
                 <span>Monthly charge</span>
-                <strong>${{ pricing[signupModal.tier] }}/mo</strong>
+                <strong>${{ pricing[signupModal.tier ?? ''] }}/mo</strong>
               </div>
               <div class="confirm-row">
                 <span>Included</span>
-                <strong>{{ tierIncluded(signupModal.tier) }}</strong>
+                <strong>{{ tierIncluded(signupModal.tier ?? '') }}</strong>
               </div>
               <div class="confirm-row">
                 <span>Add-on discount</span>
