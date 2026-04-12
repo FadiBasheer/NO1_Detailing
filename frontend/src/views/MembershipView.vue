@@ -308,7 +308,7 @@
           <div v-else-if="signupModal.step === 3" class="modal-step modal-confirm">
             <div class="confirm-circle">🎉</div>
             <h2>You're a Member!</h2>
-            <p>Your <strong>{{ tierLabel(signupModal.tier) }}</strong> membership is now active.</p>
+            <p>Your <strong>{{ tierLabel(signupModal.tier ?? '') }}</strong> membership is now active.</p>
             <div class="confirm-details">
               <div class="confirm-row">
                 <span>Vehicle</span>
@@ -316,7 +316,7 @@
               </div>
               <div class="confirm-row">
                 <span>Monthly charge</span>
-                <strong>${{ pricing[signupModal.tier] }}/mo</strong>
+                <strong>${{ pricing[signupModal.tier ?? ''] }}/mo</strong>
               </div>
             </div>
             <button class="btn-primary" @click="signupModal.open = false">View My Dashboard</button>
