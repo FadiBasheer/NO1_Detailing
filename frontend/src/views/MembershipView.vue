@@ -337,7 +337,7 @@
           <div v-if="!cancelConfirm && !cancelDone" class="modal-step">
             <h2>Manage Your Plan</h2>
             <p class="modal-sub">
-              <strong>{{ tierLabel(membership?.tier) }}</strong> — ${{ membership?.monthlyPrice }}/mo
+              <strong>{{ tierLabel(membership?.tier ?? '') }}</strong> — ${{ membership?.monthlyPrice }}/mo
             </p>
             <div class="plan-detail-list">
               <div class="plan-detail-row"><span>Vehicle</span><strong>{{ membership?.vehicleType }}</strong></div>
