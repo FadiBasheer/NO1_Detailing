@@ -71,19 +71,18 @@ router.post('/checkout-token', authMiddleware, async (req, res) => {
         paymentType: 'purchase',
         amount,
         currency: 'CAD',
-        invoice: invoiceNumber,
-        customerCode: req.user.id,
-        saveToProfile: 1,
+        invoiceNumber,
       }),
     });
 
     const rawBody = await helcimRes.text();
     let parsedBody;
-    try { parsedBody = JSON.parse(rawBody); } catch { parsedBody = {}; }
+    try { parsedBody = JSON.parse(rawBody); } catch { parsedBody = { raw: rawBody }; }
 
     if (!helcimRes.ok) {
-      console.error('[Helcim] Membership checkout error:', parsedBody);
-      return res.status(502).json({ message: 'Payment provider error.' });
+      console.error('[Helcim] Membership checkout error:', helcimRes.status, parsedBody);
+      const helcimMsg = parsedBody?.errors?.[0]?.message || parsedBody?.message || JSON.stringify(parsedBody);
+      return res.status(502).json({ message: `Payment provider error: ${helcimMsg}` });
     }
 
     const { checkoutToken } = parsedBody;
