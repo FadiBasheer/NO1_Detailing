@@ -58,7 +58,7 @@ router.post('/checkout-token', authMiddleware, async (req, res) => {
     }
 
     const amount = pricing[tier];
-    const invoiceNumber = `MBR-${req.user.id.slice(0, 8).toUpperCase()}-${Date.now()}`;
+    const invoiceNumber = Date.now().toString();
 
     const helcimRes = await fetch('https://api.helcim.com/v2/helcim-pay/initialize', {
       method: 'POST',
