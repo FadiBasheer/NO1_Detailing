@@ -43,7 +43,7 @@ router.get('/pricing', async (req, res) => {
 });
 
 // POST /api/membership/checkout-token
-// Returns a Helcim checkout token for the first month's payment
+// Returns a Helcim verify checkout token to capture card + create customer (no charge)
 router.post('/checkout-token', authMiddleware, async (req, res) => {
   try {
     const { vehicleType, tier } = req.body;
@@ -57,9 +57,8 @@ router.post('/checkout-token', authMiddleware, async (req, res) => {
       return res.status(409).json({ message: 'You already have an active membership' });
     }
 
-    const amount = pricing[tier];
-    const invoiceNumber = Date.now().toString();
-
+    // Use 'verify' to capture card info and create Helcim customer (no charge)
+    // The subscription API then handles all billing
     const helcimRes = await fetch('https://api.helcim.com/v2/helcim-pay/initialize', {
       method: 'POST',
       headers: {
@@ -68,10 +67,8 @@ router.post('/checkout-token', authMiddleware, async (req, res) => {
         'api-token': apiToken,
       },
       body: JSON.stringify({
-        paymentType: 'purchase',
-        amount,
+        paymentType: 'verify',
         currency: 'CAD',
-        invoiceNumber,
       }),
     });
 
@@ -90,6 +87,7 @@ router.post('/checkout-token', authMiddleware, async (req, res) => {
       return res.status(502).json({ message: 'Payment provider did not return a checkout token.' });
     }
 
+    const amount = pricing[tier];
     res.json({ checkoutToken, amount });
   } catch (err) {
     console.error('Membership checkout-token error:', err);
