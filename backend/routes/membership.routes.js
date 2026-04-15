@@ -99,61 +99,56 @@ router.post('/checkout-token', authMiddleware, async (req, res) => {
 // Called after Helcim Pay.js reports SUCCESS
 router.post('/activate', authMiddleware, async (req, res) => {
   try {
-    const { vehicleType, tier, transactionId, cardToken, customerCode } = req.body;
+    const { vehicleType, tier, customerCode } = req.body;
 
     const pricing = MEMBERSHIP_PRICING[vehicleType];
     if (!pricing?.[tier]) return res.status(400).json({ message: 'Invalid membership data' });
 
+    if (!customerCode) {
+      return res.status(400).json({ message: 'Missing Helcim customer code from card verification.' });
+    }
+
     const amount = pricing[tier];
 
-    // Verify transaction with Helcim
-    const verifyRes = await fetch(
-      `https://api.helcim.com/v2/transactions/${encodeURIComponent(transactionId)}`,
-      { method: 'GET', headers: { 'api-token': apiToken, 'accept': 'application/json' } }
-    );
-    if (!verifyRes.ok) {
-      return res.status(400).json({ message: 'Could not verify payment.' });
-    }
-    const txData = await verifyRes.json();
-    const tx = Array.isArray(txData.transactions) ? txData.transactions[0] : txData;
-    if (Number(tx.amount) < amount) {
-      return res.status(400).json({ message: 'Payment amount mismatch.' });
-    }
-
-    // Set up Helcim recurring subscription
-    // NOTE: Verify exact endpoint/payload at https://devdocs.helcim.com/ before going live
+    // Set up Helcim recurring subscription using the Recurring API.
+    // Requires a payment plan to exist in the Helcim dashboard.
+    // planId is read from env vars per tier: HELCIM_PLAN_ID_TIER1, HELCIM_PLAN_ID_TIER2, HELCIM_PLAN_ID_TIER3
+    const planId = process.env[`HELCIM_PLAN_ID_${tier}`] || null;
     let helcimSubscriptionId = null;
-    try {
-      const subRes = await fetch('https://api.helcim.com/v2/subscriptions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'application/json',
-          'api-token': apiToken,
-        },
-        body: JSON.stringify({
-          nickname: `Yumeeco ${tier} - ${vehicleType}`,
-          frequency: 'MONTHLY',
-          amount,
-          currency: 'CAD',
-          customerCode: customerCode || req.user.id,
-          cardToken: cardToken || undefined,
-          startDate: (() => {
-            const d = new Date();
-            d.setMonth(d.getMonth() + 1);
-            return d.toISOString().split('T')[0];
-          })(),
-        }),
-      });
-      if (subRes.ok) {
-        const subData = await subRes.json();
-        helcimSubscriptionId = subData.subscriptionId || subData.id || null;
-      } else {
-        console.warn('[Helcim] Recurring setup failed:', await subRes.text());
+
+    if (planId) {
+      try {
+        const today = new Date().toISOString().split('T')[0];
+        const subRes = await fetch('https://api.helcim.com/v2/recurring/subscriptions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'accept': 'application/json',
+            'api-token': apiToken,
+          },
+          body: JSON.stringify({
+            planId,
+            customerCode,
+            amount,
+            currency: 'CAD',
+            activationDate: today,
+          }),
+        });
+        const subText = await subRes.text();
+        let subData = {};
+        try { subData = JSON.parse(subText); } catch {}
+        if (subRes.ok) {
+          helcimSubscriptionId = subData.id || subData.subscriptionId || null;
+          console.log('[Helcim] Subscription created:', helcimSubscriptionId);
+        } else {
+          console.warn('[Helcim] Recurring setup failed:', helcimRes.status, subText);
+        }
+      } catch (err) {
+        // Don't fail activation if subscription setup fails — can be configured manually
+        console.error('[Helcim] Recurring setup error:', err.message);
       }
-    } catch (err) {
-      // Don't fail activation if recurring setup fails — admin can configure manually
-      console.error('[Helcim] Recurring setup error:', err.message);
+    } else {
+      console.warn(`[Helcim] No HELCIM_PLAN_ID_${tier} env var set — skipping subscription creation`);
     }
 
     const nextBillingDate = new Date();
