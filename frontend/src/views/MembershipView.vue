@@ -576,13 +576,12 @@ async function onHelcimMessage(event: MessageEvent) {
 
   if (event.data.eventStatus === 'SUCCESS') {
     const tx = event.data.data?.transactions?.[0] || event.data.data || {};
+    const customerCode = tx.customerCode || tx.customer?.customerCode || null;
     try {
       const res = await api.post('/api/membership/activate', {
         vehicleType: vehicleType.value,
         tier: signupModal.tier,
-        transactionId: tx.transactionId,
-        cardToken: tx.cardToken || null,
-        customerCode: tx.customerCode || null,
+        customerCode,
       });
       membership.value = res.data.membership;
       signupModal.step = 3;
