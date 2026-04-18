@@ -262,7 +262,7 @@
          SIGN-UP MODAL (payment)
     ═══════════════════════════════════════════ -->
     <Teleport to="body">
-      <div v-if="signupModal.open" class="overlay" @click.self="closeSignup">
+      <div v-if="signupModal.open && signupModal.step !== 2" class="overlay" @click.self="closeSignup">
         <div class="modal">
           <button class="modal-close" @click="closeSignup">×</button>
 
