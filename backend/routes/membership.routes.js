@@ -68,6 +68,7 @@ router.post('/checkout-token', authMiddleware, async (req, res) => {
       },
       body: JSON.stringify({
         paymentType: 'verify',
+        amount: 0,
         currency: 'CAD',
       }),
     });
