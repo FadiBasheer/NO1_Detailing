@@ -568,6 +568,7 @@ async function onHelcimMessage(event: MessageEvent) {
   if (event.data?.eventType !== 'HELCIM_PAY_JS_WITH_RESULT') return;
 
   removeHelcimIframe();
+  signupModal.open = true;
 
   if (event.data.eventStatus === 'FAILED') {
     signupModal.step = 1;
