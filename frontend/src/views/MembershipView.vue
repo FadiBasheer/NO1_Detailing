@@ -546,6 +546,7 @@ async function proceedToPayment() {
     });
     signupModal.step = 2;
     signupModal.loading = false;
+    signupModal.open = false;
     loadHelcimScript(() => {
       window.appendHelcimPayIframe?.(res.data.checkoutToken);
     });
