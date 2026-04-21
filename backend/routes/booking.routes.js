@@ -272,12 +272,54 @@ router.post('/payment-link', authMiddleware, async (req, res) => {
       }
     }
 
+    // Apply membership credit + 5% add-on discount
+    const membership = await prisma.membership.findUnique({
+      where: { userId: req.user.id },
+      select: { tier: true, status: true, washCreditUsed: true, detailCreditUsed: true }
+    });
+
+    let membershipDiscount = 0;
+    const memberCreditsToMark = {};
+
+    if (membership?.status === 'ACTIVE') {
+      const bookedServiceName = booking.services[0]?.service?.name;
+
+      if (!membership.washCreditUsed &&
+          (membership.tier === 'TIER1' || membership.tier === 'TIER3') &&
+          bookedServiceName === 'Exterior') {
+        membershipDiscount += categoryPrices['Exterior'] ?? serviceTotal;
+        memberCreditsToMark.washCreditUsed = true;
+      } else if (!membership.detailCreditUsed &&
+          (membership.tier === 'TIER2' || membership.tier === 'TIER3') &&
+          bookedServiceName === 'Both') {
+        membershipDiscount += categoryPrices['Both'] ?? serviceTotal;
+        memberCreditsToMark.detailCreditUsed = true;
+      }
+
+      // 5% off all add-ons for members
+      if (addonTotal > 0) {
+        membershipDiscount += Math.round(addonTotal * 0.05 * 100) / 100;
+      }
+
+      totalAmount = Math.max(0, parseFloat((totalAmount - membershipDiscount).toFixed(2)));
+    }
+
     // Record the discount on this booking
-    if (discountAmount > 0) {
+    const totalDiscount = discountAmount + membershipDiscount;
+    if (totalDiscount > 0) {
       await prisma.booking.update({
         where: { id: bookingId },
-        data: { discountAmount }
+        data: { discountAmount: totalDiscount }
       });
+    }
+
+    // Membership credit covers full amount — auto-confirm without charging
+    if (totalAmount <= 0) {
+      if (Object.keys(memberCreditsToMark).length > 0) {
+        await prisma.membership.update({ where: { userId: req.user.id }, data: memberCreditsToMark });
+      }
+      await prisma.booking.update({ where: { id: bookingId }, data: { status: 'CONFIRMED' } });
+      return res.json({ freeBooking: true });
     }
 
     const helcimRes = await fetch('https://api.helcim.com/v2/helcim-pay/initialize', {
@@ -424,6 +466,36 @@ router.post('/payment-success', authMiddleware, async (req, res) => {
           data: { discountUsed: true }
         });
       }
+    }
+
+    // Mark membership credit as used for this booking's service
+    try {
+      const membership = await prisma.membership.findUnique({
+        where: { userId: req.user.id },
+        select: { tier: true, status: true, washCreditUsed: true, detailCreditUsed: true }
+      });
+      if (membership?.status === 'ACTIVE') {
+        const fullBooking = await prisma.booking.findUnique({
+          where: { id: bookingId },
+          include: { services: { include: { service: true } } }
+        });
+        const serviceName = fullBooking?.services[0]?.service?.name;
+        const creditUpdate = {};
+        if (!membership.washCreditUsed &&
+            (membership.tier === 'TIER1' || membership.tier === 'TIER3') &&
+            serviceName === 'Exterior') {
+          creditUpdate.washCreditUsed = true;
+        } else if (!membership.detailCreditUsed &&
+            (membership.tier === 'TIER2' || membership.tier === 'TIER3') &&
+            serviceName === 'Both') {
+          creditUpdate.detailCreditUsed = true;
+        }
+        if (Object.keys(creditUpdate).length > 0) {
+          await prisma.membership.update({ where: { userId: req.user.id }, data: creditUpdate });
+        }
+      }
+    } catch (err) {
+      console.error('[Membership] Failed to mark credit as used:', err.message);
     }
 
     console.log(`Booking ${bookingId} confirmed via verified Helcim transaction ${transactionId}.`);
