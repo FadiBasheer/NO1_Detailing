@@ -565,6 +565,9 @@ function loadHelcimScript(cb: () => void) {
 }
 
 async function onHelcimMessage(event: MessageEvent) {
+  if (event.data && typeof event.data === 'object') {
+    console.log('[Helcim message received]', JSON.stringify(event.data));
+  }
   if (event.data?.eventType !== 'HELCIM_PAY_JS_WITH_RESULT') return;
 
   removeHelcimIframe();
