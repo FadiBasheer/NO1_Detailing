@@ -369,7 +369,15 @@ export default {
           { bookingId }
         );
 
-        const { checkoutToken } = paymentRes.data;
+        const { checkoutToken, freeBooking } = paymentRes.data;
+
+        // Membership credit covered the full amount — already confirmed
+        if (freeBooking) {
+          localStorage.removeItem('vehicles');
+          useAuthStore().clearBookingAddress();
+          this.$router.push('/thank-you?membershipCredit=true');
+          return;
+        }
 
         if (!checkoutToken) {
           this.message = 'Payment session could not be created. Please try again.';
