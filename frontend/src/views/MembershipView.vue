@@ -565,10 +565,8 @@ function loadHelcimScript(cb: () => void) {
 }
 
 async function onHelcimMessage(event: MessageEvent) {
-  if (event.data && typeof event.data === 'object') {
-    console.log('[Helcim message received]', JSON.stringify(event.data));
-  }
-  if (event.data?.eventType !== 'HELCIM_PAY_JS_WITH_RESULT') return;
+  // Helcim sends messages with eventName starting with 'helcim-pay-js-'
+  if (!event.data?.eventName?.startsWith?.('helcim-pay-js-')) return;
 
   removeHelcimIframe();
   signupModal.open = true;
@@ -580,8 +578,12 @@ async function onHelcimMessage(event: MessageEvent) {
   }
 
   if (event.data.eventStatus === 'SUCCESS') {
-    const tx = event.data.data?.transactions?.[0] || event.data.data || {};
-    const customerCode = tx.customerCode || tx.customer?.customerCode || null;
+    let txData: Record<string, any> = {};
+    try {
+      const parsed = JSON.parse(event.data.eventMessage);
+      txData = parsed?.data?.data || {};
+    } catch {}
+    const customerCode: string | null = txData.customerCode || null;
     try {
       const res = await api.post('/api/membership/activate', {
         vehicleType: vehicleType.value,
