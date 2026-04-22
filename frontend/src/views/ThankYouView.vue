@@ -12,6 +12,12 @@ const state = ref<State>('verifying');
 const errorMsg = ref('');
 
 onMounted(async () => {
+  // Free booking covered by membership credit — already confirmed server-side
+  if (route.query.membershipCredit) {
+    state.value = 'confirmed';
+    return;
+  }
+
   // HelcimPay.js flow: BookingView already verified the payment before navigating here
   if (history.state?.transactionId) {
     state.value = 'confirmed';
