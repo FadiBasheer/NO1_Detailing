@@ -84,7 +84,8 @@ onMounted(async () => {
       <!-- Confirmed -->
       <template v-else-if="state === 'confirmed'">
         <h1>🎉 Thank You!</h1>
-        <p>Your booking has been successfully confirmed and payment received.</p>
+        <p v-if="route.query.membershipCredit">Your booking has been confirmed using your membership credit. See you soon!</p>
+        <p v-else>Your booking has been successfully confirmed and payment received.</p>
         <router-link to="/"><button class="home-btn">Return Home</button></router-link>
       </template>
 
