@@ -154,6 +154,7 @@ export default {
       address: "",
       notes: "",
       vehicles: [],
+      membership: null,
       message: "",
       closedDayMessage: "",
       availableTimeSlots: [],
