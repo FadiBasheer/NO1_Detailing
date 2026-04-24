@@ -259,14 +259,41 @@ export default {
       return (Math.round(this.subtotal * 0.10 * 100) / 100).toFixed(2);
     },
 
+    membershipFreeServices() {
+      const m = this.membership;
+      if (!m || m.status !== 'ACTIVE') return new Set();
+      const free = new Set();
+      if ((m.tier === 'TIER1' || m.tier === 'TIER3') && !m.washCreditUsed) free.add('Exterior');
+      if ((m.tier === 'TIER2' || m.tier === 'TIER3') && !m.detailCreditUsed) free.add('Both');
+      return free;
+    },
+
+    membershipServiceDiscount() {
+      if (this.membershipFreeServices.size === 0) return 0;
+      return this.vehicles.reduce((sum, v) => {
+        if (this.membershipFreeServices.has(v.service)) {
+          return sum + (servicePricing[v.vehicleType]?.[v.service] ?? 0);
+        }
+        return sum;
+      }, 0);
+    },
+
+    membershipAddonDiscount() {
+      if (!this.membership || this.membership.status !== 'ACTIVE') return 0;
+      const addonTotal = this.vehicles.reduce((sum, v) =>
+        sum + v.addons.reduce((s, k) => s + (addons[k]?.price ?? 0), 0), 0);
+      return Math.round(addonTotal * 0.05 * 100) / 100;
+    },
+
     totalAmount() {
+      let total = this.subtotal;
       if (this.hasActivePromo) {
-        return Math.max(0, this.subtotal - 80);
+        total = Math.max(0, total - 80);
+      } else if (this.hasReferralDiscount) {
+        total = Math.round((total - total * 0.10) * 100) / 100;
       }
-      if (this.hasReferralDiscount) {
-        return Math.round((this.subtotal - this.subtotal * 0.10) * 100) / 100;
-      }
-      return this.subtotal;
+      total = Math.max(0, total - this.membershipServiceDiscount - this.membershipAddonDiscount);
+      return total;
     },
   },
 
