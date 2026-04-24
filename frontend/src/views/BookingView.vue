@@ -298,6 +298,10 @@ export default {
   },
 
   methods: {
+    isMembershipCovered(serviceKey) {
+      return this.membershipFreeServices.has(serviceKey);
+    },
+
     getServiceName(key) {
       return services[key]?.name || "Unknown Service";
     },
