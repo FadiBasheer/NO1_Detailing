@@ -203,6 +203,11 @@ export default {
       }
     }
       this.vehicles = savedVehicles;
+
+    // Load membership to show credits in cart
+    axios.get('/api/membership/me').then(res => {
+      this.membership = res.data.membership;
+    }).catch(() => {});
   },
 
   computed: {
