@@ -78,7 +78,8 @@
       >
         <div class="vehicle-header">
           <strong>{{ vehicle.vehicleType }} - {{ getServiceName(vehicle.service) }}</strong>
-          <span class="item-price">${{ getServicePrice(vehicle.service, vehicle.vehicleType) }}</span>
+          <span v-if="isMembershipCovered(vehicle.service)" class="membership-free-tag">✓ Free</span>
+          <span v-else class="item-price">${{ getServicePrice(vehicle.service, vehicle.vehicleType) }}</span>
         </div>
         <button @click="removeVehicle(vIndex)" class="remove-btn">X</button>
 
