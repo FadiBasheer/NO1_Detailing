@@ -109,6 +109,13 @@
         🎁 Referral discount applied! (10% off)
       </div>
 
+      <!-- Membership banner -->
+      <div v-if="membership && membership.status === 'ACTIVE'" class="membership-banner">
+        <span>⭐ Member discount applied</span>
+        <span v-if="membershipFreeServices.size > 0">Service covered by your plan</span>
+        <span v-if="membershipAddonDiscount > 0">5% off add-ons</span>
+      </div>
+
       <!-- Total -->
       <div v-if="vehicles.length > 0" class="cart-total">
         <template v-if="hasActivePromo">
@@ -125,6 +132,19 @@
           </div>
           <div class="total-row discount">
             <span>Referral discount (10%)</span><span>-${{ referralDiscountAmount }}</span>
+          </div>
+        </template>
+        <template v-if="membershipServiceDiscount > 0">
+          <div class="total-row original" v-if="!hasActivePromo && !hasReferralDiscount">
+            <span>Subtotal</span><span>${{ subtotal }}</span>
+          </div>
+          <div class="total-row discount">
+            <span>Membership credit</span><span>-${{ membershipServiceDiscount }}</span>
+          </div>
+        </template>
+        <template v-if="membershipAddonDiscount > 0">
+          <div class="total-row discount">
+            <span>Member add-on discount (5%)</span><span>-${{ membershipAddonDiscount }}</span>
           </div>
         </template>
         <div class="total-row final">
