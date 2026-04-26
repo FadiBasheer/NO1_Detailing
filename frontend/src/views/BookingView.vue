@@ -778,6 +778,30 @@ export default {
   margin: 12px 0 4px;
 }
 
+.membership-banner {
+  background: #eff6ff;
+  border: 1px solid #93c5fd;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 0.85rem;
+  color: #1e40af;
+  font-weight: 600;
+  margin: 12px 0 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.membership-free-tag {
+  background: #1e40af;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
 .cart-total {
   border-top: 2px solid #e5e7eb;
   margin-top: 12px;
