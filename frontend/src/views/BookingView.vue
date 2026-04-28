@@ -361,6 +361,8 @@ export default {
       this.vehicles = [];
       this.address = "";
       useAuthStore().clearBookingAddress();
+      // Remove URL query params so refreshing doesn't re-add the vehicle
+      this.$router.replace({ path: this.$route.path });
     },
 
     addAnotherVehicle() {
