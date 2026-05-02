@@ -9,6 +9,14 @@
     </div>
     <form @submit.prevent="handleRegister">
       <div>
+        <label for="name">Full Name:</label>
+        <input type="text" v-model="userData.name" required placeholder="John Smith" />
+      </div>
+      <div>
+        <label for="phone">Phone Number:</label>
+        <input type="tel" v-model="userData.phone" required placeholder="(514) 555-0123" />
+      </div>
+      <div>
         <label for="email">Email:</label>
         <input type="email" v-model="userData.email" required />
       </div>
