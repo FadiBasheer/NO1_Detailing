@@ -38,7 +38,7 @@ import { useAuthStore } from '../stores/auth.ts';
 
 const router = useRouter();
 const auth = useAuthStore();
-const userData = ref({ email: '', password: '' });
+const userData = ref({ name: '', phone: '', email: '', password: '' });
 const loading = ref(false);
 const error = ref('');
 const promoCode = ref('');
