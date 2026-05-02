@@ -29,13 +29,26 @@ const generateRefreshToken = (user) => jwt.sign({ id: user.id }, process.env.JWT
 // Generate a short unique referral code
 const generateReferralCode = () => Math.random().toString(36).substring(2, 10).toUpperCase();
 
+const VALID_PROMO_CODES = ['FREEWASH', 'DELIVERY', 'DETAIL1', 'WELCOME'];
+
 // Auth routes
 router.post('/register', registerLimiter, async (req, res) => {
-  const { email, password, promoCode, referralCode } = req.body;
+  const { email, password, name, phone, promoCode, referralCode } = req.body;
   try {
     // Validate input
     if (!email || !password) {
       return res.status(400).json({ message: 'Email and password are required' });
+    }
+    if (!name || !name.trim()) {
+      return res.status(400).json({ message: 'Name is required' });
+    }
+    if (!phone || !phone.trim()) {
+      return res.status(400).json({ message: 'Phone number is required' });
+    }
+
+    // Validate promo code if provided
+    if (promoCode && !VALID_PROMO_CODES.includes(promoCode.toUpperCase())) {
+      return res.status(400).json({ message: 'Invalid promo code' });
     }
 
     // Check if user already exists
@@ -64,6 +77,8 @@ router.post('/register', registerLimiter, async (req, res) => {
       data: {
         email,
         password: hashedPassword,
+        name: name.trim(),
+        phone: phone.trim(),
         role: 'CUSTOMER',
         referralCode: newReferralCode,
         ...(promoCode ? { promoCode: promoCode.toUpperCase() } : {})
