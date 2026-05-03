@@ -31,6 +31,16 @@ const generateReferralCode = () => Math.random().toString(36).substring(2, 10).t
 
 const VALID_PROMO_CODES = ['FREEWASH', 'DELIVERY', 'DETAIL1', 'WELCOME'];
 
+// Validate promo code
+router.get('/promo/:code', (req, res) => {
+  const code = req.params.code?.toUpperCase();
+  if (VALID_PROMO_CODES.includes(code)) {
+    res.json({ valid: true });
+  } else {
+    res.status(404).json({ valid: false });
+  }
+});
+
 // Auth routes
 router.post('/register', registerLimiter, async (req, res) => {
   const { email, password, name, phone, promoCode, referralCode } = req.body;
