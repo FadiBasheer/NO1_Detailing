@@ -81,14 +81,28 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import axios from '../axios';
 
 const route = useRoute();
 const router = useRouter();
 
+const valid = ref(null); // null = loading, true = valid, false = invalid
+
+onMounted(async () => {
+  const code = route.params.code?.toString().toUpperCase();
+  try {
+    await axios.get(`/api/auth/promo/${code}`);
+    valid.value = true;
+  } catch {
+    valid.value = false;
+  }
+});
+
 const claimOffer = () => {
-  const code = route.params.code || 'PROMO';
-  sessionStorage.setItem('promoCode', code.toString().toUpperCase());
+  const code = route.params.code?.toString().toUpperCase();
+  sessionStorage.setItem('promoCode', code);
   router.push('/register');
 };
 </script>
