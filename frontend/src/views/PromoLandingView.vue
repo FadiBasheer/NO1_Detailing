@@ -1,5 +1,12 @@
 <template>
-  <div class="promo-page">
+  <div v-if="valid === null" class="promo-loading">Checking offer...</div>
+
+  <div v-else-if="valid === false" class="promo-invalid">
+    <h2>Offer not found</h2>
+    <p>This link is no longer valid or doesn't exist. Visit <a href="/">yumeeco.ca</a> to see current offers.</p>
+  </div>
+
+  <div v-else class="promo-page">
 
     <!-- Hero -->
     <section class="hero">
