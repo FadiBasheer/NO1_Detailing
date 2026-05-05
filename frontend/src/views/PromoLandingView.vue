@@ -86,6 +86,7 @@
 
   </div>
 </template>
+<!-- closing tags for v-if blocks are handled by Vue single-root via fragments -->
 
 <script setup>
 import { ref, onMounted } from 'vue';
