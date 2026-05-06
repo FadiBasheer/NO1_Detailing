@@ -115,6 +115,37 @@ const claimOffer = () => {
 </script>
 
 <style scoped>
+.promo-loading {
+  text-align: center;
+  padding: 80px 20px;
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+.promo-invalid {
+  max-width: 500px;
+  margin: 80px auto;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.promo-invalid h2 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 12px;
+}
+
+.promo-invalid p {
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+.promo-invalid a {
+  color: #1e40af;
+  text-decoration: underline;
+}
+
 .promo-page {
   max-width: 1000px;
   margin: 0 auto;
