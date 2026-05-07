@@ -253,11 +253,13 @@ router.post('/payment-link', authMiddleware, async (req, res) => {
     const user = await prisma.user.findUnique({ where: { id: req.user.id } });
     let discountAmount = 0;
 
-    // Apply promo discount — free exterior wash ($80) earned after completing first Full Detail
-    const PROMO_DISCOUNT = 80;
-    if (user.promoCode && user.promoWashEarned && !user.promoUsed) {
-      discountAmount = Math.min(PROMO_DISCOUNT, totalAmount);
-      totalAmount = Math.max(0, totalAmount - PROMO_DISCOUNT);
+    // Apply promo discount — free exterior wash earned after completing first Full Detail
+    // Only applies when booking an Exterior wash; covers the full price regardless of vehicle type
+    const bookedServiceName = booking.services[0]?.service?.name;
+    if (user.promoCode && user.promoWashEarned && !user.promoUsed && bookedServiceName === 'Exterior') {
+      const exteriorPrice = categoryPrices['Exterior'] ?? serviceTotal;
+      discountAmount = Math.min(exteriorPrice, totalAmount);
+      totalAmount = Math.max(0, totalAmount - exteriorPrice);
     }
 
     // Apply referral discount — 10% off (only if no promo discount already applied)
