@@ -268,7 +268,15 @@ export default {
 
     hasActivePromo() {
       const auth = useAuthStore();
-      return !!(auth.user?.promoCode && auth.user?.promoWashEarned && !auth.user?.promoUsed);
+      if (!(auth.user?.promoCode && auth.user?.promoWashEarned && !auth.user?.promoUsed)) return false;
+      return this.vehicles.some(v => v.service === 'Exterior');
+    },
+
+    promoDiscount() {
+      if (!this.hasActivePromo) return 0;
+      const exteriorVehicle = this.vehicles.find(v => v.service === 'Exterior');
+      if (!exteriorVehicle) return 0;
+      return servicePricing[exteriorVehicle.vehicleType]?.['Exterior'] ?? 0;
     },
 
     hasReferralDiscount() {
