@@ -317,7 +317,7 @@ export default {
     totalAmount() {
       let total = this.subtotal;
       if (this.hasActivePromo) {
-        total = Math.max(0, total - 80);
+        total = Math.max(0, total - this.promoDiscount);
       } else if (this.hasReferralDiscount) {
         total = Math.round((total - total * 0.10) * 100) / 100;
       }
