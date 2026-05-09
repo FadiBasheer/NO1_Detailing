@@ -101,7 +101,7 @@
 
       <!-- Promo banner -->
       <div v-if="hasActivePromo" class="promo-banner">
-        🎉 Free exterior wash applied! (-$80)
+        🎉 Free exterior wash applied! (-${{ promoDiscount }})
       </div>
 
       <!-- Referral discount banner -->
