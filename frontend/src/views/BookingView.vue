@@ -123,7 +123,7 @@
             <span>Subtotal</span><span>${{ subtotal }}</span>
           </div>
           <div class="total-row discount">
-            <span>Promo discount</span><span>-$80</span>
+            <span>Promo discount</span><span>-${{ promoDiscount }}</span>
           </div>
         </template>
         <template v-else-if="hasReferralDiscount">
