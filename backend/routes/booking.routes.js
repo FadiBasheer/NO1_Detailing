@@ -315,10 +315,13 @@ router.post('/payment-link', authMiddleware, async (req, res) => {
       });
     }
 
-    // Membership credit covers full amount — auto-confirm without charging
+    // Free booking — auto-confirm without charging
     if (totalAmount <= 0) {
       if (Object.keys(memberCreditsToMark).length > 0) {
         await prisma.membership.update({ where: { userId: req.user.id }, data: memberCreditsToMark });
+      }
+      if (discountAmount > 0 && user.promoCode && user.promoWashEarned && !user.promoUsed) {
+        await prisma.user.update({ where: { id: req.user.id }, data: { promoUsed: true } });
       }
       await prisma.booking.update({ where: { id: bookingId }, data: { status: 'CONFIRMED' } });
       return res.json({ freeBooking: true });
